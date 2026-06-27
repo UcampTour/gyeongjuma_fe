@@ -1,8 +1,9 @@
 {
   "bottomNav": {
     "explore": "explore",
-    "course": "course",
+    "sites": "sites",
     "quiz": "quiz",
-    "mypage": "mypage"
+    "profile": "profile",
+    "home": "home"
   }
 }
