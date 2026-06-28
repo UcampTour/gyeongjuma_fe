@@ -19,7 +19,7 @@ export const useKakaoMap = (mapRef: RefObject<HTMLDivElement | null>) => {
     // 카카오맵 API 로드 후 지도 생성
     window.kakao.maps.load(() => {
       const kakaoMap = new window.kakao.maps.Map(mapRef.current, {
-        center: new window.kakao.maps.LatLng(35.8562, 129.2247), // 초기 중심 좌표: 경주 시청 좌표
+        center: new window.kakao.maps.LatLng(35.798365, 129.138955), // 초기 중심 좌표: 경주역
         level: 5,
       });
 

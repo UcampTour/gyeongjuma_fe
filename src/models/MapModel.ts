@@ -21,8 +21,13 @@ export const enum OperationStatus {
   BREAK_TIME = "BREAK_TIME",
 }
 
-// 관광지 상세 정보 인터페이스
-export interface SiteMarker {
+export interface MapLocation {
+  lat: number;
+  lng: number;
+}
+
+// 관광지 정보
+export interface SiteMapMarker {
   id: string; // 관광지 고유 ID
   title: string; // 관광지 이름 (예: 첨성대)
   lat: number; // 위도
