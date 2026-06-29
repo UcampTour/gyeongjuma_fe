@@ -7,7 +7,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import GpsFixedIcon from "@mui/icons-material/GpsFixed";
 import SiteMarker from "../../components/map/SiteMarker";
 import CurrentLocationMarker from "../../components/map/CurrentLocationMarker";
-import { dummySiteData } from "../../data/map/mapData"; // dummy test data
+import { dummySiteMarkerList } from "../../data/map/mapData"; // dummy test data
 import MapBottomSheet, {
   type HandleSheetRef,
 } from "../../components/map/MapBottomSheet";
@@ -33,7 +33,7 @@ const MapMainPage = () => {
 
   useEffect(() => {
     // dummySiteData를 siteData 상태로 설정
-    setSiteData(dummySiteData);
+    setSiteData(dummySiteMarkerList);
 
     // todo. fe에서 api 호출하여 관광지 목록 가져오기
   }, []);

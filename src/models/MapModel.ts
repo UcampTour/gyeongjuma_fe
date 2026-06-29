@@ -35,4 +35,5 @@ export interface SiteMapMarker {
   congestion: CongestionLevel; // 혼잡도
   status: OperationStatus; // 운영 상태
   isVisited: boolean; // 방문 여부 상태
+  image?: string;
 }

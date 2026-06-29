@@ -3,9 +3,10 @@ import type { SiteMapMarker } from "../../models/MapModel";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import IconButton from "@mui/material/IconButton";
-import { Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SiteDetailPage from "../../pages/sites/SiteDetailPage";
+import SiteSummary from "./SiteSummary";
 interface SheetProps {
   open: boolean;
   site: SiteMapMarker | null;
@@ -26,13 +27,13 @@ export enum SheetState {
   FULL = 3,
 }
 
-export const snapPoints = [0, 0.1, 0.45, 1]; // BottomSheet의 스냅 위치
+export const snapPoints = [0, 0.1, 0.6, 1]; // BottomSheet의 스냅 위치
 
 /**
  * BottomSheet의 스냅 위치
  * 0: 닫힘
  * 1: (20%) 마커 선택 후 지도 드래그 이동 시
- * 2: (45%) 기본
+ * 2: (60%) 기본
  * 3: 전체 화면
  */
 
@@ -134,6 +135,10 @@ const MapBottomSheet = forwardRef<HandleSheetRef, SheetProps>(
           </Sheet.Header>
 
           <Sheet.Content>
+            {/* 
+              관광지 명 정보
+              - 마커 클릭 후 지도 드래그 이동 시
+            */}
             {site && snapIndex === SheetState.COLLAPSED && (
               <div
                 style={{
@@ -145,18 +150,12 @@ const MapBottomSheet = forwardRef<HandleSheetRef, SheetProps>(
                 {site.title}
               </div>
             )}
+            {/* 관광지 요약 정보 */}
             {site && snapIndex === SheetState.EXPANDED && (
               // todo. 관광지 상세 정보 컴포넌트로 분리 예정
-              <div style={{ padding: 20 }}>
-                <h2>{site.title}</h2>
-
-                <p>혼잡도 : {site.congestion}</p>
-
-                <p>운영상태 : {site.status}</p>
-
-                <p>방문여부 : {site.isVisited ? "방문" : "미방문"}</p>
-              </div>
+              <SiteSummary site={site} />
             )}
+            {/* 전체화면 - 관광지 상세 페이지 */}
             {site && snapIndex === SheetState.FULL && (
               <SiteDetailPage siteId={site.id} />
             )}

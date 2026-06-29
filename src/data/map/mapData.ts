@@ -4,10 +4,11 @@ import {
   type SiteMapMarker,
 } from "../../models/MapModel";
 
-export const dummySiteData: SiteMapMarker[] = [
+export const dummySiteMarkerList: SiteMapMarker[] = [
   {
     id: "1",
     title: "첨성대",
+    image: "https://picsum.photos/seed/cheomseongdae/400/300",
     lat: 35.8347,
     lng: 129.219,
     congestion: CongestionLevel.LOW,
@@ -17,6 +18,7 @@ export const dummySiteData: SiteMapMarker[] = [
   {
     id: "2",
     title: "불국사",
+    image: "https://picsum.photos/seed/bulguksa/400/300",
     lat: 35.79,
     lng: 129.332,
     congestion: CongestionLevel.HIGH,
@@ -26,6 +28,7 @@ export const dummySiteData: SiteMapMarker[] = [
   {
     id: "3",
     title: "석굴암",
+    image: "https://picsum.photos/seed/seokguram/400/300",
     lat: 35.7952,
     lng: 129.3499,
     congestion: CongestionLevel.MEDIUM,
@@ -35,6 +38,7 @@ export const dummySiteData: SiteMapMarker[] = [
   {
     id: "4",
     title: "동궁과 월지",
+    image: "https://picsum.photos/seed/donggung/400/300",
     lat: 35.8349,
     lng: 129.2268,
     congestion: CongestionLevel.HIGH,
@@ -44,6 +48,7 @@ export const dummySiteData: SiteMapMarker[] = [
   {
     id: "5",
     title: "대릉원",
+    image: "https://picsum.photos/seed/daereungwon/400/300",
     lat: 35.8384,
     lng: 129.2114,
     congestion: CongestionLevel.MEDIUM,
@@ -53,6 +58,7 @@ export const dummySiteData: SiteMapMarker[] = [
   {
     id: "6",
     title: "황리단길",
+    image: "https://picsum.photos/seed/hwangridan/400/300",
     lat: 35.8375,
     lng: 129.2098,
     congestion: CongestionLevel.HIGH,
@@ -62,6 +68,7 @@ export const dummySiteData: SiteMapMarker[] = [
   {
     id: "7",
     title: "국립경주박물관",
+    image: "https://picsum.photos/seed/gyeongjumuseum/400/300",
     lat: 35.8289,
     lng: 129.2277,
     congestion: CongestionLevel.LOW,
@@ -71,6 +78,7 @@ export const dummySiteData: SiteMapMarker[] = [
   {
     id: "8",
     title: "월정교",
+    image: "https://picsum.photos/seed/woljeonggyo/400/300",
     lat: 35.8297,
     lng: 129.2148,
     congestion: CongestionLevel.MEDIUM,
@@ -80,6 +88,7 @@ export const dummySiteData: SiteMapMarker[] = [
   {
     id: "9",
     title: "교촌마을",
+    image: "https://picsum.photos/seed/gyochon/400/300",
     lat: 35.8283,
     lng: 129.214,
     congestion: CongestionLevel.LOW,
@@ -89,6 +98,7 @@ export const dummySiteData: SiteMapMarker[] = [
   {
     id: "10",
     title: "경주엑스포대공원",
+    image: "https://picsum.photos/seed/expo/400/300",
     lat: 35.7919,
     lng: 129.3328,
     congestion: CongestionLevel.MEDIUM,
@@ -98,6 +108,7 @@ export const dummySiteData: SiteMapMarker[] = [
   {
     id: "11",
     title: "경주역",
+    image: "https://picsum.photos/seed/gyeongjustation/400/300",
     lat: 35.798365,
     lng: 129.138955,
     congestion: CongestionLevel.HIGH,

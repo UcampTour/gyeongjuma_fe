@@ -1,4 +1,3 @@
-import React from "react";
 import MapMarker from "./MapMarker";
 import image from "../../assets/map/test_current_marker.png";
 
