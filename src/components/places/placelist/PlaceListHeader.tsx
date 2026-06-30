@@ -1,6 +1,6 @@
 import { Box, FormControl, MenuItem, Select, Typography } from "@mui/material"
 
-const SiteListHeader = () => {
+const PlaceListHeader = () => {
 
   return (
     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, mt: 1 }}>
@@ -32,4 +32,4 @@ const SiteListHeader = () => {
   )
 }
 
-export default SiteListHeader;
+export default PlaceListHeader;

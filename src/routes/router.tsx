@@ -2,10 +2,10 @@ import { createBrowserRouter, type RouteObject } from "react-router-dom";
 import App from "../App";
 import MainLayout from "../layouts/MainLayout";
 import MapMainPage from "../pages/map/MapMainPage";
-import SiteListPage from "../pages/sites/SiteListPage";
 import HomePage from "../pages/home/HomePage";
 import ProfilePage from "../pages/profile/ProfilePage";
 import QuizListPage from "../pages/quiz/QuizListPage";
+import PlaceListPage from "../pages/places/PlaceListPage";
 
 const routes: RouteObject[] = [
   {
@@ -24,8 +24,8 @@ const routes: RouteObject[] = [
             element: <MapMainPage />,
           },
           {
-            path: "sites" /* 관광지 리스트 */,
-            element: <SiteListPage />,
+            path: "places" /* 관광지 리스트 */,
+            element: <PlaceListPage />,
           },
           {
             path: "profile", /*마이 페이지 */

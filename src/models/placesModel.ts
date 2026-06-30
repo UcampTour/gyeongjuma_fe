@@ -2,7 +2,7 @@
 
 import type { CongestionLevel, OperationStatus } from "./MapModel";
 
-export interface SiteListBase {
+export interface PlaceListBase {
   id: number; // 관광지 고유 ID
   name: string; // 관광지 이름 (예: 첨성대)
   description: string; // 관광지 간단 설명
@@ -18,6 +18,6 @@ export interface SiteListBase {
   imageUrl: string  // 대표 이미지
 }
 
-export interface SiteListItem extends SiteListBase {
+export interface PlaceListItem extends PlaceListBase {
   distance: number | null; 
 }

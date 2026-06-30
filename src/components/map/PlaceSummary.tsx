@@ -2,13 +2,13 @@ import { Box, Stack, Typography } from "@mui/material";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import WifiTetheringIcon from "@mui/icons-material/WifiTethering";
 import LocalParkingIcon from "@mui/icons-material/LocalParking";
-import type { SiteMapMarker } from "../../models/MapModel";
+import type { PlaceMapMarker } from "../../models/MapModel";
 
-interface SiteSummaryProps {
-  site: SiteMapMarker;
+interface PlaceSummaryProps {
+  place: PlaceMapMarker;
 }
 
-const SiteSummary = ({ site }: SiteSummaryProps) => {
+const PlaceSummary = ({ place }: PlaceSummaryProps) => {
   return (
     <Stack
       sx={{
@@ -23,7 +23,7 @@ const SiteSummary = ({ site }: SiteSummaryProps) => {
       <Stack spacing={3}>
         {/* 제목 */}
         <Typography variant="h5" sx={{ fontWeight: 700 }}>
-          {site.title}
+          {place.title}
         </Typography>
         {/* 정보 */}
 
@@ -57,8 +57,8 @@ const SiteSummary = ({ site }: SiteSummaryProps) => {
       {/* 이미지 */}
       <Box
         component="img"
-        src={site.image}
-        alt={site.title}
+        src={place.image}
+        alt={place.title}
         sx={{
           mt: "auto",
           width: "100%",
@@ -71,4 +71,4 @@ const SiteSummary = ({ site }: SiteSummaryProps) => {
   );
 };
 
-export default SiteSummary;
+export default PlaceSummary;

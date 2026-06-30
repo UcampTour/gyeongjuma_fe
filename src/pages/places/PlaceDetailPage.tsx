@@ -7,11 +7,11 @@ import { CongestionLevel } from "../../models/MapModel";
 import type { TabItem } from "../../components/common/CommonChipTabs";
 import CommonChipTabs from "../../components/common/CommonChipTabs";
 
-export interface SiteDetailProps {
-  siteId: string; //number;
+export interface PlaceDetailProps {
+  placeId: string; //number;
 }
 
-const dummySiteDetail = {
+const dummyPlaceDetail = {
   title: "경주역",
   enTitle: "Gyeongju Station (KTX)",
   imageList: [
@@ -23,13 +23,13 @@ const dummySiteDetail = {
   status: "OPEN",
   isVisited: true,
 };
-const SiteDetailPage = ({ siteId }: SiteDetailProps) => {
-  const [site, setSite] = useState<any | null>(null);
+const PlaceDetailPage = ({ placeId }: PlaceDetailProps) => {
+  const [place, setPlace] = useState<any | null>(null);
   const [activeTab, setActiveTab] = useState(0);
 
   useEffect(() => {
-    // siteId를 기반으로 API 호출하여 관광지 상세 정보를 가져오는 로직
-    setSite(dummySiteDetail);
+    // placeId를 기반으로 API 호출하여 관광지 상세 정보를 가져오는 로직
+    setPlace(dummyPlaceDetail);
   }, []);
 
   const TABS: TabItem[] = [
@@ -54,29 +54,29 @@ const SiteDetailPage = ({ siteId }: SiteDetailProps) => {
     <Box sx={{ padding: 3 }}>
       <Stack sx={{ mb: 2 }}>
         <Typography variant="h5" sx={{ fontWeight: 700 }}>
-          {site?.title ?? ""}
+          {place?.title ?? ""}
         </Typography>
         <Typography variant="h5" sx={{ fontWeight: 700 }}>
-          {site?.enTitle ?? ""}
+          {place?.enTitle ?? ""}
         </Typography>
       </Stack>
 
-      {site?.imageList?.length > 0 && (
+      {place?.imageList?.length > 0 && (
         <Swiper
           spaceBetween={12}
-          slidesPerView={site?.imageList.length > 1 ? 1.15 : 0}
+          slidesPerView={place?.imageList.length > 1 ? 1.15 : 0}
           grabCursor
           style={{
             width: "100%",
             height: 220,
           }}
         >
-          {site.imageList.map((img: string, index: number) => (
+          {place.imageList.map((img: string, index: number) => (
             <SwiperSlide key={index}>
               <Box
                 component="img"
                 src={img}
-                alt={site.title}
+                alt={place.title}
                 sx={{
                   width: "100%",
                   height: 220,
@@ -97,10 +97,10 @@ const SiteDetailPage = ({ siteId }: SiteDetailProps) => {
       <Box>
         {activeTab === 0 && (
           <>
-            <p>관광지 이름: {site?.title ?? ""}</p>
-            <p>혼잡도: {site?.CongestionLevel ?? ""}</p>
-            <p>운영상태: {site?.status ?? ""}</p>
-            <p>방문여부: {site?.isVisited ? "방문" : "미방문"}</p>
+            <p>관광지 이름: {place?.title ?? ""}</p>
+            <p>혼잡도: {place?.CongestionLevel ?? ""}</p>
+            <p>운영상태: {place?.status ?? ""}</p>
+            <p>방문여부: {place?.isVisited ? "방문" : "미방문"}</p>
           </>
         )}
 
@@ -112,4 +112,4 @@ const SiteDetailPage = ({ siteId }: SiteDetailProps) => {
     </Box>
   );
 };
-export default SiteDetailPage;
+export default PlaceDetailPage;

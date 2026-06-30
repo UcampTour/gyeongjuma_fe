@@ -1,15 +1,15 @@
 import { Sheet, type SheetRef } from "react-modal-sheet";
-import type { SiteMapMarker } from "../../models/MapModel";
+import type { PlaceMapMarker } from "../../models/MapModel";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import IconButton from "@mui/material/IconButton";
 import { Box, Stack } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import SiteDetailPage from "../../pages/sites/SiteDetailPage";
-import SiteSummary from "./SiteSummary";
+import PlaceSummary from "./PlaceSummary";
+import PlaceDetailPage from "../../pages/places/PlaceDetailPage";
 interface SheetProps {
   open: boolean;
-  site: SiteMapMarker | null;
+  place: PlaceMapMarker | null;
   onClose: () => void;
 }
 
@@ -38,7 +38,7 @@ export const snapPoints = [0, 0.1, 0.6, 1]; // BottomSheet의 스냅 위치
  */
 
 const MapBottomSheet = forwardRef<HandleSheetRef, SheetProps>(
-  ({ open, site, onClose }, ref) => {
+  ({ open, place, onClose }, ref) => {
     // BottomSheet를 원하는 스냅 위치로 이동시키기 위한 ref
     const sheetRef = useRef<SheetRef>(null);
 
@@ -139,7 +139,7 @@ const MapBottomSheet = forwardRef<HandleSheetRef, SheetProps>(
               관광지 명 정보
               - 마커 클릭 후 지도 드래그 이동 시
             */}
-            {site && snapIndex === SheetState.COLLAPSED && (
+            {place && snapIndex === SheetState.COLLAPSED && (
               <div
                 style={{
                   padding: "12px 20px",
@@ -147,17 +147,17 @@ const MapBottomSheet = forwardRef<HandleSheetRef, SheetProps>(
                   fontSize: 18,
                 }}
               >
-                {site.title}
+                {place.title}
               </div>
             )}
             {/* 관광지 요약 정보 */}
-            {site && snapIndex === SheetState.EXPANDED && (
+            {place && snapIndex === SheetState.EXPANDED && (
               // todo. 관광지 상세 정보 컴포넌트로 분리 예정
-              <SiteSummary site={site} />
+              <PlaceSummary place={place} />
             )}
             {/* 전체화면 - 관광지 상세 페이지 */}
-            {site && snapIndex === SheetState.FULL && (
-              <SiteDetailPage siteId={site.id} />
+            {place && snapIndex === SheetState.FULL && (
+              <PlaceDetailPage placeId={place.id} />
             )}
           </Sheet.Content>
         </Sheet.Container>

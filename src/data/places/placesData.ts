@@ -1,7 +1,7 @@
 import { CongestionLevel, OperationStatus } from "../../models/MapModel";
-import type { SiteListBase } from "../../models/SiteModel";
+import type { PlaceListBase } from "../../models/placesModel";
 
-export const dummySiteListData: SiteListBase[] = [
+export const dummyPlaceListData: PlaceListBase[] = [
   {
     id: 1,
     name: "첨성대",

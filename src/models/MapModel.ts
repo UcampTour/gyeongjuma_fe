@@ -27,7 +27,7 @@ export interface MapLocation {
 }
 
 // 관광지 정보
-export interface SiteMapMarker {
+export interface PlaceMapMarker {
   id: string; // 관광지 고유 ID
   title: string; // 관광지 이름 (예: 첨성대)
   lat: number; // 위도
