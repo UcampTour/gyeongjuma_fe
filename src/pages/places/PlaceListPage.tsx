@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { dummySiteListData } from "../../data/sites/sitesData";
-import SiteListHeader from "../../components/sites/sitelist/SiteListHeader";
-import SiteCategoryFilter from "../../components/sites/sitelist/SiteCategoryFilter";
+import { dummyPlaceListData } from "../../data/places/placesData";
 import CommonSearchBar from "../../components/common/CommonSearchBar";
-import SiteList from "../../components/sites/sitelist/SiteList";
 import { getDistance } from "../../utils/geo";
+import PlaceListHeader from "../../components/places/placelist/PlaceListHeader";
+import PlaceCategoryFilter from "../../components/places/placelist/PlaceCategoryFilter";
+import PlaceList from "../../components/places/placelist/PlaceList";
 
-
-
-const SiteListPage = () => {
+const PlaceListPage = () => {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const sitesData = dummySiteListData;
+  const placesData = dummyPlaceListData;
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -26,28 +24,28 @@ const SiteListPage = () => {
     }
   }, []);
   
-  const calculatedSites = sitesData.map((site) => {
-    const distance = userLocation ? getDistance(userLocation.lat, userLocation.lng, site.lat, site.lng) : null;
-    return { ...site, distance };
+  const calculatedPlaces = placesData.map((place) => {
+    const distance = userLocation ? getDistance(userLocation.lat, userLocation.lng, place.lat, place.lng) : null;
+    return { ...place, distance };
   });
 
   return (
     <Box sx={{ p: 2, bgcolor: "#F7F5EE", minHeight: "100vh", pb: 12 }}>
       
       {/* 상단 타이틀 & 정렬 */}
-      <SiteListHeader />
+      <PlaceListHeader />
 
       {/* 카테고리 탭 가로 스크롤 영역 */}
-      <SiteCategoryFilter />
+      <PlaceCategoryFilter />
 
       {/* 검색창 */}
       <CommonSearchBar placeholder="관광지를 검색해보세요"/>
 
       {/* 관광지 리스트 영역 */}
-      <SiteList siteList={calculatedSites} />
+      <PlaceList placeList={calculatedPlaces} />
       
     </Box>
   );
 }
 
-export default SiteListPage;
+export default PlaceListPage;

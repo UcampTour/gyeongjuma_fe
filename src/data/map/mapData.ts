@@ -1,10 +1,10 @@
 import {
   CongestionLevel,
   OperationStatus,
-  type SiteMapMarker,
+  type PlaceMapMarker,
 } from "../../models/MapModel";
 
-export const dummySiteMarkerList: SiteMapMarker[] = [
+export const dummyPlaceMarkerList: PlaceMapMarker[] = [
   {
     id: "1",
     title: "첨성대",

@@ -1,18 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import { useKakaoMap } from "../../hooks/useKakaoMap";
-import { type MapLocation, type SiteMapMarker } from "../../models/MapModel";
+import { type MapLocation, type PlaceMapMarker } from "../../models/MapModel";
 import { Box, Stack } from "@mui/material";
 import IconCircleButton from "../../components/common/IconCircleButton";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import GpsFixedIcon from "@mui/icons-material/GpsFixed";
-import SiteMarker from "../../components/map/SiteMarker";
 import CurrentLocationMarker from "../../components/map/CurrentLocationMarker";
-import { dummySiteMarkerList } from "../../data/map/mapData"; // dummy test data
+import { dummyPlaceMarkerList } from "../../data/map/mapData"; // dummy test data
 import MapBottomSheet, {
   type HandleSheetRef,
 } from "../../components/map/MapBottomSheet";
 import type { LoadingProps } from "../../components/common/CommonLoading";
 import CommonLoading from "../../components/common/CommonLoading";
+import PlaceMarker from "../../components/map/PlaceMarker";
 
 /**
  * 지도 메인 페이지
@@ -23,8 +23,8 @@ const MapMainPage = () => {
 
   const map = useKakaoMap(mapRef);
 
-  const [siteData, setSiteData] = useState<SiteMapMarker[]>([]); // 관광지 목록 데이터
-  const [selectedSite, setSelectedSite] = useState<SiteMapMarker | null>(null); // 선택 관광지
+  const [placeData, setPlaceData] = useState<PlaceMapMarker[]>([]); // 관광지 목록 데이터
+  const [selectedPlace, setSelectedPlace] = useState<PlaceMapMarker | null>(null); // 선택 관광지
   const [loading, setLoading] = useState<LoadingProps | undefined>(undefined);
 
   const [currentLocation, setCurrentLocation] = useState<MapLocation | null>(
@@ -32,8 +32,8 @@ const MapMainPage = () => {
   ); // 현재 위치 상태
 
   useEffect(() => {
-    // dummySiteData를 siteData 상태로 설정
-    setSiteData(dummySiteMarkerList);
+    // dummyPlaceData를 placeData 상태로 설정
+    setPlaceData(dummyPlaceMarkerList);
 
     // todo. fe에서 api 호출하여 관광지 목록 가져오기
   }, []);
@@ -42,12 +42,12 @@ const MapMainPage = () => {
     if (!map) return;
 
     const handleMapClick = () => {
-      setSelectedSite(null);
+      setSelectedPlace(null);
     };
 
     const handleDragStart = () => {
       // 관광지가 선택되어 있을 때만 BottomSheet를 20%로 접기
-      if (selectedSite) {
+      if (selectedPlace) {
         sheetRef.current?.collapse();
       }
     };
@@ -59,14 +59,14 @@ const MapMainPage = () => {
       window.kakao.maps.event.removeListener(map, "click", handleMapClick);
       window.kakao.maps.event.removeListener(map, "dragstart", handleDragStart);
     };
-  }, [map, selectedSite]);
+  }, [map, selectedPlace]);
 
   /**
    * 마커 클릭 이벤트 핸들러
    */
-  const handleMarkerClick = (site: SiteMapMarker) => {
-    console.log("marker clicked", site);
-    setSelectedSite(site);
+  const handleMarkerClick = (place: PlaceMapMarker) => {
+    console.log("marker clicked", place);
+    setSelectedPlace(place);
     sheetRef.current?.expand(); // BottomSheet를 기본 높이로 열기
   };
 
@@ -161,20 +161,20 @@ const MapMainPage = () => {
         {/* 하단 드로어 */}
         <MapBottomSheet
           ref={sheetRef}
-          open={!!selectedSite}
-          site={selectedSite}
+          open={!!selectedPlace}
+          place={selectedPlace}
           onClose={() => {
-            setSelectedSite(null);
+            setSelectedPlace(null);
           }}
         />
       </div>
 
       {/* 관광지 마커 렌더링 */}
       {map &&
-        siteData.map((site) => (
-          <SiteMarker
-            key={site.id}
-            site={site}
+        placeData.map((place) => (
+          <PlaceMarker
+            key={place.id}
+            place={place}
             map={map}
             onClick={handleMarkerClick}
           />

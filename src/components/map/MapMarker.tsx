@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import siteMarkerImage from "../../assets/map/test_marker.png";
+import placeMarkerImage from "../../assets/map/test_marker.png";
 import currentLocationImage from "../../assets/map/test_current_marker.png";
 import type { MapLocation } from "../../models/MapModel";
 
@@ -33,8 +33,8 @@ const MapMarker = ({
 
     // 2. 마커 이미지 생성
     const defaultImageUrls = {
-      site: siteMarkerImage,
-      visited: siteMarkerImage,
+      place: placeMarkerImage,
+      visited: placeMarkerImage,
       currentLocation: currentLocationImage,
     } as const;
 

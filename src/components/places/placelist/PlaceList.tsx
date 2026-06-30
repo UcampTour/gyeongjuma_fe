@@ -2,11 +2,11 @@ import { Box, Card, CardMedia, Typography } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import StarIcon from "@mui/icons-material/Star";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import type { SiteListItem } from "../../../models/SiteModel";
 import { CongestionLevel, OperationStatus } from "../../../models/MapModel";
+import type { PlaceListItem } from "../../../models/placesModel";
 
-interface SiteListProps {
-  siteList: SiteListItem[];
+interface PlaceListProps {
+  placeList: PlaceListItem[];
 }
 
 const statusStyles: Record<CongestionLevel | OperationStatus, { label: string; bgColor: string }> = {
@@ -18,17 +18,17 @@ const statusStyles: Record<CongestionLevel | OperationStatus, { label: string; b
   [OperationStatus.OPEN]: { label: "영업중", bgColor: "#3F8E72" }, 
 };
 
-const SiteList = ({ siteList }: SiteListProps) => {
+const PlaceList = ({ placeList }: PlaceListProps) => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-      {siteList.map((site) => {
-        const currentBadge = site.operationStatus === OperationStatus.OPEN
-          ? (statusStyles[site.congestion] || statusStyles[OperationStatus.OPEN])
-          : statusStyles[site.operationStatus];
+      {placeList.map((place) => {
+        const currentBadge = place.operationStatus === OperationStatus.OPEN
+          ? (statusStyles[place.congestion] || statusStyles[OperationStatus.OPEN])
+          : statusStyles[place.operationStatus];
 
         return (
           <Card 
-            key={site.id} 
+            key={place.id} 
             elevation={0} 
             sx={{ 
               display: "flex", 
@@ -47,8 +47,8 @@ const SiteList = ({ siteList }: SiteListProps) => {
             <Box sx={{ position: "relative", width: 100, height: 100, flexShrink: 0 }}>
               <CardMedia
                 component="img"
-                image={site.imageUrl}
-                alt={site.name}
+                image={place.imageUrl}
+                alt={place.name}
                 sx={{ 
                   width: "100%", 
                   height: "100%", 
@@ -82,11 +82,11 @@ const SiteList = ({ siteList }: SiteListProps) => {
               {/* 상단 타이틀 부분 */}
               <Box>
                 <Typography sx={{ color: "#AC8E61", fontSize: "12px", fontWeight: 600, mb: 0.1 }}>
-                  {site.category}
+                  {place.category}
                 </Typography>
                 
                 <Typography sx={{ fontWeight: 800, fontSize: "17px", color: "#111111", mb: 0.3, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                  {site.name}
+                  {place.name}
                 </Typography>
                 
                 <Typography sx={{ 
@@ -99,7 +99,7 @@ const SiteList = ({ siteList }: SiteListProps) => {
                   WebkitLineClamp: 2, 
                   WebkitBoxOrient: "vertical" 
                 }}>
-                  {site.description}
+                  {place.description}
                 </Typography>
               </Box>
               
@@ -120,7 +120,7 @@ const SiteList = ({ siteList }: SiteListProps) => {
                 <Box sx={{ display: "flex", alignItems: "center", flexShrink: 0, whiteSpace: "nowrap" }}>
                   <LocationOnIcon sx={{ fontSize: "14px", color: "#B8B0A2", mr: 0.3, flexShrink: 0 }} />
                   <Typography variant="body2" sx={{ color: "#7A7265", fontSize: "12px", fontWeight: 500, lineHeight: 1.2 }}>
-                    {site.distance !== null ? `${site.distance.toFixed(1)}km` : "계산중"}
+                    {place.distance !== null ? `${place.distance.toFixed(1)}km` : "계산중"}
                   </Typography>
                 </Box>
 
@@ -128,9 +128,9 @@ const SiteList = ({ siteList }: SiteListProps) => {
                 <Box sx={{ display: "flex", alignItems: "center", flexShrink: 0, whiteSpace: "nowrap" }}>
                   <StarIcon sx={{ fontSize: "14px", color: "#E0B134", mr: 0.3, flexShrink: 0 }} />
                   <Typography variant="body2" sx={{ color: "#7A7265", fontSize: "12px", fontWeight: "bold", display: "flex", alignItems: "center", lineHeight: 1.2 }}>
-                    {site.rating}
+                    {place.rating}
                     <Box component="span" sx={{ fontSize: "11px", color: "#958D80", ml: 0.2, fontWeight: 400 }}>
-                      ({site.reviewCount})
+                      ({place.reviewCount})
                     </Box>
                   </Typography>
                 </Box>
@@ -139,7 +139,7 @@ const SiteList = ({ siteList }: SiteListProps) => {
                 <Box sx={{ display: "flex", alignItems: "center", flexShrink: 0, whiteSpace: "nowrap" }}>
                   <FavoriteIcon sx={{ fontSize: "13px", color: "#C05656", mr: 0.3, flexShrink: 0 }} />
                   <Typography variant="body2" sx={{ color: "#7A7265", fontSize: "12px", fontWeight: 500, lineHeight: 1.2 }}>
-                    {site.likes}
+                    {place.likes}
                   </Typography>
                 </Box>
                 
@@ -147,7 +147,7 @@ const SiteList = ({ siteList }: SiteListProps) => {
             </Box>
 
             {/* 방문 완료 도장 */}
-            {site.isVisited && (
+            {place.isVisited && (
               <Box
                 sx={{
                   position: "absolute",
@@ -192,4 +192,4 @@ const SiteList = ({ siteList }: SiteListProps) => {
   )
 }
 
-export default SiteList;
+export default PlaceList;

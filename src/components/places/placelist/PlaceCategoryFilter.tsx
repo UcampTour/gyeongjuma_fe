@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { useState } from "react";
 
-const SiteCategoryFilter = () => {
+const PlaceCategoryFilter = () => {
 
   const [selectedCategory, setSelectedCategory] = useState("전체");
   const categories = ["전체", "관광지", "유적지", "기타"];
@@ -46,4 +46,4 @@ const SiteCategoryFilter = () => {
   )
 }
 
-export default SiteCategoryFilter;
+export default PlaceCategoryFilter;
