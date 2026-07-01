@@ -1,0 +1,8 @@
+{
+  "category": {
+    "all": "전체",
+    "tourist": "관광지",
+    "historic": "유적지",
+    "other": "기타"
+  }
+}

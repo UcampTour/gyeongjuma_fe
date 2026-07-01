@@ -1,10 +1,19 @@
 import { Box } from "@mui/material";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { PlaceCategory } from "../../../models/PlaceModel";
 
 const PlaceCategoryFilter = () => {
+  const { t } = useTranslation();
+  const [selectedCategory, setSelectedCategory] = useState(PlaceCategory.ALL);
+  
+  const categories = [
+    {category: PlaceCategory.ALL, label: t("places.category.all")},
+    {category: PlaceCategory.HISTORIC, label: t("places.category.historic")},
+    {category: PlaceCategory.TOURIST, label: t("places.category.tourist")},
+    {category: PlaceCategory.OTHER, label: t("places.category.other")}
+  ]
 
-  const [selectedCategory, setSelectedCategory] = useState("전체");
-  const categories = ["전체", "관광지", "유적지", "기타"];
   return (
     <Box 
       sx={{ 

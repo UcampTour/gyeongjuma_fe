@@ -1,0 +1,8 @@
+{
+  "category": {
+    "all": "all",
+    "tourist": "tourist",
+    "historic": "historic",
+    "other": "other"
+  }
+}
