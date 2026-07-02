@@ -11,7 +11,7 @@ const PlaceList = ({ placeList }: PlaceListProps) => {
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       {placeList.map((place) => (
         <PlaceCard key={place.id} place={place} />
-      ))};
+      ))}
     </Box>
   )
 }

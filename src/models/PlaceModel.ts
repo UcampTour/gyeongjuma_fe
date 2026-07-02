@@ -9,7 +9,7 @@ export interface PlaceListBase {
   id: number; // 관광지 고유 ID
   name: string; // 관광지 이름 (예: 첨성대)
   description: string; // 관광지 간단 설명
-  category: string; // 관광지 카테고리(추후 ENUM 변경)
+  category: PlaceCategory; // 관광지 카테고리(추후 ENUM 변경)
   rating: number; // 관광지 평점
   reviewCount: number; // 평점 참여자 수
   likes: number; // 좋아요 수
@@ -42,7 +42,7 @@ export const statusBadgeStyles: Record<CongestionLevel | OperationStatus, { labe
   [OperationStatus.OPEN]: { label: "영업중", bgColor: "#3F8E72" }, 
 };
 
-/* -------- Enum -------- */
+/* -------- ENUM -------- */
 
 /**
  * 관광지 카테고리 ENUM
@@ -52,4 +52,13 @@ export const enum PlaceCategory {
   TOURIST = "TOURIST",
   HISTORIC = "HISTORIC",
   OTHER = "OTHER",
+}
+
+/**
+ * 관광지 정렬 타입 Enum 
+ */
+export enum PlaceSortType {
+  DEFAULT = "DEFAULT",
+  LIKES = "LIKES",
+  DISTANCE = "DISTANCE",
 }

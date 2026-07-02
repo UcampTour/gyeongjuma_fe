@@ -1,6 +1,21 @@
 import { Box, FormControl, MenuItem, Select, Typography } from "@mui/material"
+import { PlaceSortType } from "../../../models/PlaceModel";
+import { useTranslation } from "react-i18next";
 
-const PlaceListHeader = () => {
+interface PlaceListHeaderProps {
+  sortBy: PlaceSortType;
+  setSortBy: (sort:PlaceSortType) => void;
+}
+
+const PlaceListHeader = ({ sortBy, setSortBy }: PlaceListHeaderProps) => {
+
+  const { t } =  useTranslation();
+
+  const sortTypes = [
+    {value: PlaceSortType.DEFAULT, label: t("places:sortType.default")},
+    {value: PlaceSortType.LIKES, label: t("places:sortType.likes")},
+    {value: PlaceSortType.DISTANCE, label: t("places:sortType.distance")},
+  ]
 
   return (
     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, mt: 1 }}>
@@ -10,7 +25,8 @@ const PlaceListHeader = () => {
       
       <FormControl size="small" sx={{ minWidth: 85 }}>
         <Select
-          value="default"
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
           displayEmpty
           sx={{
             bgcolor: "#FFFFFF",
@@ -22,10 +38,9 @@ const PlaceListHeader = () => {
             fontWeight: 500,
           }}
         >
-          <MenuItem value="default">기본순</MenuItem>
-          <MenuItem value="likes">인기순</MenuItem>
-          <MenuItem value="distance">거리순</MenuItem>
-          <MenuItem value="congestion">혼잡도순</MenuItem>
+          {sortTypes.map((sort) => (
+             <MenuItem value={sort.value}>{sort.label}</MenuItem>
+          ))}
         </Select>
       </FormControl>
     </Box>

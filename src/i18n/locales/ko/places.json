@@ -4,5 +4,10 @@
     "tourist": "관광지",
     "historic": "유적지",
     "other": "기타"
+  },
+   "sortType": {
+    "default": "기본순",
+    "likes": "좋아요순",
+    "distance": "거리순"
   }
 }

@@ -1,17 +1,20 @@
 import { Box } from "@mui/material";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { PlaceCategory } from "../../../models/PlaceModel";
 
-const PlaceCategoryFilter = () => {
+interface PlaceCategoryFilterProps {
+  selectedCategory: PlaceCategory,
+  setSelectedCategory: (category: PlaceCategory) => void;
+}
+
+const PlaceCategoryFilter = ({ selectedCategory, setSelectedCategory }: PlaceCategoryFilterProps) => {
   const { t } = useTranslation();
-  const [selectedCategory, setSelectedCategory] = useState(PlaceCategory.ALL);
   
   const categories = [
-    {category: PlaceCategory.ALL, label: t("places.category.all")},
-    {category: PlaceCategory.HISTORIC, label: t("places.category.historic")},
-    {category: PlaceCategory.TOURIST, label: t("places.category.tourist")},
-    {category: PlaceCategory.OTHER, label: t("places.category.other")}
+    {category: PlaceCategory.ALL, label: t("places:category.all")},
+    {category: PlaceCategory.HISTORIC, label: t("places:category.historic")},
+    {category: PlaceCategory.TOURIST, label: t("places:category.tourist")},
+    {category: PlaceCategory.OTHER, label: t("places:category.other")}
   ]
 
   return (
@@ -26,12 +29,12 @@ const PlaceCategoryFilter = () => {
         "::-webkit-scrollbar": { display: "none" } 
       }}
     >
-      {categories.map((cat) => {
-        const isSelected = selectedCategory === cat;
+      {categories.map((category) => {
+        const isSelected = selectedCategory === category.category;
         return (
           <Box
-            key={cat}
-            onClick={() => setSelectedCategory(cat)}
+            key={category.category}
+            onClick={() => setSelectedCategory(category.category)}
             sx={{
               px: 2.2,
               py: 0.8,
@@ -47,7 +50,7 @@ const PlaceCategoryFilter = () => {
               transition: "all 0.2s"
             }}
           >
-            {cat}
+            {category.label}
           </Box>
         );
       })}
