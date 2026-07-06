@@ -13,6 +13,7 @@ export const usePlaceList = () => {
 
   // 1. 내 위치 정보 가져오기
   useEffect(() => {
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -27,6 +28,7 @@ export const usePlaceList = () => {
 
   // 2. 내 위치와 장소 사이의 거리 계산
   const placesWithDistance = useMemo(() => {
+
     return dummyPlaceListData.map((place) => {
       const distance = userLocation ? getDistance(userLocation.lat, userLocation.lng, place.lat, place.lng) : null;
       return { ...place, distance };
@@ -35,6 +37,7 @@ export const usePlaceList = () => {
 
   // 3. 데이터 필터링
   const filteredPlaces = useMemo(() => {
+    
     return placesWithDistance.filter((place) => {
       
       // 카테고리 매칭 여부
@@ -49,10 +52,35 @@ export const usePlaceList = () => {
     });
   }, [placesWithDistance, selectedCategory, searchKeyword]);
 
+  // 4. 데이터 정렬
+  const sortedPlaces = useMemo(() => {
+
+    const result = [...filteredPlaces];
+
+    switch (sortBy) {
+      case PlaceSortType.DISTANCE:
+        return result.sort((a, b) => {
+          if (a.distance === null) return 1;
+          if (b.distance === null) return -1;
+          return a.distance - b.distance;
+        });
+      
+      case PlaceSortType.LIKES:
+        return result.sort((a, b) => {
+          if (a.likes === null) return 1;
+          if (b.likes === null) return -1;
+          return b.likes - a.likes;
+        });
+
+      default: 
+        return result;
+    }
+  }, [filteredPlaces, sortBy]);
+
   return {
     selectedCategory,
     setSelectedCategory,
-    filteredPlaces,
+    placeList: sortedPlaces,
     searchKeyword,
     setSearchKeyword,
     sortBy,

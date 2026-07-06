@@ -8,9 +8,9 @@ import { usePlaceList } from "../../hooks/usePlaceList";
 const PlaceListPage = () => {
   
   const { 
+    placeList,
     selectedCategory, 
     setSelectedCategory, 
-    filteredPlaces,
     searchKeyword,
     setSearchKeyword,
     sortBy,
@@ -40,7 +40,7 @@ const PlaceListPage = () => {
       />
 
       {/* 관광지 리스트 영역 */}
-      <PlaceList placeList={filteredPlaces} />
+      <PlaceList placeList={placeList} />
       
     </Box>
   );
