@@ -4,9 +4,11 @@ import LanguageDetector from "i18next-browser-languagedetector";
 
 import commonKo from "./locales/ko/common.json";
 import mapKo from "./locales/ko/map.json";
+import placesKo from "./locales/ko/places.json";
 
 import commonEn from "./locales/en/common.json";
 import mapEn from "./locales/en/map.json";
+import placesEn from "./locales/en/places.json";
 
 i18n
   // 브라우저 언어 자동 감지
@@ -21,10 +23,12 @@ i18n
       ko: {
         common: commonKo,
         map: mapKo,
+        places: placesKo,
       },
       en: {
         common: commonEn,
         map: mapEn,
+        places: placesEn,
       },
       // ... more 일단 한글,영어만 추가
     },
@@ -38,7 +42,7 @@ i18n
     defaultNS: "common",
 
     // 프로젝트에서 사용하는 namespace 목록
-    ns: ["common", "map"], // *.json 확장
+    ns: ["common", "map", "places"], // *.json 확장
 
     interpolation: {
       escapeValue: false,
