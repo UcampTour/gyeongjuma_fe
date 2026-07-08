@@ -10,28 +10,23 @@ export interface QuizListItem {
   image: string;
   totalQuestions: number;
   solvedQuestions: number;
-  quizStatus: QuizStatus
-}
-
-/* -------- ENUM -------- */
-
-/**
- * Quiz Status Enum
- */
-export const enum QuizStatus {
-  LOCKED = "LOCKED",
-  AVAILABLE = "AVAILABLE",
-  PROGRESS = "PROGRESS",
-  COMPLETED = "COMPLETED",
+  quizStatus: QuizStatusType
 }
 
 /**
- * Quiz 카테고리 Enum
+ * 
  */
-export const enum QuizCategory {
-  All = "ALL",
-  LOCKED = "LOCKED",
-  AVAILABLE = "AVAILABLE",
-  PROGRESS = "PROGRESS",
-  COMPLETED = "COMPLETED",
-}
+export const QuizStatus = {
+  LOCKED: "LOCKED",
+  AVAILABLE: "AVAILABLE",
+  PROGRESS: "PROGRESS",
+  COMPLETED: "COMPLETED",
+} as const;
+
+export const QuizFilter = {
+  ...QuizStatus,
+  ALL: "ALL",
+} as const;
+
+export type QuizStatusType = typeof QuizStatus[keyof typeof QuizStatus];
+export type QuizFilterType = typeof QuizFilter[keyof typeof QuizFilter];

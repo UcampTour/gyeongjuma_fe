@@ -1,13 +1,16 @@
-import { memo, useState } from 'react';
-import { Box, Typography, Card, CardMedia, Button, LinearProgress } from '@mui/material';
-import { QuizCategory, QuizStatus } from '../../models/QuizModel';
+import { Box, Typography } from '@mui/material';
 import QuizCategoryFilter from '../../components/Quiz/QuizCategoryFilter';
-import { dummyQuizListData } from '../../data/quiz/QuizData';
 import QuizProgressCard from '../../components/Quiz/QuizProgressCard';
 import QuizList from '../../components/Quiz/QuizList';
+import { useQuizList } from '../../hooks/useQuizList';
 
 const QuizListPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState<QuizCategory>(QuizCategory.All);
+  
+  const {
+    selectedCategory,
+    setSelectedCategory,
+    quizList,
+  } = useQuizList();
 
   return (
     <Box sx={{ p: 2, bgcolor: "#F7F5EE", minHeight: "100vh", pb: 12 }}>
@@ -29,11 +32,11 @@ const QuizListPage = () => {
       <QuizProgressCard />
 
       {/* 퀴즈 목록 */}
-      <QuizList quizList={dummyQuizListData} />
+      <QuizList quizList={quizList} />
 
       
     </Box>
   );
 };
 
-export default memo(QuizListPage);
+export default QuizListPage;
