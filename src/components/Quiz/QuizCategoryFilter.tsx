@@ -1,19 +1,19 @@
 import { Box } from "@mui/material";
-import { QuizFilter, type QuizFilterType, type QuizStatusType } from "../../models/QuizModel";
+import { QuizCategory } from "../../models/QuizModel";
 
 interface QuizCategoryFilterProps {
-  selectedCategory: QuizFilterType,
-  setSelectedCategory: (category: QuizFilterType) => void;
+  selectedCategory: QuizCategory,
+  setSelectedCategory: (category: QuizCategory) => void;
 }
 
 const QuizCategoryFilter = ({ selectedCategory, setSelectedCategory }: QuizCategoryFilterProps) => {
 
   const categories = [
-    {value: QuizFilter.ALL, label: "전체"},
-    {value: QuizFilter.AVAILABLE, label: "도전가능"},
-    {value: QuizFilter.PROGRESS, label: "진행중"},
-    {value: QuizFilter.COMPLETED, label: "완료"},
-    {value: QuizFilter.LOCKED, label: "잠김"},
+    {value: QuizCategory.ALL, label: "전체"},
+    {value: QuizCategory.AVAILABLE, label: "도전가능"},
+    {value: QuizCategory.PROGRESS, label: "진행중"},
+    {value: QuizCategory.COMPLETED, label: "완료"},
+    {value: QuizCategory.LOCKED, label: "잠김"},
   ]
 
   return (

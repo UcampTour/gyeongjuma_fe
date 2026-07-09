@@ -6,6 +6,7 @@ import HomePage from "../pages/home/HomePage";
 import ProfilePage from "../pages/profile/ProfilePage";
 import QuizListPage from "../pages/quiz/QuizListPage";
 import PlaceListPage from "../pages/places/PlaceListPage";
+import QuizPlayPage from "../pages/quiz/QuizPlayPage";
 
 const routes: RouteObject[] = [
   {
@@ -32,8 +33,17 @@ const routes: RouteObject[] = [
             element: <ProfilePage />,
           },
           {
-            path: "quiz",
-            element: <QuizListPage />,
+            path: "quiz", /* 퀴즈 페이지*/
+            children: [
+              {
+                index: true,
+                element: <QuizListPage />
+              },
+              {
+                path: ":quizId",
+                element: <QuizPlayPage />
+              }
+            ]
           },
         ],
       },

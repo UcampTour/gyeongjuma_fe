@@ -9,13 +9,14 @@ function MainLayout() {
       disableGutters
       sx={{
         bgcolor: "#F9F6EE",
-        minHeight: "100vh",
+        height: "100dvh", 
         display: "flex",
         flexDirection: "column",
         position: "relative",
+        overflow: "hidden", 
       }}
     >
-      <Box sx={{ flex: 1, pb: "90px" }}>
+      <Box sx={{ flex: 1, overflowY: "auto" }}> 
         <Outlet />
       </Box>
 

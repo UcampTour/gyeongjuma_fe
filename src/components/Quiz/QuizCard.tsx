@@ -5,6 +5,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import QuizIcon from '@mui/icons-material/Quiz';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PendingIcon from '@mui/icons-material/Pending';
+import { useNavigate } from "react-router-dom";
 
 interface QuizCardProps {
   quiz: QuizListItem;
@@ -12,15 +13,23 @@ interface QuizCardProps {
 
 export const QuizCard = ({ quiz }: QuizCardProps) => {
 
+  const navigate = useNavigate();
+
   const isLocked = quiz.quizStatus === QuizStatus.LOCKED;
   const isAvailable = quiz.quizStatus === QuizStatus.AVAILABLE;
   const isProgressing = quiz.quizStatus === QuizStatus.PROGRESS;
   const isCompleted = quiz.quizStatus === QuizStatus.COMPLETED;
+
+  const handleNavigate = () => {
+    if (!isLocked) {
+      navigate(`/quiz/${quiz.id}`); 
+    }
+  };
   
   return (
     <Card
-      key={quiz.id}
       elevation={0}
+      onClick={handleNavigate}
       sx={{
         display: "flex",
         bgcolor: "#FFFFFF",

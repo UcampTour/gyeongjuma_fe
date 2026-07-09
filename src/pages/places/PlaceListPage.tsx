@@ -18,7 +18,7 @@ const PlaceListPage = () => {
   } = usePlaceList(); 
 
   return (
-    <Box sx={{ p: 2, bgcolor: "#F7F5EE", minHeight: "100vh", pb: 12 }}>
+    <Box sx={{ p: 2, bgcolor: "#F7F5EE", minHeight: "100vh", pb: 16 }}>
       
       {/* 상단 타이틀 & 정렬 */}
       <PlaceListHeader 

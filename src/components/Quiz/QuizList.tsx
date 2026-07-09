@@ -11,7 +11,7 @@ const QuizList = ({ quizList }: QuizListProps) => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       {quizList.map((quiz) => (
-        <QuizCard quiz={quiz} />
+        <QuizCard key={quiz.id} quiz={quiz} />
       ))}
     </Box>
   )
