@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { type QuizListItem } from "../../models/QuizModel";
+import { type QuizListItem } from "../../../models/QuizModel";
 import QuizCard from "./QuizCard";
 
 interface QuizListProps {

@@ -1,7 +1,7 @@
 /* -------- Interface -------- */
 
 /**
- * API 서버로부터 받아오는 퀴즈 리스트 데이터 인터페이스
+ * 퀴즈 리스트 데이터 인터페이스
  */
 export interface QuizListItem {
   id: number;
@@ -11,6 +11,36 @@ export interface QuizListItem {
   totalQuestions: number;
   solvedQuestions: number;
   quizStatus: QuizStatus
+}
+
+/**
+ * 퀴즈 상세 정보 인터페이스 목록
+ */
+export interface QuizItem {
+  placeId: number;
+  title: string;
+  description: string;
+  imageUrl: string;
+  totalQuestions: number;
+  correctQuestions: number;
+  progressRate: number;
+  isCorrect: boolean;
+  lastQuestionIndex?: number;
+  quizStatus: QuizStatus;
+  questions: QuizQuestion[];
+}
+
+interface QuizQuestion {
+  quizId: number;
+  question: string;
+  options: QuizOption[];
+  isCorrect?: boolean | null;          
+  isSolved?: boolean;
+}
+
+interface QuizOption {
+  answerId: number;
+  content: string;
 }
 
 /**

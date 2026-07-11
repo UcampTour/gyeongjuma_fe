@@ -1,11 +1,11 @@
 import { memo } from "react"
-import { QuizStatus, type QuizListItem } from "../../models/QuizModel";
 import { Box, Button, Card, CardMedia, Typography } from "@mui/material";
 import LockIcon from '@mui/icons-material/Lock';
 import QuizIcon from '@mui/icons-material/Quiz';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PendingIcon from '@mui/icons-material/Pending';
 import { useNavigate } from "react-router-dom";
+import { QuizStatus, type QuizListItem } from "../../../models/QuizModel";
 
 interface QuizCardProps {
   quiz: QuizListItem;

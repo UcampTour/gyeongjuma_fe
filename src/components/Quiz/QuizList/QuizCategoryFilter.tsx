@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { QuizCategory } from "../../models/QuizModel";
+import { QuizCategory } from "../../../models/QuizModel";
 
 interface QuizCategoryFilterProps {
   selectedCategory: QuizCategory,

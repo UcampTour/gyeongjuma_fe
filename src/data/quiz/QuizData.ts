@@ -1,4 +1,4 @@
-  import { QuizStatus, type QuizListItem } from "../../models/QuizModel";
+  import { QuizStatus, type QuizItem, type QuizListItem } from "../../models/QuizModel";
 
   export const dummyQuizListData: QuizListItem[] = [
     {
@@ -38,3 +38,22 @@
       quizStatus: QuizStatus.LOCKED
     },
   ];
+
+  export const quizDetailData: QuizItem = {
+    placeId: 1,
+    title: "첨성대 탐험 퀴즈",
+    description: "첨성대 관련 퀴즈입니다 첨성대에 대해서 맞춰보아요~",
+    imageUrl: "https://picsum.photos/id/10/400",
+    totalQuestions: 5,
+    correctQuestions: 0,
+    progressRate: 0,
+    isCorrect: false,
+    quizStatus: QuizStatus.AVAILABLE,
+    questions: [
+      { quizId: 101, question: "첨성대는 신라 시대 누구의 재위 기간에 만들어졌나요?", options: [{ answerId: 1, content: "선덕여왕" }, { answerId: 2, content: "진흥왕" }, { answerId: 3, content: "무열왕" }, { answerId: 4, content: "문무왕" }] },
+      { quizId: 102, question: "첨성대의 몸통은 무엇을 사용하여 쌓았나요?", options: [{ answerId: 1, content: "화강암" }, { answerId: 2, content: "대리석" }, { answerId: 3, content: "현무암" }, { answerId: 4, content: "황토 벽돌" }] },
+      { quizId: 103, question: "첨성대의 가장 높은 곳의 모양은 어떤 형태인가요?", options: [{ answerId: 1, content: "정사각형" }, { answerId: 2, content: "원형" }, { answerId: 3, content: "삼각형" }, { answerId: 4, content: "육각형" }] },
+      { quizId: 104, question: "첨성대가 세워진 장소인 경주에 있는 왕궁 터는 어디인가요?", options: [{ answerId: 1, content: "월성" }, { answerId: 2, content: "대릉원" }, { answerId: 3, content: "불국사" }, { answerId: 4, content: "석굴암" }] },
+      { quizId: 105, question: "첨성대의 주된 용도로 추정되는 것은?", options: [{ answerId: 1, content: "천문 관측" }, { answerId: 2, content: "곡물 저장" }, { answerId: 3, content: "망루" }, { answerId: 4, content: "불교 수행" }] }
+    ]
+  };
