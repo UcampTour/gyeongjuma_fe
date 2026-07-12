@@ -7,6 +7,8 @@ import ProfilePage from "../pages/profile/ProfilePage";
 import QuizListPage from "../pages/quiz/QuizListPage";
 import PlaceListPage from "../pages/places/PlaceListPage";
 import QuizPlayPage from "../pages/quiz/QuizPlayPage";
+import LoginPage from "../pages/login/LoginPage";
+import RegisterPage from "../pages/login/RegisterPage";
 
 const routes: RouteObject[] = [
   {
@@ -47,6 +49,14 @@ const routes: RouteObject[] = [
           },
         ],
       },
+      {
+        path: "member",
+        element: <LoginPage />
+      },
+      {
+        path: "register",
+        element: <RegisterPage />
+      }
     ],
   },
 ];
