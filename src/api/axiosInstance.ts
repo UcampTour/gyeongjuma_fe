@@ -1,6 +1,8 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
+import { authService } from "./authService";
+import { useAuthStore } from "../store/useAuthStore";
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: "http://localhost:8080",
   timeout: 5000,
   headers: {
@@ -25,5 +27,24 @@ api.interceptors.response.use(
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean};
 
     // 토큰 만료(A003)시 재발급 시도
+    if (error.response?.data?.code === "A003" && !originalRequest._retry ) {
+      originalRequest._retry = true;
+      const refreshToken = localStorage.getItem("refreshToken");
+
+      try {
+        const { data } = await authService.reissue(refreshToken);
+
+        useAuthStore.getState().login(data.data.accessToken, data.data.refreshToken);
+
+        originalRequest.headers.Authorization = `Bearer ${data.data.accessToken}`;
+
+        return api(originalRequest);
+      } catch(reissueError) {
+        useAuthStore.getState().logout();
+        window.location.href = "/login";
+      }
+
+      return Promise.reject(error);
+    }
   }
 )

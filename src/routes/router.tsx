@@ -50,7 +50,7 @@ const routes: RouteObject[] = [
         ],
       },
       {
-        path: "member",
+        path: "login",
         element: <LoginPage />
       },
       {

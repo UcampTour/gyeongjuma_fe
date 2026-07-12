@@ -1,44 +1,43 @@
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { authService } from "../../api/authService"; 
+import { useAuthStore } from "../../store/useAuthStore";
 
-// LoginPage.jsx
 const LoginPage = () => {
-
   const navigate = useNavigate();
+  const { login } = useAuthStore();
   
-  const handleLogin = (provider: string) => {
-    console.log(`${provider} 로그인 버튼 클릭됨!`);
-  };
-
   const onSuccess = async (credentialResponse: CredentialResponse) => {
-    console.log("구글 성공! 토큰:", credentialResponse.credential);
+    const idToken = credentialResponse.credential;
+    
+    if (!idToken) return;
 
     try {
-      const response = await axios.post("http://localhost:8080/api/members/login", {
-        provider: "GOOGLE",
-        idToken: credentialResponse.credential,
-      });
+      const response = await authService.login("GOOGLE", idToken);
 
-      const {accessToken, refreshToken, isNewMember } = response.data.data;
+      const { accessToken, isNewMember } = response.data.data;
+    
+      login(accessToken);
 
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
-
-      if(isNewMember) {
+      if (isNewMember) {
         navigate("/register");
       } else {
         navigate("/");
       }
 
-      console.log("백엔드 응답 결과:", response.data);
-    } catch(error) {
-      console.log("백엔드 로그인 요청 실패:", error);
+      console.log("로그인 성공:", response.data);
+    } catch (error) {
+      console.error("로그인 실패:", error);
     }
   };
 
   const onError = () => {
-      console.log("구글 로그인 실패");
+    console.log("구글 로그인 실패");
+  };
+
+  // 카카오/네이버는 추후 구현 예정
+  const handleSocialLogin = (provider: string) => {
+    console.log(`${provider} 로그인 준비중...`);
   };
 
   return (
@@ -48,8 +47,8 @@ const LoginPage = () => {
         onSuccess={onSuccess}
         onError={onError}
       />
-      <button onClick={() => handleLogin('KAKAO')}>카카오로 로그인</button>
-      <button onClick={() => handleLogin('NAVER')}>네이버로 로그인</button>
+      <button onClick={() => handleSocialLogin('KAKAO')}>카카오로 로그인</button>
+      <button onClick={() => handleSocialLogin('NAVER')}>네이버로 로그인</button>
     </div>
   );
 };
