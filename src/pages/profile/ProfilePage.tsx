@@ -1,21 +1,21 @@
 import { useNavigate } from "react-router-dom";
-import { authService } from "../../api/authService"
 import { useAuthStore } from "../../store/useAuthStore";
+import { logout, withdraw } from "../../api/authService";
 
 const ProfilePage = () => {
 
   const navigate = useNavigate();
-  const { isLoggedIn, logout} = useAuthStore();
+  const { isLoggedIn, logout: storeLogout } = useAuthStore();
 
   const handleLogout = async () => {
 
     if(!isLoggedIn) return;
 
     try {
-      await authService.logout();
+      await logout();
       alert("로그아웃 완료");
-      logout();
-      navigate("/login");
+      storeLogout();
+      navigate("/login", { replace: true });
     } catch (error) {
       console.error("로그아웃 실패:", error);
     }
@@ -26,10 +26,10 @@ const ProfilePage = () => {
     if(!isLoggedIn) return;
 
     try {
-      await authService.withdraw();
+      await withdraw();
       alert("탈퇴 완료");
-      logout();
-      navigate("/login");
+      storeLogout();
+      navigate("/login", { replace: true });
     } catch (error) {
       console.error("탈퇴 실패:", error);
     }

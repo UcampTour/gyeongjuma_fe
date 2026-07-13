@@ -1,12 +1,20 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+interface AuthMember {
+  memberId: number;
+  nickname: string;
+}
+
 interface AuthState {
   isLoggedIn: boolean;
-  // 토큰도 상태로 같이 관리해야 새로고침해도 유지됩니다.
   accessToken: string | null; 
-  login: (accessToken: string) => void;
+  refreshToken: string | null;
+  member: AuthMember | null;
+
+  login: (accessToken: string, refreshToken: string, member: AuthMember) => void;
   logout: () => void;
+  updateNickname: (nickname: string) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -14,14 +22,21 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       isLoggedIn: false,
       accessToken: null,
+      refreshToken: null,
+      member: null,
       
-      login: (accessToken) => {
-        set({ isLoggedIn: true, accessToken });
+      login: (accessToken, refreshToken, member) => {
+        set({ isLoggedIn: true, accessToken, refreshToken, member });
       },
       
       logout: () => {
-        set({ isLoggedIn: false, accessToken: null });
+        set({ isLoggedIn: false, accessToken: null, refreshToken: null, member: null });
       },
+
+      updateNickname: (nickname) =>
+        set((state) => ({
+          member: state.member ? {...state.member, nickname} : null
+        })),
     }),
     {
       name: 'auth-storage', 

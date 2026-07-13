@@ -1,33 +1,40 @@
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
-import { authService } from "../../api/authService"; 
 import { useAuthStore } from "../../store/useAuthStore";
+import { login as googleLogin } from "../../api/authService";
+import { useState } from "react";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { login } = useAuthStore();
+  const { login } = useAuthStore(); //이렇게 구독 하는거 별로니까 나중에 수정하자
+  const [isLoading, setIsLoading] = useState(false);
   
   const onSuccess = async (credentialResponse: CredentialResponse) => {
+    if(isLoading) return;
+    
+    setIsLoading(true);
     const idToken = credentialResponse.credential;
     
     if (!idToken) return;
 
     try {
-      const response = await authService.login("GOOGLE", idToken);
+      const response = await googleLogin({ provider: "GOOGLE", idToken:idToken, accessToken:null});
+      const { accessToken, refreshToken, memberId, nickname, isNewMember } = response;
 
-      const { accessToken, isNewMember } = response.data.data;
-    
-      login(accessToken);
+      login(accessToken, refreshToken, { memberId, nickname });
 
       if (isNewMember) {
+        // 신규 회원은 스토어에 토큰을 저장하면 PublicRoute가 즉시 홈으로 리다이렉트하므로, 
+        // 로그인 처리를 미루고 데이터만 넘겨 가입 페이지로 이동해야 함.
         navigate("/register");
       } else {
         navigate("/");
-      }
+      } 
 
-      console.log("로그인 성공:", response.data);
     } catch (error) {
       console.error("로그인 실패:", error);
+    } finally {
+        setIsLoading(false);
     }
   };
 

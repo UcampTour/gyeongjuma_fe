@@ -1,28 +1,47 @@
-import { api } from "./axiosInstance";
+import type { CheckNicknameRequest, CheckNicknameResponse, ExtraInfoRequest, ExtraInfoResponse, RefreshTokenResponse, SignupRequest, SingupResponse } from "../models/AuthModel";
+import { useAuthStore } from "../store/useAuthStore";
+import { apiClient, authClient, type ApiResponse } from "./apiClient";
 
-export const authService = {
+// 1. 소셜 로그인
+export const login = async (request: SignupRequest): Promise<SingupResponse> => {
+  const response = await apiClient.post<ApiResponse<SingupResponse>>("/api/members/login", request);
 
-  // 1. 소셜 로그인
-  login: (provider: string, token: string) => {
-    const body = provider === "GOOGLE" ? { provider, idToken: token } : { provider, accessToken: token };
-    return api.post("/api/members/login", body);
-  },
+  return response.data.data;
+}
 
-  // 2. 닉네임 중복 확인
-  checkNickname: (nickname: string) => 
-    api.get(`/api/members/check-nickname?nickname=${encodeURIComponent(nickname)}`),
+// 2. 닉네임 중복 확인 
+export const checkNickname = async (request: CheckNicknameRequest): Promise<CheckNicknameResponse> => {
+  const response = await apiClient.get("/api/members/check-nickname",{ params: { nickname: request.nickname} });
 
-  // 3. 추가 정보 등록
-  registerExtraInfo: (data: { nickname: string; difficulty: string }) => 
-    api.patch("/api/members/extra-info", data),
+  return response.data.data;
+}
 
-  // 4. 토큰 재발급
-  reissue: (refreshToken: string) =>
-    api.post("api/members/reissue", { refreshToken }),
+// 3. 추가 정보 등록
+export const registerExtraInfo = async (request: ExtraInfoRequest): Promise<ExtraInfoResponse> => {
+  const response = await apiClient.patch("/api/members/extra-info", request);
 
-  // 5. 로그아웃
-  logout: () => api.post("/api/members/logout"),
+  return response.data.data;
+}
 
-  // 6. 탈퇴
-  withdraw: () => api.delete("/api/members"),
+// 4. 토큰 재발급
+export const reissue = async (): Promise<RefreshTokenResponse> => {
+  const refreshToken = useAuthStore.getState().refreshToken;
+
+  const response = await authClient.post("api/members/reissue", { refreshToken });
+
+  return response.data.data;
+}
+
+// 5. 로그아웃
+export const logout = async (): Promise<void> => {
+  await apiClient.post("/api/members/logout");
+
+  useAuthStore.getState().logout();
+};
+
+//6. 회원 탈퇴
+export const withdraw = async (): Promise<void> => {
+  await apiClient.delete("/api/members");
+
+  useAuthStore.getState().logout();
 }

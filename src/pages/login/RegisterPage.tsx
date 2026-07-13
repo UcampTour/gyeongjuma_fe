@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { authService } from "../../api/authService";
+import { checkNickname, registerExtraInfo } from "../../api/authService";
 
 const RegisterPage = () => {
-
+  console.log("RegisterPage 렌더링됨!");
   const [nickname, setNickname] = useState("");
   const [difficulty, setDifficulty] = useState("");
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
@@ -11,12 +11,11 @@ const RegisterPage = () => {
 
   const handleCheckNickname = async () => {
     try {
-      const response = await authService.checkNickname(nickname);
-      console.log(response);
-      const available = response.data.data.available;
+      const response = await checkNickname({nickname});
+      const available = response.available;
 
       setIsAvailable(available);
-      alert(response.data.message);
+      alert(available ? "사용가능" : "사용불가");
     } catch (error) {
       console.error("중복 확인 실패", error);
     }
@@ -29,7 +28,7 @@ const RegisterPage = () => {
     }
 
     try {
-      await authService.registerExtraInfo({ nickname, difficulty });
+      await registerExtraInfo({ nickname, difficulty });
       alert("등록 완료");
       navigate("/");
     } catch (error) {
