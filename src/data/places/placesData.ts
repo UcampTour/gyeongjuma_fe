@@ -1,4 +1,4 @@
-import { CongestionLevel, OperationStatus } from "../../models/MapModel";
+import { CongestionLevel, OperationStatus } from "../../models/commonModel";
 import { PlaceCategory, type PlaceListBase } from "../../models/PlaceModel";
 
 export const dummyPlaceListData: PlaceListBase[] = [

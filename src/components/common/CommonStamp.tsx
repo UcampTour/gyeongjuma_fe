@@ -2,38 +2,57 @@ import { Box, Typography } from "@mui/material";
 
 interface CommonStampProps {
   label: string;
+
+  // 스탬프 크기
+  size?: number;
+
+  // 외부 스타일 override
+  // sx?: SxProps<Theme>;
+
+  // 색상 변경 가능
+  color?: string;
 }
 
-const CommonStamp = ({ label }: CommonStampProps) => {
-
+const CommonStamp = ({
+  label,
+  size = 50,
+  color = "#8E7249",
+}: CommonStampProps) => {
   return (
     <Box
       sx={{
-        width: "50px",  
-        height: "50px", 
+        width: size,
+        height: size,
         borderRadius: "50%",
-        border: "1.5px dashed #8E7249",   
+        border: `1.5px dashed ${color}`,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        pointerEvents: "none",         
-        backgroundColor: "rgba(255, 255, 255, 0.85)", 
-        boxShadow: "inset 0 0 0 1px #8E7249", 
+        pointerEvents: "none",
+        backgroundColor: "rgba(255, 255, 255, 0.85)",
+        boxShadow: `inset 0 0 0 1px ${color}`,
         backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M0 0h10v1H0zm0 4h10v1H0z' fill='%238E7249' fill-opacity='0.04'/%3E%3C/svg%3E")`,
       }}
     >
-      <Box 
-        sx={{ 
-          border: "1px solid rgba(142, 114, 73, 0.25)", 
-          borderRadius: "50%", 
-          width: "38px", 
-          height: "38px", 
-          display: "flex", 
-          alignItems: "center", 
-          justifyContent: "center" 
+      <Box
+        sx={{
+          border: "1px solid rgba(142, 114, 73, 0.25)",
+          borderRadius: "50%",
+          width: size * 0.76,
+          height: size * 0.76,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        <Typography sx={{ fontSize: "9px", fontWeight: 900, color: "#8E7249", letterSpacing: "0.1px" }}>
+        <Typography
+          sx={{
+            fontSize: size * 0.18,
+            fontWeight: 900,
+            color: color,
+            letterSpacing: "0.1px",
+          }}
+        >
           {label}
         </Typography>
       </Box>

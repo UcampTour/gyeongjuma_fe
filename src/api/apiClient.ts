@@ -43,7 +43,9 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
-    const originalRequest = error.config as CustomAxiosRequestConfig | undefined;
+    const originalRequest = error.config as
+      | CustomAxiosRequestConfig
+      | undefined;
 
     // 401 에러가 아니면 그냥 통과
     if (!originalRequest || error.response?.status !== 401) {
@@ -72,19 +74,29 @@ apiClient.interceptors.response.use(
 
     try {
       const refreshToken = useAuthStore.getState().refreshToken;
-      
+
       if (!refreshToken) {
         clearAuthAndRedirect();
         return Promise.reject(error);
       }
 
       const response = await reissue();
-      
+
       const newAccessToken = response.accessToken;
       const newRefreshToken = response.refreshToken || refreshToken;
       const currentMember = useAuthStore.getState().member;
 
-      useAuthStore.getState().login(newAccessToken, newRefreshToken, currentMember, false);
+      /**
+       * 현재 로그인된 사용자 정보 없을 경우
+       * 토큰 갱신
+       */
+      if (!currentMember) {
+        useAuthStore.getState().updateToken(newAccessToken, newRefreshToken);
+      } else {
+        useAuthStore
+          .getState()
+          .login(newAccessToken, newRefreshToken, currentMember, false);
+      }
 
       pendingRequests.forEach((callback) => callback(newAccessToken));
       pendingRequests = [];
@@ -97,5 +109,5 @@ apiClient.interceptors.response.use(
     } finally {
       isRefreshing = false;
     }
-  }
+  },
 );

@@ -25,16 +25,19 @@ const IconCircleButton = ({
       disabled={disabled}
       sx={{
         zIndex: 10,
-        positon: "absolute",
+        // position: "absolute",
         bgcolor: "background.paper",
         color: "text.primary",
         border: 1,
         borderColor: "divider",
         boxShadow: 1,
-        width: 48,
-        height: 48,
+        width: 37,
+        height: 37,
         "&:hover": {
           bgcolor: "grey.100",
+        },
+        "& .MuiSvgIcon-root": {
+          fontSize: "1rem",
         },
         ...sx,
       }}

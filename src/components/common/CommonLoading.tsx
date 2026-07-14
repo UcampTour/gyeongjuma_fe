@@ -3,7 +3,7 @@ import React from "react";
 
 export interface LoadingProps {
   isLoading: boolean;
-  loadingMsg: string;
+  loadingMsg?: string;
 }
 
 const CommonLoading = ({ loading }: { loading?: LoadingProps }) => {
