@@ -11,6 +11,7 @@ import LoginPage from "../pages/login/LoginPage";
 import PublicRoute from "../components/auth/PublicRoute";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 import RegisterPage from "../pages/login/RegisterPage";
+import RegistrationRoute from "../components/auth/RegistrationRoute";
 
 const routes: RouteObject[] = [
   {
@@ -67,9 +68,15 @@ const routes: RouteObject[] = [
           },
         ],
       },
+      // 3. 가입 완료 안된 사용자만 접근 가능
       {
-        path: "register",
-        element: <RegisterPage />
+        element: <RegistrationRoute />,
+        children: [
+          {
+            path: "register",
+            element: <RegisterPage />
+          },
+        ],
       },
     ],
   },

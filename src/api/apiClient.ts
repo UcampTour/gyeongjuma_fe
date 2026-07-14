@@ -1,8 +1,11 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
 import { useAuthStore } from "../store/useAuthStore";
 import { reissue } from "./authService";
+import router from "../routes/router";
 
-// 1. 인터페이스 정의
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+
+// 인터페이스
 export interface ApiResponse<T> {
   status: string;
   data: T;
@@ -13,25 +16,19 @@ export interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
 
-const clearAuthAndRedirect = () => {
-  useAuthStore.getState().logout();
-  window.location.href = "/login";
-};
-
-// 2. 일반 요청용 클라이언트
+// 일반 요청용 클라이언트
 export const apiClient = axios.create({
-  baseURL: "http://localhost:8080",
-  headers: { "Content-Type": "application/json" },
-});
-
-// 3. 토큰 재발급 전용 클라이언트
-export const authClient = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: BASE_URL,
   headers: { "Content-Type": "application/json" },
 });
 
 let isRefreshing = false;
 let pendingRequests: Array<(token: string) => void> = [];
+
+const clearAuthAndRedirect = () => {
+  useAuthStore.getState().logout();
+  router.navigate("/login");
+};
 
 // 요청 인터셉터
 apiClient.interceptors.request.use((config) => {
@@ -87,7 +84,7 @@ apiClient.interceptors.response.use(
       const newRefreshToken = response.refreshToken || refreshToken;
       const currentMember = useAuthStore.getState().member;
 
-      useAuthStore.getState().login(newAccessToken, newRefreshToken, currentMember);
+      useAuthStore.getState().login(newAccessToken, newRefreshToken, currentMember, false);
 
       pendingRequests.forEach((callback) => callback(newAccessToken));
       pendingRequests = [];

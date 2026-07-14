@@ -6,7 +6,7 @@ import { apiClient } from "../../api/apiClient";
 
 export const AuthGuard = ({ children }: { children: JSX.Element }) => {
   const [isInitializing, setIsInitializing] = useState(true);
-  const { accessToken, logout } = useAuthStore();
+  const { accessToken, logout } = useAuthStore.getState();
 
   useEffect(() => {
     const initAuth = async () => {

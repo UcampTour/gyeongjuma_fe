@@ -2,9 +2,13 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore"
 
 const PublicRoute = () => {
-  const { isLoggedIn } = useAuthStore();
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const isPendingRegistration = useAuthStore((state) => state.isPendingRegistration);
 
-  return isLoggedIn ? <Navigate to="/" replace={true} /> : <Outlet />;
+  if (isLoggedIn) return <Navigate to="/" replace />;
+  if (isPendingRegistration) return <Navigate to="/register" replace />;
+
+  return <Outlet />;
 }
 
 export default PublicRoute;
