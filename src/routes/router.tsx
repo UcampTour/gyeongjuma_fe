@@ -6,34 +6,75 @@ import HomePage from "../pages/home/HomePage";
 import ProfilePage from "../pages/profile/ProfilePage";
 import QuizListPage from "../pages/quiz/QuizListPage";
 import PlaceListPage from "../pages/places/PlaceListPage";
+import QuizPlayPage from "../pages/quiz/QuizPlayPage";
+import LoginPage from "../pages/login/LoginPage";
+import PublicRoute from "../components/auth/PublicRoute";
+import ProtectedRoute from "../components/auth/ProtectedRoute";
+import RegisterPage from "../pages/login/RegisterPage";
+import RegistrationRoute from "../components/auth/RegistrationRoute";
 
 const routes: RouteObject[] = [
   {
     path: "/",
     element: <App />,
     children: [
+      // 1. 로그인한 사용자만 접근 가능
       {
-        element: <MainLayout />,
+        element: <ProtectedRoute />,
         children: [
           {
-            index: true,
-            element: <HomePage />,
+            element: <MainLayout />,
+            children: [
+              {
+                index: true,
+                element: <HomePage />,
+              },
+              {
+                path: "explore",
+                element: <MapMainPage />,
+              },
+              {
+                path: "places",
+                element: <PlaceListPage />,
+              },
+              {
+                path: "profile",
+                element: <ProfilePage />,
+              },
+              {
+                path: "quiz",
+                children: [
+                  {
+                    index: true,
+                    element: <QuizListPage />,
+                  },
+                  {
+                    path: ":quizId",
+                    element: <QuizPlayPage />,
+                  },
+                ],
+              },
+            ],
           },
+        ],
+      },
+      // 2. 로그인 안 한 사용자만 접근 가능
+      {
+        element: <PublicRoute />,
+        children: [
           {
-            path: "explore" /* 지도 메인 홈 */,
-            element: <MapMainPage />,
+            path: "login",
+            element: <LoginPage />,
           },
+        ],
+      },
+      // 3. 가입 완료 안된 사용자만 접근 가능
+      {
+        element: <RegistrationRoute />,
+        children: [
           {
-            path: "places" /* 관광지 리스트 */,
-            element: <PlaceListPage />,
-          },
-          {
-            path: "profile", /*마이 페이지 */
-            element: <ProfilePage />,
-          },
-          {
-            path: "quiz",
-            element: <QuizListPage />,
+            path: "register",
+            element: <RegisterPage />
           },
         ],
       },
