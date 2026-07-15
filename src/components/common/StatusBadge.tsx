@@ -6,15 +6,14 @@ interface StatusBadgeProps {
   color?: string;
 }
 
-
-const StatusBadge = ({ 
-  label, 
+const StatusBadge = ({
+  label,
   bgcolor = "#3F8E72",
-  color = "#FFFFFF"
+  color = "#FFFFFF",
 }: StatusBadgeProps) => {
-
   return (
-     <Box sx={{ 
+    <Box
+      sx={{
         position: "absolute",
         top: "6px",
         left: "6px",
@@ -27,11 +26,12 @@ const StatusBadge = ({
         fontWeight: 800,
         boxShadow: "0 2px 4px rgba(0,0,0,0.15)",
         letterSpacing: "-0.3px",
-        lineHeight: 1
-      }}>
-        {label}
-      </Box>
-  )
-}
+        lineHeight: 1,
+      }}
+    >
+      {label}
+    </Box>
+  );
+};
 
 export default StatusBadge;

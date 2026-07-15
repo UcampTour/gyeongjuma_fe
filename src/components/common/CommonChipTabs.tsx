@@ -7,7 +7,7 @@ export interface TabItem {
 
 interface CommonChipTabsProps {
   tabs: TabItem[];
-  activeTab: number;
+  activeTab: number | null;
   setActiveTab: (index: number) => void;
 }
 

@@ -1,18 +1,24 @@
 import { Sheet, type SheetRef } from "react-modal-sheet";
-import type { PlaceMapMarker } from "../../models/MapModel";
+import type { PlaceMapMarker } from "../../models/mapModel";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import IconButton from "@mui/material/IconButton";
 import { Box, Stack } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import PlaceSummary from "./PlaceSummary";
 import PlaceDetailPage from "../../pages/places/PlaceDetailPage";
+import PlaceSummaryPage from "./PlaceSummaryPage";
 interface SheetProps {
   open: boolean;
   place: PlaceMapMarker | null;
   onClose: () => void;
 }
-
+// export interface HandleCommonSheetRef {
+//   full: () => void; // BottomSheet를 전체화면으로 열기 위한 메서드
+//   expand: () => void; // BottomSheet를 기본 높이로 열기 위한 메서드
+//   collapse: () => void; // BottomSheet를 닫기 위한 메서드
+//   close: () => void; // BottomSheet를 닫기 위한 메서드
+//   summary: () => void;
+// }
 export interface HandleSheetRef {
   full: () => void; // BottomSheet를 전체화면으로 열기 위한 메서드
   expand: () => void; // BottomSheet를 기본 높이로 열기 위한 메서드
@@ -39,6 +45,10 @@ export const snapPoints = [0, 0.1, 0.6, 1]; // BottomSheet의 스냅 위치
 
 const MapBottomSheet = forwardRef<HandleSheetRef, SheetProps>(
   ({ open, place, onClose }, ref) => {
+    // const mountPoint = document.getElementById("sheet-root");
+    const mountPoint: Element | undefined =
+      document.getElementById("sheet-root") ?? undefined;
+
     // BottomSheet를 원하는 스냅 위치로 이동시키기 위한 ref
     const sheetRef = useRef<SheetRef>(null);
 
@@ -68,6 +78,7 @@ const MapBottomSheet = forwardRef<HandleSheetRef, SheetProps>(
       <Sheet
         ref={sheetRef}
         isOpen={open}
+        mountPoint={snapIndex === SheetState.COLLAPSED ? mountPoint : undefined}
         onClose={onClose}
         // snapPoints={[0, 0.45, 1]}
         snapPoints={snapPoints}
@@ -113,7 +124,6 @@ const MapBottomSheet = forwardRef<HandleSheetRef, SheetProps>(
               </Stack>
             ) : (
               // 기본 상태에서는 드래그 핸들만 표시
-
               <div
                 style={{
                   display: "flex",
@@ -147,17 +157,21 @@ const MapBottomSheet = forwardRef<HandleSheetRef, SheetProps>(
                   fontSize: 18,
                 }}
               >
-                {place.title}
+                {place.placeName}
               </div>
             )}
             {/* 관광지 요약 정보 */}
             {place && snapIndex === SheetState.EXPANDED && (
-              // todo. 관광지 상세 정보 컴포넌트로 분리 예정
-              <PlaceSummary place={place} />
+              <Box
+                onClick={() => sheetRef.current?.snapTo(SheetState.FULL)}
+                sx={{ cursor: "pointer" }}
+              >
+                <PlaceSummaryPage placeId={place.placeId} />
+              </Box>
             )}
             {/* 전체화면 - 관광지 상세 페이지 */}
             {place && snapIndex === SheetState.FULL && (
-              <PlaceDetailPage placeId={place.id} />
+              <PlaceDetailPage placeId={place.placeId} />
             )}
           </Sheet.Content>
         </Sheet.Container>

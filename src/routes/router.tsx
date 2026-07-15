@@ -12,6 +12,8 @@ import PublicRoute from "../components/auth/PublicRoute";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 import RegisterPage from "../pages/login/RegisterPage";
 import RegistrationRoute from "../components/auth/RegistrationRoute";
+import MapSearchPage from "../pages/map/MapSearchPage";
+import PlaceDetailPage from "../pages/places/PlaceDetailPage";
 
 const routes: RouteObject[] = [
   {
@@ -31,7 +33,24 @@ const routes: RouteObject[] = [
               },
               {
                 path: "explore",
-                element: <MapMainPage />,
+                children: [
+                  {
+                    index: true,
+                    element: <MapMainPage />,
+                  },
+                  {
+                    path: "search",
+                    element: <MapSearchPage />,
+                  },
+                  {
+                    path: ":placeId",
+                    element: <PlaceDetailPage />,
+                  },
+                  {
+                    path: "filter",
+                    element: <PlaceListPage />,
+                  },
+                ],
               },
               {
                 path: "places",
@@ -74,7 +93,7 @@ const routes: RouteObject[] = [
         children: [
           {
             path: "register",
-            element: <RegisterPage />
+            element: <RegisterPage />,
           },
         ],
       },

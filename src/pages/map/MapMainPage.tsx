@@ -1,128 +1,128 @@
-import { useEffect, useRef, useState } from "react";
-import { useKakaoMap } from "../../hooks/useKakaoMap";
-import { type MapLocation, type PlaceMapMarker } from "../../models/MapModel";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useKakaoMap } from "../../hooks/map/useKakaoMap";
+
 import { Box, Stack } from "@mui/material";
 import IconCircleButton from "../../components/common/IconCircleButton";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import GpsFixedIcon from "@mui/icons-material/GpsFixed";
 import CurrentLocationMarker from "../../components/map/CurrentLocationMarker";
-import { dummyPlaceMarkerList } from "../../data/map/mapData"; // dummy test data
-import MapBottomSheet, {
-  type HandleSheetRef,
-} from "../../components/map/MapBottomSheet";
+import { dummyPlaceMarkerList } from "../../data/map/mapMarkerList"; // dummy test data
+import MapCommonInfoSheet, {
+  SheetState,
+  type HandleInfoSheetRef,
+} from "../../components/map/MapCommonInfoSheet";
 import type { LoadingProps } from "../../components/common/CommonLoading";
 import CommonLoading from "../../components/common/CommonLoading";
 import PlaceMarker from "../../components/map/PlaceMarker";
+import CommonSearchBar from "../../components/common/CommonSearchBar";
+import { useTranslation } from "react-i18next";
+import CommonFilterChip from "../../components/common/CommonFilterChip";
+import MapBottomSheet, {
+  type HandleSheetRef,
+} from "../../components/map/MapBottomSheet";
+import { useNavigate } from "react-router-dom";
+import { PlaceFilterType, type PlaceMapMarker } from "../../models/MapModel";
+import { usePlaceMarkers } from "../../hooks/queries/usePlaceMarkers";
+import { nearbyPlaceList } from "../../data/map/nearbyPlaceList";
+import { useCurrentLocation } from "../../hooks/useCurrentLocaton";
+import MapLegend from "../../components/map/MapLegend";
+import { useMapFilter } from "../../hooks/map/useMapFilter";
+import { useMapNavigation } from "../../hooks/map/useMapNavigation";
+import { useCommonLoading } from "../../hooks/common/useCommonLoading";
+import { useMapEvent } from "../../hooks/map/useMapEvent";
 
 /**
  * 지도 메인 페이지
  */
+
+export interface CommonSearchForm {
+  keyword: string;
+}
 const MapMainPage = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const mapRef = useRef<HTMLDivElement>(null);
   const sheetRef = useRef<HandleSheetRef>(null);
-
+  const infoSheetRef = useRef<HandleInfoSheetRef>(null);
   const map = useKakaoMap(mapRef);
 
-  const [placeData, setPlaceData] = useState<PlaceMapMarker[]>([]); // 관광지 목록 데이터
-  const [selectedPlace, setSelectedPlace] = useState<PlaceMapMarker | null>(null); // 선택 관광지
-  const [loading, setLoading] = useState<LoadingProps | undefined>(undefined);
+  /* 관광지 목록 데이터 */
+  const { data: placeData = [], isLoading, error } = usePlaceMarkers();
 
-  const [currentLocation, setCurrentLocation] = useState<MapLocation | null>(
+  /* 현재 위치 상태 */
+  const { loading, currentLocation, updateCurrentLocation } =
+    useCurrentLocation();
+
+  /* 지도 네비게이션 */
+  const { moveToGyeongjuCenter, moveToCurrentLocation, locationLoading } =
+    useMapNavigation({ map });
+
+  /* 필터링 */
+  const {
+    filterOptions,
+    selectedFilter,
+    setSelectedFilter,
+    getLegendConfig,
+    filterLoading,
+  } = useMapFilter(placeData);
+
+  const [selectedPlace, setSelectedPlace] = useState<PlaceMapMarker | null>(
     null,
-  ); // 현재 위치 상태
+  );
+  const [isRecommendOpen, setIsRecommendOpen] = useState(true);
+  const recommendInitialSnap = SheetState.DEFAULT;
+  useMapEvent({
+    map,
+    selectedPlace,
+    setSelectedPlace,
+    setIsRecommendOpen,
+    infoSheetRef,
+    sheetRef,
+  });
 
   useEffect(() => {
-    // dummyPlaceData를 placeData 상태로 설정
-    setPlaceData(dummyPlaceMarkerList);
-
-    // todo. fe에서 api 호출하여 관광지 목록 가져오기
-  }, []);
-
-  useEffect(() => {
-    if (!map) return;
-
-    const handleMapClick = () => {
-      setSelectedPlace(null);
-    };
-
-    const handleDragStart = () => {
-      // 관광지가 선택되어 있을 때만 BottomSheet를 20%로 접기
-      if (selectedPlace) {
-        sheetRef.current?.collapse();
-      }
-    };
-
-    window.kakao.maps.event.addListener(map, "click", handleMapClick);
-    window.kakao.maps.event.addListener(map, "dragstart", handleDragStart);
-
-    return () => {
-      window.kakao.maps.event.removeListener(map, "click", handleMapClick);
-      window.kakao.maps.event.removeListener(map, "dragstart", handleDragStart);
-    };
-  }, [map, selectedPlace]);
+    if (!selectedFilter) return;
+    sheetRef?.current?.close();
+    infoSheetRef?.current?.close();
+  }, [selectedFilter]);
 
   /**
    * 마커 클릭 이벤트 핸들러
    */
   const handleMarkerClick = (place: PlaceMapMarker) => {
-    console.log("marker clicked", place);
+    setIsRecommendOpen(false);
     setSelectedPlace(place);
     sheetRef.current?.expand(); // BottomSheet를 기본 높이로 열기
   };
 
-  /**
-   * 경주 중심지로 이동
-   */
-  const handleGoToGyeongjuCenter = () => {
-    if (!map) return;
+  const legendConfig = useMemo(
+    () => getLegendConfig(selectedFilter, placeData),
+    [selectedFilter, placeData],
+  );
 
-    sheetRef.current?.close(); // BottomSheet 닫기
-    setLoading({ isLoading: true, loadingMsg: "경주 중심지로 이동 중..." });
-
-    const gyeongjuCenter = new window.kakao.maps.LatLng(35.798365, 129.138955);
-
-    map.setCenter(gyeongjuCenter);
-
-    setTimeout(() => {
-      setLoading(undefined);
-    }, 500);
+  const handleGoToFilterList = () => {
+    navigate("/explore/filter", { state: { filter: selectedFilter } });
   };
 
   /**
    * 현재 위치로 이동
    */
-  const handleGoToCurrentLocation = () => {
-    sheetRef.current?.close(); // BottomSheet 닫기
+  const handleGoToCurrentLocation = async () => {
+    sheetRef.current?.close();
+
     if (!map) return;
 
-    if (!navigator.geolocation) {
-      console.warn("Geolocation 브라우저에서 작동 에러");
-      return;
-    }
-    setLoading({ isLoading: true, loadingMsg: "현재 위치로 이동 중..." });
+    const location = await updateCurrentLocation();
+    if (!location) return;
 
-    navigator.geolocation.getCurrentPosition(
-      ({ coords }) => {
-        const position = new window.kakao.maps.LatLng(
-          coords.latitude,
-          coords.longitude,
-        );
-        map.setCenter(position);
-        setCurrentLocation({ lat: coords.latitude, lng: coords.longitude });
-
-        setLoading(undefined);
-      },
-      (error) => {
-        console.warn("Geolocation error:", error);
-        setLoading(undefined);
-      },
-      { enableHighAccuracy: true, maximumAge: 0 },
-    );
+    moveToCurrentLocation(location, "현재 위치로 이동 중");
   };
+
+  const commonLoading = useCommonLoading(locationLoading, filterLoading);
 
   return (
     <>
-      <div
+      <Box
         style={{
           position: "relative",
           width: "100%",
@@ -137,43 +137,109 @@ const MapMainPage = () => {
             height: "100%",
           }}
         />
+        {/* 검색바 */}
         <Box
           sx={{
             position: "absolute",
             top: 16,
+            left: 16,
             right: 16,
             zIndex: 20,
           }}
         >
-          <Stack direction="column" spacing={1}>
-            <IconCircleButton
-              icon={<LocationOnIcon />}
-              ariaLabel="경주 중심지로 이동"
-              onClick={handleGoToGyeongjuCenter}
-            />
-            <IconCircleButton
-              icon={<GpsFixedIcon />}
-              ariaLabel="현재 위치로 이동"
-              onClick={handleGoToCurrentLocation}
-            />
+          {/* 검색창 페이지로 이동 */}
+          <CommonSearchBar
+            placeholder={t("map:search.placeholder")}
+            mode="navigate"
+            onClick={() => navigate("/explore/search")}
+          />
+          {/* 필터링 옵션 */}
+          <Stack direction="row" spacing={1}>
+            {filterOptions.map((item) => (
+              <CommonFilterChip
+                key={item.value}
+                label={item.label}
+                selected={selectedFilter === item.value}
+                onClick={() =>
+                  setSelectedFilter((prev) =>
+                    prev === item.value ? PlaceFilterType.NONE : item.value,
+                  )
+                }
+              />
+            ))}
           </Stack>
         </Box>
-        {/* 하단 드로어 */}
-        <MapBottomSheet
-          ref={sheetRef}
-          open={!!selectedPlace}
-          place={selectedPlace}
-          onClose={() => {
-            setSelectedPlace(null);
+
+        {/* 우측 상단 버튼 */}
+        <Stack
+          spacing={1}
+          sx={{
+            position: "absolute",
+            right: 16,
+            top: 70, // 하단에서 32px
+            zIndex: 20,
+            alignItems: "flex-end",
           }}
-        />
-      </div>
+        >
+          <IconCircleButton
+            icon={<LocationOnIcon />}
+            ariaLabel="경주 중심지로 이동"
+            onClick={moveToGyeongjuCenter}
+          />
+
+          <IconCircleButton
+            icon={<GpsFixedIcon />}
+            ariaLabel="현재 위치로 이동"
+            onClick={handleGoToCurrentLocation}
+          />
+        </Stack>
+
+        <Stack
+          spacing={1}
+          sx={{
+            position: "absolute",
+            width: "100%",
+            right: 16,
+            bottom: 8, // 하단에서 32px
+            zIndex: 20,
+            alignItems: "flex-end",
+          }}
+        >
+          {/* 우측 하단 혼잡도 범례 */}
+          {legendConfig && (
+            <MapLegend config={legendConfig} onClick={handleGoToFilterList} />
+          )}
+        </Stack>
+
+        {/* 하단 관광지 정보 드로어 */}
+        {selectedPlace && (
+          // 특정 관광지 정보 시트
+          <MapBottomSheet
+            ref={sheetRef}
+            open={!!selectedPlace}
+            place={selectedPlace}
+            onClose={() => setSelectedPlace(null)}
+          />
+        )}
+        {/* 하단 관광지 정보 드로어 */}
+        {isRecommendOpen && selectedFilter === PlaceFilterType.NONE && (
+          <MapCommonInfoSheet
+            ref={infoSheetRef}
+            open={isRecommendOpen}
+            initialSnap={recommendInitialSnap}
+            onClose={() => setIsRecommendOpen(false)}
+            placeList={nearbyPlaceList}
+          />
+        )}
+      </Box>
 
       {/* 관광지 마커 렌더링 */}
-      {map &&
+      {!loading &&
+        map &&
         placeData.map((place) => (
           <PlaceMarker
-            key={place.id}
+            filter={selectedFilter}
+            key={place.placeId}
             place={place}
             map={map}
             onClick={handleMarkerClick}
@@ -188,7 +254,8 @@ const MapMainPage = () => {
           lng={currentLocation.lng}
         />
       )}
-      <CommonLoading loading={loading} />
+      {/* 로딩창 */}
+      <CommonLoading loading={commonLoading} />
     </>
   );
 };

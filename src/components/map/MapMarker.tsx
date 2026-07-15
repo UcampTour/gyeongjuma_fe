@@ -1,20 +1,25 @@
 import { useEffect } from "react";
+
 import placeMarkerImage from "../../assets/map/test_marker.png";
 import currentLocationImage from "../../assets/map/test_current_marker.png";
 import type { MapLocation } from "../../models/MapModel";
 
 interface MapMarkerProps {
-  map: any; // useKakaoMap 훅이 반환한 카카오맵 객체
-  lat: number; // 위도
-  lng: number; // 경도
+  map: any;
+  lat: number;
+  lng: number;
   onClick?: (marker: MapLocation) => void;
   image?: string;
-  imageSize?: { width: number; height: number };
+  imageSize?: {
+    width: number;
+    height: number;
+  };
   title?: string;
+  showLabel?: boolean;
 }
 
 /**
- * 기본 마커 컴포넌트
+ * 카카오맵 마커 컴포넌트
  */
 const MapMarker = ({
   map,
@@ -24,52 +29,102 @@ const MapMarker = ({
   image,
   imageSize = { width: 50, height: 50 },
   title,
+  showLabel = true,
 }: MapMarkerProps) => {
   useEffect(() => {
     if (!map) return;
 
-    // 1. 카카오 좌표 객체 생성
     const position = new window.kakao.maps.LatLng(lat, lng);
 
-    // 2. 마커 이미지 생성
     const defaultImageUrls = {
       place: placeMarkerImage,
       visited: placeMarkerImage,
       currentLocation: currentLocationImage,
     } as const;
 
-    const markerImageUrl = image;
     const markerImage = new window.kakao.maps.MarkerImage(
-      markerImageUrl,
+      image ?? defaultImageUrls.place,
       new window.kakao.maps.Size(imageSize.width, imageSize.height),
     );
 
-    // 3. 마커 인스턴스 생성
+    // ===== 마커 생성 =====
     const marker = new window.kakao.maps.Marker({
       position,
-      title: title ?? "", // 마우스 오버 시 뜨는 기본 툴팁
-      image: markerImage, // 커스텀 이미지 적용
+      image: markerImage,
+      title: title ?? "",
     });
 
-    // 지도에 마커 표시
     marker.setMap(map);
 
-    // 클릭 이벤트 바인딩
+    // ===== 라벨(CustomOverlay) 생성 =====
+    let overlay: any = null;
+
+    if (showLabel && title) {
+      const label = document.createElement("div");
+      label.textContent = title;
+
+      Object.assign(label.style, {
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+
+        padding: "5px 10px",
+
+        background: "rgba(255,255,255,0.95)",
+        border: "1px solid #E5E7EB",
+        borderRadius: "999px",
+
+        color: "#222",
+        fontSize: "12px",
+        fontWeight: "600",
+        lineHeight: "1",
+
+        whiteSpace: "nowrap",
+
+        boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+
+        pointerEvents: "none",
+        userSelect: "none",
+      } satisfies Partial<CSSStyleDeclaration>);
+
+      overlay = new window.kakao.maps.CustomOverlay({
+        position,
+        content: label,
+
+        // 가운데 정렬
+        xAnchor: 0.5,
+
+        // 마커 아래에 표시
+        yAnchor: -0.15,
+      });
+
+      overlay.setMap(map);
+    }
+
+    // ===== 클릭 이벤트 =====
     const clickListener = () => {
-      if (onClick) {
-        onClick({ lat, lng }); // 클릭된 마커의 위치 데이터를 부모로 넘겨줌
-      }
+      onClick?.({ lat, lng });
     };
 
     window.kakao.maps.event.addListener(marker, "click", clickListener);
 
-    // 컴포넌트 언마운트 시 마커 제거 및 이벤트 해제
-    // Cleanup: 데이터가 바뀌거나 필터링되어 컴포넌트가 사라질 때 지도에서 마커 삭제
     return () => {
       window.kakao.maps.event.removeListener(marker, "click", clickListener);
-      marker.setMap(null); // 카카오 오버레이 객체만 제어하므로 DOM은 그리지 않음
+
+      marker.setMap(null);
+      overlay?.setMap(null);
     };
-  }, [map, lat, lng, image, imageSize, onClick]);
+  }, [
+    map,
+    lat,
+    lng,
+    image,
+    imageSize.width,
+    imageSize.height,
+    title,
+    showLabel,
+    onClick,
+  ]);
 
   return null;
 };

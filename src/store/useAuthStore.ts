@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface AuthMember {
   memberId: number;
@@ -9,11 +9,17 @@ interface AuthMember {
 interface AuthState {
   isLoggedIn: boolean;
   isPendingRegistration: boolean;
-  accessToken: string | null; 
+  accessToken: string | null;
   refreshToken: string | null;
   member: AuthMember | null;
 
-  login: (accessToken: string, refreshToken: string, member: AuthMember, isNewMember: boolean) => void;
+  login: (
+    accessToken: string,
+    refreshToken: string,
+    member: AuthMember,
+    isNewMember: boolean,
+  ) => void;
+  updateToken: (accessToken: string, refreshToken: string) => void;
   completeRegistration: (memner: AuthMember) => void;
   logout: () => void;
   updateNickname: (nickname: string) => void;
@@ -27,32 +33,45 @@ export const useAuthStore = create<AuthState>()(
       accessToken: null,
       refreshToken: null,
       member: null,
-      
+
       login: (accessToken, refreshToken, member, isNewMember) => {
-        set({ 
+        set({
           isLoggedIn: !isNewMember,
           isPendingRegistration: isNewMember,
-          accessToken, 
-          refreshToken, 
-          member 
+          accessToken,
+          refreshToken,
+          member,
+        });
+      },
+
+      updateToken: (accessToken, refreshToken) => {
+        set({
+          accessToken,
+          refreshToken,
         });
       },
 
       completeRegistration: (member) => {
-        set({ isLoggedIn: true, isPendingRegistration: false, member});
+        set({ isLoggedIn: true, isPendingRegistration: false, member });
       },
-      
+
       logout: () => {
-        set({ isLoggedIn: false, accessToken: null, refreshToken: null, member: null });
+        set({
+          isLoggedIn: false,
+          accessToken: null,
+          refreshToken: null,
+          member: null,
+          isPendingRegistration: false,
+        });
       },
-    
+
       updateNickname: (nickname) =>
         set((state) => ({
-          member: state.member ? {...state.member, nickname} : null
+          member: state.member ? { ...state.member, nickname } : null,
         })),
     }),
     {
-      name: 'auth-storage', 
-    }
-  )
+      name: "auth-storage",
+    },
+  ),
 );
