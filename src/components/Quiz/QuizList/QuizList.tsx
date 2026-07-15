@@ -4,17 +4,21 @@ import QuizCard from "./QuizCard";
 
 interface QuizListProps {
   quizList: QuizListItem[];
+  handleQuizClick: (quiz: QuizListItem) => void; 
 }
 
-const QuizList = ({ quizList }: QuizListProps) => {
-
+const QuizList = ({ quizList, handleQuizClick }: QuizListProps) => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       {quizList.map((quiz) => (
-        <QuizCard key={quiz.id} quiz={quiz} />
+        <QuizCard 
+          key={quiz.id} 
+          quiz={quiz} 
+          onClick={() => handleQuizClick(quiz)} // 클릭 이벤트 연결
+        />
       ))}
     </Box>
-  )
-}
+  );
+};
 
 export default QuizList;

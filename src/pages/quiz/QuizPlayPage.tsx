@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/common/PageHeader';
 import { QuizStatus } from '../../models/QuizModel';
 import { quizDetailData } from '../../data/quiz/QuizData';
-import QuizStart from '../../components/Quiz/QuizDetail/QuizStart';
+import QuizStart from '../../components/Quiz/QuizPlay/QuizStart';
 
 const answerData = [1, 3, 4, 2, 1];
 
@@ -44,7 +44,7 @@ const useAnimatedNumber = (targetNumber: number, duration: number = 500) => {
 const QuizPlayPage = () => {
   const navigate = useNavigate();
 
-  const [stage, setStage] = useState('start'); 
+  const [stage, setStage] = useState('playing'); 
   const [currentIdx, setCurrentIdx] = useState(0);
   const [correctCnt, setCorrectCnt] = useState(0);
   
@@ -91,8 +91,6 @@ const QuizPlayPage = () => {
 
   const getHeaderProps = () => {
     switch (stage) {
-      case 'start':
-        return { title: "퀴즈 시작하기" };
       case 'playing':
         return { title: quizDetailData.title, customBack: () => setStage('start') };
       case 'result':
@@ -112,16 +110,7 @@ const QuizPlayPage = () => {
 
       <Box sx={{ width: '100%', maxWidth: '500px', height: '100%', display: 'flex', flexDirection: 'column', boxSizing: 'border-box', px: 2, pb: 3, overflow: 'hidden'}}>
         
-        {/* 1. 시작 화면 */}
-        {stage === 'start' && (
-          <Fade in={stage === 'start'}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, height: '100%', pb: 11 }}>
-              <QuizStart quiz={quizDetailData} setStage={setStage} />
-            </Box>
-          </Fade>
-        )}
-
-        {/* 2. 퀴즈 풀이 화면 */}
+        {/* 퀴즈 풀이 화면 */}
         {stage === 'playing' && (
           <Fade in={stage === 'playing'}>
             <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, height: '100%', pb: 11 }}>
