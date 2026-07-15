@@ -1,50 +1,40 @@
-import { memo } from "react"
+import { memo } from "react";
 import { Box, Button, Card, CardMedia, Typography } from "@mui/material";
 import LockIcon from '@mui/icons-material/Lock';
 import QuizIcon from '@mui/icons-material/Quiz';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PendingIcon from '@mui/icons-material/Pending';
-import { useNavigate } from "react-router-dom";
 import { QuizStatus, type QuizListItem } from "../../../models/QuizModel";
 
 interface QuizCardProps {
   quiz: QuizListItem;
+  onClick: () => void; // 부모로부터 전달받는 클릭 핸들러
 }
 
-export const QuizCard = ({ quiz }: QuizCardProps) => {
-
-  const navigate = useNavigate();
-
+export const QuizCard = ({ quiz, onClick }: QuizCardProps) => {
   const isLocked = quiz.quizStatus === QuizStatus.LOCKED;
   const isAvailable = quiz.quizStatus === QuizStatus.AVAILABLE;
   const isProgressing = quiz.quizStatus === QuizStatus.PROGRESS;
   const isCompleted = quiz.quizStatus === QuizStatus.COMPLETED;
 
-  const handleNavigate = () => {
-    if (!isLocked) {
-      navigate(`/quiz/${quiz.id}`); 
-    }
-  };
-  
   return (
     <Card
       elevation={0}
-      onClick={handleNavigate}
+      onClick={isLocked ? undefined : onClick}
       sx={{
         display: "flex",
         bgcolor: "#FFFFFF",
-        borderRadius: "16px", 
-        p: 1.5,                
+        borderRadius: "16px",
+        p: 1.5,
         cursor: isLocked ? "default" : "pointer",
-        boxShadow: "0 4px 12px rgba(142,114,73,0.04)", 
-        position: "relative", 
-        overflow: "visible", 
+        boxShadow: "0 4px 12px rgba(142,114,73,0.04)",
+        position: "relative",
+        overflow: "visible",
         borderLeft: isCompleted ? "4px solid #4E7055" : "none",
-        border: isAvailable ? "1px solid rgba(142, 114, 73, 0.15)" : "none", 
+        border: isAvailable ? "1px solid rgba(142, 114, 73, 0.15)" : "none",
         opacity: isLocked ? 0.6 : 1,
         transition: "transform 0.2s, box-shadow 0.2s",
-        "&:hover": { transform: "translateY(-2px)" },
-        
+        "&:hover": { transform: isLocked ? "none" : "translateY(-2px)" },
         "&::before, &::after": {
           content: '""',
           position: "absolute",
@@ -52,7 +42,7 @@ export const QuizCard = ({ quiz }: QuizCardProps) => {
           height: "16px",
           backgroundColor: "#F7F5EE",
           borderRadius: "50%",
-          left: "112px", 
+          left: "112px",
           zIndex: 2,
         },
         "&::before": { top: "-8px" },
@@ -60,10 +50,10 @@ export const QuizCard = ({ quiz }: QuizCardProps) => {
       }}
     >
       <Box sx={{ position: "relative", width: 100, height: 100, flexShrink: 0 }}>
-        <CardMedia 
-          component="img" 
-          image={quiz.image} 
-          sx={{ width: "100%", height: "100%", borderRadius: "12px", objectFit: "cover", bgcolor: "#F5F2EB" }} 
+        <CardMedia
+          component="img"
+          image={quiz.image}
+          sx={{ width: "100%", height: "100%", borderRadius: "12px", objectFit: "cover", bgcolor: "#F5F2EB" }}
         />
         {isLocked && (
           <Box sx={{ position: "absolute", inset: 0, borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "rgba(0,0,0,0.35)" }}>
@@ -72,26 +62,18 @@ export const QuizCard = ({ quiz }: QuizCardProps) => {
         )}
       </Box>
 
-      <Box 
-        sx={{ 
-          width: "1px", 
-          borderLeft: "2px dashed #E5E0D8", 
-          mx: 1.5, 
-          my: 0.5,
-          position: "relative" 
-        }} 
-      />
+      <Box sx={{ width: "1px", borderLeft: "2px dashed #E5E0D8", mx: 1.5, my: 0.5, position: "relative" }} />
 
       <Box sx={{ flex: 1, pr: 0.5, display: "flex", flexDirection: "column", justifyContent: "space-between", minWidth: 0, overflow: "hidden" }}>
         <Box>
-          <Typography sx={{ fontWeight: 800, fontSize: "17px", color: "#111111", mb: 0.3, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", pr: (isCompleted || isProgressing) ? 3 : 0 }}>
+          <Typography sx={{ fontWeight: 800, fontSize: "17px", color: "#111111", mb: 0.3, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
             {quiz.title}
           </Typography>
           <Typography sx={{ color: "#958D80", fontSize: "12.5px", lineHeight: 1.3, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
             {quiz.description}
           </Typography>
         </Box>
-        
+
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 1, mt: 0.8, flexWrap: "nowrap" }}>
           <Box sx={{ display: "flex", alignItems: "center", bgcolor: "#F5F2EB", px: 0.8, py: 0.4, borderRadius: "4px", minWidth: 0, flexShrink: 1 }}>
             <QuizIcon sx={{ fontSize: "11px", color: "#8E7249", mr: 0.4, flexShrink: 0 }} />
@@ -101,24 +83,25 @@ export const QuizCard = ({ quiz }: QuizCardProps) => {
           </Box>
 
           <Button
-            size="small" 
+            size="small"
             variant={isProgressing ? "outlined" : "contained"}
-            disabled={isLocked} 
-            sx={{ 
-              height: "26px", 
-              borderRadius: "6px", 
-              fontSize: "11px", 
-              fontWeight: 800, 
-              px: 1.2, 
+            disabled={isLocked}
+            onClick={(e) => {
+              e.stopPropagation(); // 카드 전체 onClick과의 중복 방지
+              if (!isLocked) onClick();
+            }}
+            sx={{
+              height: "26px",
+              borderRadius: "6px",
+              fontSize: "11px",
+              fontWeight: 800,
+              px: 1.2,
               minWidth: "68px",
-              whiteSpace: "nowrap", 
-              flexShrink: 0,        
-              boxShadow: "none", 
+              boxShadow: "none",
               borderColor: isProgressing ? "#BA9663" : "transparent",
-              bgcolor: isCompleted ? "#EFECE5" : isProgressing ? "transparent" : "#8E7249", 
-              color: isCompleted ? "#A49E95" : isProgressing ? "#BA9663" : "#FFFFFF", 
-              pointerEvents: isLocked ? "none" : "auto",
-              "& :hover": { bgcolor: isProgressing ? "rgba(186, 150, 99, 0.1)" : isCompleted ? "#EFECE5" : "#765E3C" }
+              bgcolor: isCompleted ? "#EFECE5" : isProgressing ? "transparent" : "#8E7249",
+              color: isCompleted ? "#A49E95" : isProgressing ? "#BA9663" : "#FFFFFF",
+              "&:hover": { bgcolor: isProgressing ? "rgba(186, 150, 99, 0.1)" : isCompleted ? "#EFECE5" : "#765E3C" }
             }}
           >
             {isCompleted ? '다시 풀기' : isProgressing ? '이어 풀기' : '도전하기'}
@@ -138,6 +121,6 @@ export const QuizCard = ({ quiz }: QuizCardProps) => {
       )}
     </Card>
   );
-}
+};
 
 export default memo(QuizCard);
