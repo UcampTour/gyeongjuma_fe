@@ -1,25 +1,22 @@
 import { Box } from "@mui/material";
-import type { PlaceListItem } from "../../../models/PlaceModel";
+import type { PlaceListBase } from "../../../models/PlaceModel";
 import PlaceCard from "./PlaceCard";
 import { useNavigate } from "react-router-dom";
 
 interface PlaceListProps {
-  placeList: PlaceListItem[];
+  placeList: PlaceListBase[];
 }
 
 const PlaceList = ({ placeList }: PlaceListProps) => {
   const navigate = useNavigate();
 
-  const handleGoToPlaceDetail = () => {
-    navigate("/explore/");
-  };
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       {placeList.map((place) => (
         <PlaceCard
-          key={place.id}
+          key={place.placeId}
           place={place}
-          onClick={() => navigate(`/explore/${place.id}`)}
+          onClick={() => navigate(`/explore/${place.placeId}`)}
         />
       ))}
     </Box>

@@ -1,5 +1,5 @@
 import { CongestionLevel } from "../../models/commonModel";
-import type { NearByPlaceInfo } from "../../models/mapModel";
+import type { NearByPlaceInfo } from "../../models/MapModel";
 
 export const nearbyPlaceList: NearByPlaceInfo[] = [
   {

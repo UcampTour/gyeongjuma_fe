@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState, useTransition } from "react";
-import { PlaceFilterType, type PlaceMapMarker } from "../../models/MapModel";
+import { PlaceFilterType } from "../../models/MapModel";
 import type { MapLegendConfig } from "../../components/map/MapLegend";
 import { CongestionLevel, OperationStatus } from "../../models/commonModel";
 import type { LoadingProps } from "../../components/common/CommonLoading";
 import { useTranslation } from "react-i18next";
+import type { PlaceListBase } from "../../models/PlaceModel";
 
-export const useMapFilter = (places: PlaceMapMarker[]) => {
+export const useMapFilter = (places: PlaceListBase[]) => {
   const { t } = useTranslation();
   const [filterLoading, setFilterLoading] = useState<LoadingProps | undefined>(
     undefined,
@@ -35,7 +36,7 @@ export const useMapFilter = (places: PlaceMapMarker[]) => {
         return places.filter((place) => place.congestion !== "LOW");
 
       case PlaceFilterType.OPERATING:
-        return places.filter((place) => place.status === "OPEN");
+        return places.filter((place) => place.operationStatus === "OPEN");
 
       case PlaceFilterType.UNVISITED:
         return places.filter((place) => !place.isVisited);
@@ -47,7 +48,7 @@ export const useMapFilter = (places: PlaceMapMarker[]) => {
 
   const getLegendConfig = (
     filter: PlaceFilterType,
-    places: PlaceMapMarker[],
+    places: PlaceListBase[],
   ): MapLegendConfig | null => {
     switch (filter) {
       case PlaceFilterType.CONGESTION:
@@ -94,19 +95,21 @@ export const useMapFilter = (places: PlaceMapMarker[]) => {
               label: "운영중",
               value: OperationStatus.OPEN,
               color: "#4CAF50",
-              count: places.filter((p) => p.status === "OPEN").length,
+              count: places.filter((p) => p.operationStatus === "OPEN").length,
             },
             {
               label: "운영종료",
               value: OperationStatus.CLOSED,
               color: "#999",
-              count: places.filter((p) => p.status === "CLOSED").length,
+              count: places.filter((p) => p.operationStatus === "CLOSED")
+                .length,
             },
             {
               label: "브레이크 타임",
               value: OperationStatus.BREAK_TIME,
               color: "#ffb46d",
-              count: places.filter((p) => p.status === "BREAK_TIME").length,
+              count: places.filter((p) => p.operationStatus === "BREAK_TIME")
+                .length,
             },
           ],
         };

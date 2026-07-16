@@ -1,16 +1,16 @@
 import { useEffect, useRef } from "react";
-import type { PlaceMapMarker } from "../../models/MapModel";
 import type { HandleInfoSheetRef } from "../../components/map/MapCommonInfoSheet";
 import type { HandleSheetRef } from "../../components/map/MapBottomSheet";
+import type { PlaceListBase } from "../../models/PlaceModel";
 
 interface UseMapEventProps {
   map: any | null;
 
   // 선택된 관광지
-  selectedPlace: PlaceMapMarker | null;
+  selectedPlace: PlaceListBase | null;
 
   // 관광지 선택 상태 변경
-  setSelectedPlace: React.Dispatch<React.SetStateAction<PlaceMapMarker | null>>;
+  setSelectedPlace: React.Dispatch<React.SetStateAction<PlaceListBase | null>>;
 
   // 추천 시트 열림 상태 변경
   setIsRecommendOpen: React.Dispatch<React.SetStateAction<boolean>>;

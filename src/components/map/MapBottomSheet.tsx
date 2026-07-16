@@ -1,5 +1,4 @@
 import { Sheet, type SheetRef } from "react-modal-sheet";
-import type { PlaceMapMarker } from "../../models/mapModel";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import IconButton from "@mui/material/IconButton";
@@ -7,9 +6,10 @@ import { Box, Stack } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import PlaceDetailPage from "../../pages/places/PlaceDetailPage";
 import PlaceSummaryPage from "./PlaceSummaryPage";
+import type { PlaceListBase } from "../../models/PlaceModel";
 interface SheetProps {
   open: boolean;
-  place: PlaceMapMarker | null;
+  place: PlaceListBase | null;
   onClose: () => void;
 }
 // export interface HandleCommonSheetRef {
@@ -53,7 +53,7 @@ const MapBottomSheet = forwardRef<HandleSheetRef, SheetProps>(
     const sheetRef = useRef<SheetRef>(null);
 
     // 현재 BottomSheet의 스냅 위치(index)
-    const [snapIndex, setSnapIndex] = useState(SheetState.EXPANDED); // 기본 스냅 위치는 2 (45%)로 설정
+    const [snapIndex, setSnapIndex] = useState(SheetState.CLOSED); // 기본 스냅 위치는 2 (45%)로 설정
 
     // 전체화면 상태 여부
 

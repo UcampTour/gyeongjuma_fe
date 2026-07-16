@@ -5,11 +5,24 @@ import { CongestionLevel, OperationStatus } from "./commonModel";
 /**
  * API 서버로부터 받아오는 관광지 데이터 인터페이스
  */
+
+/**
+ * 관광지 목록 Request
+ */
+export interface PlaceSearchParams {
+  search?: string;
+  sort?: string; // 기본값 "distance"
+  latitude: number; // 필수
+  longitude: number; // 필수
+}
+/**
+ * 관광지 목록 Response
+ */
 export interface PlaceListBase {
-  id: number; // 관광지 고유 ID
-  name: string; // 관광지 이름 (예: 첨성대)
+  placeId: number; // 관광지 고유 ID
+  placeName: string; // 관광지 이름 (예: 첨성대)
   description: string; // 관광지 간단 설명
-  category: PlaceCategory; // 관광지 카테고리(추후 ENUM 변경)
+  category: string; // 관광지 카테고리 (추후 ENUM 변경)
   rating: number; // 관광지 평점
   reviewCount: number; // 평점 참여자 수
   likes: number; // 좋아요 수
@@ -19,13 +32,7 @@ export interface PlaceListBase {
   operationStatus: OperationStatus; // 운영 상태
   isVisited: boolean; // 방문 여부 상태
   imageUrl: string; // 대표 이미지
-}
-
-/**
- * 실제 화면 렌더링용 데이터 인터페이스
- */
-export interface PlaceListItem extends PlaceListBase {
-  distance: number | null; // 내 위치로부터 거리
+  distance: number; // 내 위치로부터의 거리 (Integer -> number)
 }
 
 /* -------- Constants -------- */
@@ -65,4 +72,21 @@ export enum PlaceSortType {
   DEFAULT = "DEFAULT",
   LIKES = "LIKES",
   DISTANCE = "DISTANCE",
+}
+
+// types/place.ts (타입 정의는 프로젝트 구조에 맞게 위치시켜 주세요)
+export interface PlaceSearchResponse {
+  id: number;
+  name: string;
+  // 백엔드 PlaceSearchResponse의 필드들을 여기에 정의해주세요.
+  latitude: number;
+  longitude: number;
+  address?: string;
+}
+
+export interface PlaceSearchParams {
+  search?: string;
+  sort?: string; // 기본값 "distance"
+  latitude: number; // 필수
+  longitude: number; // 필수
 }

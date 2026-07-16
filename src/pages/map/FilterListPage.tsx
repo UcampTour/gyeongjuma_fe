@@ -1,8 +1,5 @@
 import { Box } from "@mui/material";
-import React from "react";
 import PageHeader from "../../components/common/PageHeader";
-import PlaceCategoryFilter from "../../components/places/placelist/PlaceCategoryFilter";
-import CommonSearchBar from "../../components/common/CommonSearchBar";
 
 const FilterListPage = () => {
   // const {

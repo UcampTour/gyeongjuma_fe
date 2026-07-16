@@ -16,6 +16,7 @@ interface SheetProps {
   onClose: () => void;
   initialSnap: SheetState;
   placeList?: NearByPlaceInfo[]; // 관광지 목록 데이터
+  currentAddress: string | null;
 }
 
 export interface HandleInfoSheetRef {
@@ -45,7 +46,16 @@ export const snapPoints = [0, 0.1, 0.3, 0.7, 1]; // BottomSheet의 스냅 위치
  */
 
 const MapCommonInfoSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
-  ({ open, onClose, initialSnap = SheetState.DEFAULT, placeList }, ref) => {
+  (
+    {
+      open,
+      onClose,
+      initialSnap = SheetState.DEFAULT,
+      placeList,
+      currentAddress,
+    },
+    ref,
+  ) => {
     const navigate = useNavigate();
     // const mountPoint = document.getElementById("sheet-root"); //  BottomSheet를 지도의 하단에 렌더링하기 위해 mountPoint를 지정
     // const [mountPoint, setMountPoint] = useState<HTMLElement | null>(null);
@@ -136,32 +146,30 @@ const MapCommonInfoSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
             <Box sx={{ p: 2 }}>
               <Stack
                 direction="row"
-                spacing={1}
+                spacing={0.5}
                 sx={{ alignItems: "center", mb: 2 }}
               >
                 <PersonPinCircleIcon
                   sx={{
                     color: "text.secondary",
-                    fontSize: 22,
+                    fontSize: 20,
                   }}
                 />
 
                 <Typography
                   variant="subtitle2"
-                  sx={{ fontWeight: 500, fontSize: "0.875rem" }}
+                  sx={{ fontWeight: 500, fontSize: "0.785rem" }}
                   color="text.secondary"
                 >
-                  사용자의 현재 위치
+                  {currentAddress ?? "현재 위치를 확인 중..."}
                 </Typography>
               </Stack>
               <Stack
                 direction="row"
                 spacing={1}
-                sx={{ alignItems: "center", mb: 2 }}
+                sx={{ alignItems: "center", mb: 3 }}
               >
-                <Typography variant="subtitle1">
-                  지금 둘러보기 좋은 곳
-                </Typography>
+                <Typography variant="subtitle1">내 주변 인기 장소</Typography>
                 <Typography
                   variant="subtitle1"
                   sx={{ fontWeight: 700, color: "#BC9A5D" }}
