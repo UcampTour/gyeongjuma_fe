@@ -10,7 +10,6 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import CloseIcon from "@mui/icons-material/Close";
 import { CongestionLevel } from "../../models/commonModel";
 import CommonStamp from "../../components/common/CommonStamp";
-import QuizStart from "../../components/Quiz/QuizDetail/QuizStart";
 import { quizDetailData } from "../../data/quiz/QuizData";
 import PlaceCommentTab from "../../components/places/PlaceCommentTab";
 export interface PlaceDetailProps {
@@ -179,7 +178,7 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
                 pb: 11,
               }}
             >
-              <QuizStart quiz={quizDetailData} setStage={setStage} />
+              {/* <QuizStart quiz={quizDetailData} setStage={setStage} /> */}
             </Box>
           )}
         </Box>
