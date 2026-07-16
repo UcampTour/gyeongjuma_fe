@@ -1,13 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
 import { PlaceCategory, PlaceSortType } from "../models/PlaceModel";
-import { dummyPlaceListData } from "../data/places/placesData";
 import { getDistance } from "../utils/geo";
+import { usePlaceListQuery } from "../queries/usePlaceListQuery";
 
 export const usePlaceList = () => {
   const [userLocation, setUserLocation] = useState<{
     lat: number;
     lng: number;
   } | null>(null);
+
+  const { data: placeData = [], isLoading } = usePlaceListQuery({
+    latitude: userLocation?.lat ?? 0,
+    longitude: userLocation?.lng ?? 0,
+  });
+
   const [selectedCategory, setSelectedCategory] = useState<PlaceCategory>(
     PlaceCategory.ALL,
   );
@@ -33,7 +39,7 @@ export const usePlaceList = () => {
 
   // 2. 내 위치와 장소 사이의 거리 계산
   const placesWithDistance = useMemo(() => {
-    return dummyPlaceListData.map((place) => {
+    return placeData.map((place) => {
       const distance = userLocation
         ? getDistance(userLocation.lat, userLocation.lng, place.lat, place.lng)
         : null;
@@ -51,7 +57,9 @@ export const usePlaceList = () => {
 
       // 키워드 매칭 여부
       const cleanKeyword = searchKeyword.trim().toLocaleLowerCase();
-      const matchesKeyword = place.name.toLowerCase().includes(cleanKeyword);
+      const matchesKeyword = place.placeName
+        .toLowerCase()
+        .includes(cleanKeyword);
 
       return matchesCategory && matchesKeyword;
     });

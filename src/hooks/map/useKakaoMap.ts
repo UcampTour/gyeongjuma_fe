@@ -1,4 +1,5 @@
 import { useEffect, useState, type RefObject } from "react";
+import { GYEONGJU_CENTER } from "../../constants/map";
 
 /**
  * Kakao Maps hook
@@ -19,7 +20,10 @@ export const useKakaoMap = (mapRef: RefObject<HTMLDivElement | null>) => {
     // 카카오맵 API 로드 후 지도 생성
     window.kakao.maps.load(() => {
       const kakaoMap = new window.kakao.maps.Map(mapRef.current, {
-        center: new window.kakao.maps.LatLng(35.798365, 129.138955), // 초기 중심 좌표: 경주역
+        center: new window.kakao.maps.LatLng(
+          GYEONGJU_CENTER.lat,
+          GYEONGJU_CENTER.lng,
+        ), // 초기 중심 좌표: 경주역
         level: 5,
       });
 

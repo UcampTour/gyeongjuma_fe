@@ -1,4 +1,4 @@
-import { PlaceFilterType, type PlaceMapMarker } from "../../models/MapModel";
+import { PlaceFilterType } from "../../models/MapModel";
 import MapMarker from "./MapMarker";
 import normalMarker from "../../assets/map/normal_marker.png";
 import operatingMarker from "../../assets/map/operating_marker.png";
@@ -6,14 +6,15 @@ import unvisitedFilterMarker from "../../assets/map/unvisited_filter_marker.png"
 import lowCongestionMarker from "../../assets/map/congestion_low.png";
 import mediumCongestionMarker from "../../assets/map/congestion_medium.png";
 import highCongestionMarker from "../../assets/map/congestion_high.png";
+import type { PlaceListBase } from "../../models/PlaceModel";
 
 /**
  *  관광지 마커 컴포넌트
  */
 export interface PlaceMarkerProps {
   map: any; // useKakaoMap 훅이 반환한 카카오맵 객체
-  place: PlaceMapMarker; // 관광지 정보
-  onClick?: (place: PlaceMapMarker) => void; // 클릭 이벤트 핸들러
+  place: PlaceListBase; // 관광지 정보
+  onClick?: (place: PlaceListBase) => void; // 클릭 이벤트 핸들러
   filter: PlaceFilterType;
 }
 
@@ -55,8 +56,8 @@ const PlaceMarker = ({
   return (
     <MapMarker
       map={map}
-      lat={place.mapY}
-      lng={place.mapX}
+      lat={place.lat}
+      lng={place.lng}
       title={place.placeName}
       image={settingMarkerImage()}
       imageSize={{ width: 35, height: 35 }}

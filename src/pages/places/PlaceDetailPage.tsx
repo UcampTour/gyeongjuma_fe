@@ -10,8 +10,8 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import CloseIcon from "@mui/icons-material/Close";
 import { CongestionLevel } from "../../models/commonModel";
 import CommonStamp from "../../components/common/CommonStamp";
-import { quizDetailData } from "../../data/quiz/QuizData";
 import PlaceCommentTab from "../../components/places/PlaceCommentTab";
+import PlaceInfoTab from "../../components/places/PlaceInfoTab";
 export interface PlaceDetailProps {
   placeId?: number; //number;
 }
@@ -121,8 +121,8 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
             size={80}
           />
         </Stack>
-
-        {activeTab === 0 && place?.imageList?.length > 0 && (
+        {/* // activeTab === 0 &&  */}
+        {place?.imageList?.length > 0 && (
           <Swiper
             spaceBetween={12}
             slidesPerView={place?.imageList.length > 1 ? 1.15 : 0}
@@ -149,21 +149,22 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
             ))}
           </Swiper>
         )}
-
+        {/* <Box
+          sx={{
+            position: "sticky",
+            top: 0,
+            zIndex: 10,
+          }}
+        > */}
         <CommonChipTabs
           tabs={TABS}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
+        {/* </Box> */}
+
         <Box>
-          {activeTab === 0 && (
-            <>
-              <p>관광지 이름: {place?.title ?? ""}</p>
-              <p>혼잡도: {place?.CongestionLevel ?? ""}</p>
-              <p>운영상태: {place?.status ?? ""}</p>
-              <p>방문여부: {place?.isVisited ? "방문 완료" : "미방문"}</p>
-            </>
-          )}
+          {activeTab === 0 && <PlaceInfoTab />}
 
           {activeTab === 1 && <PlaceCommentTab />}
 

@@ -6,12 +6,10 @@ import IconCircleButton from "../../components/common/IconCircleButton";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import GpsFixedIcon from "@mui/icons-material/GpsFixed";
 import CurrentLocationMarker from "../../components/map/CurrentLocationMarker";
-import { dummyPlaceMarkerList } from "../../data/map/mapMarkerList"; // dummy test data
 import MapCommonInfoSheet, {
   SheetState,
   type HandleInfoSheetRef,
 } from "../../components/map/MapCommonInfoSheet";
-import type { LoadingProps } from "../../components/common/CommonLoading";
 import CommonLoading from "../../components/common/CommonLoading";
 import PlaceMarker from "../../components/map/PlaceMarker";
 import CommonSearchBar from "../../components/common/CommonSearchBar";
@@ -21,15 +19,16 @@ import MapBottomSheet, {
   type HandleSheetRef,
 } from "../../components/map/MapBottomSheet";
 import { useNavigate } from "react-router-dom";
-import { PlaceFilterType, type PlaceMapMarker } from "../../models/MapModel";
-import { usePlaceMarkers } from "../../hooks/queries/usePlaceMarkers";
+import { PlaceFilterType } from "../../models/MapModel";
+import { usePlaceListQuery } from "../../queries/usePlaceListQuery";
 import { nearbyPlaceList } from "../../data/map/nearbyPlaceList";
-import { useCurrentLocation } from "../../hooks/useCurrentLocaton";
+import { useCurrentLocation } from "../../hooks/useCurrentLocation";
 import MapLegend from "../../components/map/MapLegend";
 import { useMapFilter } from "../../hooks/map/useMapFilter";
 import { useMapNavigation } from "../../hooks/map/useMapNavigation";
 import { useCommonLoading } from "../../hooks/common/useCommonLoading";
 import { useMapEvent } from "../../hooks/map/useMapEvent";
+import type { PlaceListBase } from "../../models/PlaceModel";
 
 /**
  * 지도 메인 페이지
@@ -45,13 +44,16 @@ const MapMainPage = () => {
   const sheetRef = useRef<HandleSheetRef>(null);
   const infoSheetRef = useRef<HandleInfoSheetRef>(null);
   const map = useKakaoMap(mapRef);
+  /* 현재 위치 상태 */
+  const { loading, currentLocation, updateCurrentLocation, getCurrentAddress } =
+    useCurrentLocation();
 
   /* 관광지 목록 데이터 */
-  const { data: placeData = [], isLoading, error } = usePlaceMarkers();
-
-  /* 현재 위치 상태 */
-  const { loading, currentLocation, updateCurrentLocation } =
-    useCurrentLocation();
+  const { data: placeData = [] } = usePlaceListQuery({
+    longitude: currentLocation?.lng ?? 0,
+    latitude: currentLocation?.lat ?? 0,
+  });
+  const [markerLoading, setMarkerLoading] = useState(false);
 
   /* 지도 네비게이션 */
   const { moveToGyeongjuCenter, moveToCurrentLocation, locationLoading } =
@@ -66,7 +68,7 @@ const MapMainPage = () => {
     filterLoading,
   } = useMapFilter(placeData);
 
-  const [selectedPlace, setSelectedPlace] = useState<PlaceMapMarker | null>(
+  const [selectedPlace, setSelectedPlace] = useState<PlaceListBase | null>(
     null,
   );
   const [isRecommendOpen, setIsRecommendOpen] = useState(true);
@@ -79,6 +81,21 @@ const MapMainPage = () => {
     infoSheetRef,
     sheetRef,
   });
+  const [currentAddress, setCurrentAddress] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!map) return; // 지도 생성 완료 후에만 실행
+
+    const initLocation = async () => {
+      const location = await updateCurrentLocation();
+      if (!location) return;
+
+      const address = await getCurrentAddress(location.lat, location.lng);
+      setCurrentAddress(address);
+    };
+
+    initLocation();
+  }, [map]);
 
   useEffect(() => {
     if (!selectedFilter) return;
@@ -89,7 +106,7 @@ const MapMainPage = () => {
   /**
    * 마커 클릭 이벤트 핸들러
    */
-  const handleMarkerClick = (place: PlaceMapMarker) => {
+  const handleMarkerClick = (place: PlaceListBase) => {
     setIsRecommendOpen(false);
     setSelectedPlace(place);
     sheetRef.current?.expand(); // BottomSheet를 기본 높이로 열기
@@ -109,7 +126,7 @@ const MapMainPage = () => {
    */
   const handleGoToCurrentLocation = async () => {
     sheetRef.current?.close();
-
+    // infoSheetRef.current?.close();
     if (!map) return;
 
     const location = await updateCurrentLocation();
@@ -119,6 +136,29 @@ const MapMainPage = () => {
   };
 
   const commonLoading = useCommonLoading(locationLoading, filterLoading);
+  const loadingState =
+    commonLoading ??
+    (markerLoading
+      ? {
+          isLoading: true,
+          loadingMsg: "지도를 불러오는 중...",
+        }
+      : undefined);
+
+  // 1. 컴포넌트 내부 상단에 마커 리스트 메모이제이션 추가
+  const renderedMarkers = useMemo(() => {
+    if (loading || !map || !placeData) return null;
+
+    return placeData.map((place) => (
+      <PlaceMarker
+        filter={selectedFilter}
+        key={place.placeId}
+        place={place}
+        map={map}
+        onClick={handleMarkerClick}
+      />
+    ));
+  }, [placeData, map, selectedFilter, loading]); // 의존성 배열 관리
 
   return (
     <>
@@ -229,12 +269,14 @@ const MapMainPage = () => {
             initialSnap={recommendInitialSnap}
             onClose={() => setIsRecommendOpen(false)}
             placeList={nearbyPlaceList}
+            currentAddress={currentAddress}
           />
         )}
       </Box>
 
       {/* 관광지 마커 렌더링 */}
-      {!loading &&
+      {renderedMarkers}
+      {/* {!loading &&
         map &&
         placeData.map((place) => (
           <PlaceMarker
@@ -244,7 +286,7 @@ const MapMainPage = () => {
             map={map}
             onClick={handleMarkerClick}
           />
-        ))}
+        ))} */}
 
       {/* 현재 위치 마커 렌더링 */}
       {currentLocation && (

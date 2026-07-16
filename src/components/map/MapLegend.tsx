@@ -30,6 +30,7 @@ const MapLegend = ({ config, onClick }: MapLegendProps) => {
         }
       }}
       sx={{
+        width: 140,
         position: "absolute",
         // right: 16,
         bottom: 16,
