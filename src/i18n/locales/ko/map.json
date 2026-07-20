@@ -5,5 +5,9 @@
   "buttons": {
     "currentLocation": "현재 위치",
     "nearbyAttractions": "주변 관광지"
+  },
+  "label": {
+    "unVisited": "미방문",
+    "isVisited": "방문 완료"
   }
 }

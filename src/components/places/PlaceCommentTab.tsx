@@ -1,6 +1,11 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import type { PlaceListBase } from "../../models/PlaceModel";
 
-const PlaceCommentTab = () => {
+export interface PlaceCommentProps {
+  place: PlaceListBase | undefined;
+}
+const PlaceCommentTab = ({ place }: PlaceCommentProps) => {
+  const description = place?.description?.replace(/\.\s*/g, ".\n\n");
   return (
     <Box
       sx={{
@@ -10,13 +15,18 @@ const PlaceCommentTab = () => {
         border: "1px solid rgba(160, 142, 115, 0.15)",
         borderRadius: "32px",
         p: 2.5,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
+        pt: 3.5,
         boxShadow: "0 4px 20px rgba(160, 142, 115, 0.03)",
       }}
     >
-      해설탭
+      <Typography
+        sx={{
+          whiteSpace: "pre-line",
+          lineHeight: 1.8,
+        }}
+      >
+        {description}
+      </Typography>
     </Box>
   );
 };

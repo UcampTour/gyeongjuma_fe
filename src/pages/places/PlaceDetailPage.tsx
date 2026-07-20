@@ -12,37 +12,29 @@ import { CongestionLevel } from "../../models/commonModel";
 import CommonStamp from "../../components/common/CommonStamp";
 import PlaceCommentTab from "../../components/places/PlaceCommentTab";
 import PlaceInfoTab from "../../components/places/PlaceInfoTab";
+import { usePlaceDetail } from "../../hooks/place/usePlaceDetail";
+import type { PlaceListBase } from "../../models/PlaceModel";
+import { useTranslation } from "react-i18next";
 export interface PlaceDetailProps {
   placeId?: number; //number;
 }
 
-const dummyPlaceDetail = {
-  title: "경주역",
-  enTitle: "Gyeongju Station (KTX)",
-  imageList: [
-    "https://picsum.photos/seed/bulguksa1/400/300",
-    "https://picsum.photos/seed/bulguksa2/400/300",
-    "https://picsum.photos/seed/bulguksa3/400/300",
-  ],
-  CongestionLevel: CongestionLevel.HIGH,
-  status: "OPEN",
-  isVisited: true,
-};
-
 const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { placeId: paramPlaceId } = useParams<{ placeId: string }>();
-  const [place, setPlace] = useState<any | null>(null);
+  const [place, setPlace] = useState<PlaceListBase>();
   const [activeTab, setActiveTab] = useState(0);
-  const placeId = propPlaceId || paramPlaceId;
+  const placeId = propPlaceId || Number(paramPlaceId);
 
   const [stage, setStage] = useState("start");
+  const { getPlaceDetail } = usePlaceDetail();
 
   useEffect(() => {
     if (!placeId) return;
-    console.log(placeId);
     // placeId를 기반으로 API 호출하여 관광지 상세 정보를 가져오는 로직
-    setPlace(dummyPlaceDetail);
+    const target = getPlaceDetail(placeId);
+    setPlace(target);
   }, [placeId]);
 
   const TABS: TabItem[] = [
@@ -102,71 +94,74 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
       >
         <Stack
           direction="row"
-          sx={{ justifyContent: "space-between", alignItems: "flex-start" }}
+          sx={{
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            pr: 1,
+          }}
         >
           {/* 타이틀 영역 */}
-          <Stack sx={{ mb: 2, mt: 5, gap: 1 }}>
+          <Stack sx={{ mb: 3, mt: 5, gap: 1 }}>
             <Typography sx={{ fontSize: "25px", fontWeight: 700 }}>
-              {place?.title ?? ""}
+              {place?.placeName ?? ""}
             </Typography>
 
-            <Typography sx={{ fontSize: "18px", fontWeight: 700 }}>
-              {place?.enTitle ?? ""}
-            </Typography>
+            {/* <Typography sx={{ fontSize: "18px", fontWeight: 700 }}>
+              {place?.enPlaceName ?? ""}
+            </Typography> */}
           </Stack>
 
           {/* 우측 상단 스탬프 */}
           <CommonStamp
-            label={place?.isVisited ? "방문 완료" : "미방문"}
+            label={
+              place?.isVisited
+                ? t("map:label.isVisited")
+                : t("map:label.unVisited")
+            }
             size={80}
+            sx={{
+              transform: "rotate(8deg)",
+            }}
           />
         </Stack>
         {/* // activeTab === 0 &&  */}
-        {place?.imageList?.length > 0 && (
+        {place?.imageUrl && (
           <Swiper
             spaceBetween={12}
-            slidesPerView={place?.imageList.length > 1 ? 1.15 : 0}
+            slidesPerView={0}
             grabCursor
             style={{
               width: "100%",
               height: 220,
             }}
           >
-            {place.imageList.map((img: string, index: number) => (
-              <SwiperSlide key={index}>
-                <Box
-                  component="img"
-                  src={img}
-                  alt={place.title}
-                  sx={{
-                    width: "100%",
-                    height: 220,
-                    borderRadius: 3,
-                    objectFit: "cover",
-                  }}
-                />
-              </SwiperSlide>
-            ))}
+            <SwiperSlide key={place?.placeId}>
+              <Box
+                component="img"
+                src={place?.imageUrl}
+                alt={place?.placeName}
+                sx={{
+                  width: "100%",
+                  height: 220,
+                  borderRadius: 3,
+                  objectFit: "cover",
+                }}
+              />
+            </SwiperSlide>
           </Swiper>
         )}
-        {/* <Box
-          sx={{
-            position: "sticky",
-            top: 0,
-            zIndex: 10,
-          }}
-        > */}
+
+        {/* 관광지 상세 페이지 > 탭 */}
         <CommonChipTabs
           tabs={TABS}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
-        {/* </Box> */}
 
         <Box>
-          {activeTab === 0 && <PlaceInfoTab />}
+          {activeTab === 0 && <PlaceInfoTab place={place} />}
 
-          {activeTab === 1 && <PlaceCommentTab />}
+          {activeTab === 1 && <PlaceCommentTab place={place} />}
 
           {activeTab === 2 && <Box>오디오 영역</Box>}
           {activeTab === 3 && (

@@ -20,9 +20,9 @@ createRoot(document.getElementById("root")!).render(
           <CssBaseline />
           <RouterProvider router={router} />
         </ThemeProvider>
+        {/* 리액트 쿼리 개발 캐싱 확인 도구 */}
+        {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
       </QueryClientProvider>
     </GoogleOAuthProvider>
-    {/* 리액트 쿼리 개발 캐싱 확인 도구
-    {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />} */}
   </StrictMode>,
 );

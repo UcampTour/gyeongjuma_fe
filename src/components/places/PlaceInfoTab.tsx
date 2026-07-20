@@ -1,73 +1,95 @@
-import { Box, Chip, Stack, Typography } from "@mui/material";
+import { Box, Chip, Stack } from "@mui/material";
 import GroupsIcon from "@mui/icons-material/Groups";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import LocalParkingIcon from "@mui/icons-material/LocalParking";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import ReviewsOutlinedIcon from "@mui/icons-material/ReviewsOutlined";
+import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
+import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
+import TourIcon from "@mui/icons-material/Tour";
+import InfoRow from "../common/InfoRow";
+import type { PlaceListBase } from "../../models/PlaceModel";
+import StarIcon from "@mui/icons-material/Star";
+interface PlaceInfoTabProps {
+  place?: PlaceListBase;
+}
 
-const PlaceInfoTab = () => {
+const PlaceInfoTab = ({ place }: PlaceInfoTabProps) => {
   return (
     <Box sx={{ py: 2 }}>
-      <Stack spacing={2}>
-        {/* 예상 혼잡도 */}
-        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
-          <GroupsIcon sx={{ color: "#BC9A5D" }} />
+      <Stack spacing={3}>
+        <InfoRow
+          icon={<CategoryOutlinedIcon />}
+          label="카테고리"
+          value={place?.category}
+        />
 
-          <Stack spacing={0.3}>
-            <Typography variant="caption" color="text.secondary">
-              예상 혼잡도
-            </Typography>
-
+        <InfoRow
+          icon={<GroupsIcon />}
+          label="예상 혼잡도"
+          value={
             <Chip
-              label="보통"
+              label={place?.congestion ?? "정보 없음"}
               size="small"
-              color="warning"
-              sx={{ width: "fit-content" }}
+              color="default"
             />
-          </Stack>
-        </Stack>
+          }
+        />
 
-        {/* 운영 상태 */}
-        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
-          <ScheduleIcon sx={{ color: "#BC9A5D" }} />
+        <InfoRow
+          icon={<ScheduleIcon />}
+          label="운영 상태"
+          value={
+            <Chip
+              label={place?.operationStatus ?? "정보 없음"}
+              size="small"
+              color="default"
+            />
+          }
+        />
 
-          <Stack spacing={0.3}>
-            <Typography variant="caption" color="text.secondary">
-              운영 상태
-            </Typography>
+        <InfoRow
+          icon={<LocationOnIcon />}
+          label="주소"
+          value={`${place?.add1 ?? ""} ${place?.add2 ?? ""}`.trim()}
+        />
 
-            <Typography variant="body2" sx={{ fontWeight: 600 }}>
-              운영 중 (09:00 ~ 18:00)
-            </Typography>
-          </Stack>
-        </Stack>
+        <InfoRow
+          icon={<RouteOutlinedIcon />}
+          label="현재 위치"
+          value={`${Math.round(place?.distance ?? 0).toLocaleString()}m`}
+        />
 
-        {/* 주소 */}
-        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
-          <LocationOnIcon sx={{ color: "#BC9A5D" }} />
+        <InfoRow
+          icon={<StarIcon />}
+          label="평점"
+          value={place?.rating ? `${place?.rating?.toFixed(1)} 점` : "0.0점"}
+        />
 
-          <Stack spacing={0.3}>
-            <Typography variant="caption" color="text.secondary">
-              주소
-            </Typography>
+        <InfoRow
+          icon={<ReviewsOutlinedIcon />}
+          label="리뷰"
+          value={`${place?.reviewCount ?? 0}개`}
+        />
 
-            <Typography variant="body2">
-              경상북도 경주시 건천읍 신경주역로 80
-            </Typography>
-          </Stack>
-        </Stack>
+        <InfoRow
+          icon={<FavoriteBorderIcon />}
+          label="좋아요"
+          value={`${place?.likes ?? 0}개`}
+        />
 
-        {/* 주차 정보 */}
-        <Stack direction="row" spacing={1.5} sx={{ alignItems: "center" }}>
-          <LocalParkingIcon sx={{ color: "#BC9A5D" }} />
-
-          <Stack spacing={0.3}>
-            <Typography variant="caption" color="text.secondary">
-              주차 정보
-            </Typography>
-
-            <Typography variant="body2">주차 가능 (무료)</Typography>
-          </Stack>
-        </Stack>
+        <InfoRow
+          icon={<TourIcon />}
+          label="방문 여부"
+          value={
+            <Chip
+              label={place?.isVisited ? "방문 완료" : "미방문"}
+              size="small"
+              color={place?.isVisited ? "info" : "default"}
+            />
+          }
+        />
       </Stack>
     </Box>
   );

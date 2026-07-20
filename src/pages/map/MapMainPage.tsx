@@ -20,7 +20,6 @@ import MapBottomSheet, {
 } from "../../components/map/MapBottomSheet";
 import { useNavigate } from "react-router-dom";
 import { PlaceFilterType } from "../../models/MapModel";
-import { usePlaceListQuery } from "../../queries/usePlaceListQuery";
 import { nearbyPlaceList } from "../../data/map/nearbyPlaceList";
 import { useCurrentLocation } from "../../hooks/useCurrentLocation";
 import MapLegend from "../../components/map/MapLegend";
@@ -29,6 +28,9 @@ import { useMapNavigation } from "../../hooks/map/useMapNavigation";
 import { useCommonLoading } from "../../hooks/common/useCommonLoading";
 import { useMapEvent } from "../../hooks/map/useMapEvent";
 import type { PlaceListBase } from "../../models/PlaceModel";
+import { dummyPlaceList } from "../../data/map/dummyPlaceList";
+import { usePlaceList } from "../../hooks/usePlaceList";
+import { useNearbyPlaceListQuery } from "../../queries/useNearbyPlaceListQuery";
 
 /**
  * 지도 메인 페이지
@@ -49,10 +51,14 @@ const MapMainPage = () => {
     useCurrentLocation();
 
   /* 관광지 목록 데이터 */
-  const { data: placeData = [] } = usePlaceListQuery({
-    longitude: currentLocation?.lng ?? 0,
+  const { allPlaceList } = usePlaceList();
+
+  const { data: nearbyPlaceData = [] } = useNearbyPlaceListQuery({
     latitude: currentLocation?.lat ?? 0,
+    longitude: currentLocation?.lng ?? 0,
+    sort: "distance",
   });
+
   const [markerLoading, setMarkerLoading] = useState(false);
 
   /* 지도 네비게이션 */
@@ -66,7 +72,7 @@ const MapMainPage = () => {
     setSelectedFilter,
     getLegendConfig,
     filterLoading,
-  } = useMapFilter(placeData);
+  } = useMapFilter(allPlaceList);
 
   const [selectedPlace, setSelectedPlace] = useState<PlaceListBase | null>(
     null,
@@ -113,8 +119,8 @@ const MapMainPage = () => {
   };
 
   const legendConfig = useMemo(
-    () => getLegendConfig(selectedFilter, placeData),
-    [selectedFilter, placeData],
+    () => getLegendConfig(selectedFilter, allPlaceList),
+    [selectedFilter, allPlaceList],
   );
 
   const handleGoToFilterList = () => {
@@ -147,9 +153,9 @@ const MapMainPage = () => {
 
   // 1. 컴포넌트 내부 상단에 마커 리스트 메모이제이션 추가
   const renderedMarkers = useMemo(() => {
-    if (loading || !map || !placeData) return null;
+    if (loading || !map || !allPlaceList) return null;
 
-    return placeData.map((place) => (
+    return allPlaceList.map((place) => (
       <PlaceMarker
         filter={selectedFilter}
         key={place.placeId}
@@ -158,7 +164,7 @@ const MapMainPage = () => {
         onClick={handleMarkerClick}
       />
     ));
-  }, [placeData, map, selectedFilter, loading]); // 의존성 배열 관리
+  }, [allPlaceList, map, selectedFilter, loading]); // 의존성 배열 관리
 
   return (
     <>
@@ -268,7 +274,7 @@ const MapMainPage = () => {
             open={isRecommendOpen}
             initialSnap={recommendInitialSnap}
             onClose={() => setIsRecommendOpen(false)}
-            placeList={nearbyPlaceList}
+            placeList={nearbyPlaceData}
             currentAddress={currentAddress}
           />
         )}

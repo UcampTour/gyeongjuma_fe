@@ -2,9 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { getPlaceList } from "../api/placeApi";
 import type { PlaceSearchParams } from "../models/PlaceModel";
 
-export const usePlaceListQuery = (params: PlaceSearchParams) => {
+export const useNearbyPlaceListQuery = (params: PlaceSearchParams) => {
   return useQuery({
-    queryKey: ["places", params],
+    queryKey: ["nearbyPlaces", params],
     queryFn: () => getPlaceList(params),
     // 위도, 경도 좌표가 실제로 존재할 때만 쿼리 자동 실행
     enabled: params.latitude !== undefined && params.longitude !== undefined,
