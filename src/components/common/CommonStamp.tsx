@@ -1,4 +1,5 @@
-import { Box, Typography } from "@mui/material";
+import type { Theme } from "@emotion/react";
+import { Box, Typography, type SxProps } from "@mui/material";
 
 interface CommonStampProps {
   label: string;
@@ -7,7 +8,7 @@ interface CommonStampProps {
   size?: number;
 
   // 외부 스타일 override
-  // sx?: SxProps<Theme>;
+  sx?: SxProps<Theme>;
 
   // 색상 변경 가능
   color?: string;
@@ -17,6 +18,7 @@ const CommonStamp = ({
   label,
   size = 50,
   color = "#8E7249",
+  sx,
 }: CommonStampProps) => {
   return (
     <Box
@@ -32,6 +34,7 @@ const CommonStamp = ({
         backgroundColor: "rgba(255, 255, 255, 0.85)",
         boxShadow: `inset 0 0 0 1px ${color}`,
         backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M0 0h10v1H0zm0 4h10v1H0z' fill='%238E7249' fill-opacity='0.04'/%3E%3C/svg%3E")`,
+        ...sx,
       }}
     >
       <Box

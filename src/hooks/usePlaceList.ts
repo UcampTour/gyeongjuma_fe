@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { PlaceCategory, PlaceSortType } from "../models/PlaceModel";
 import { getDistance } from "../utils/geo";
 import { usePlaceListQuery } from "../queries/usePlaceListQuery";
+import { dummyPlaceList } from "../data/map/dummyPlaceList";
 
 export const usePlaceList = () => {
   const [userLocation, setUserLocation] = useState<{
@@ -9,7 +10,8 @@ export const usePlaceList = () => {
     lng: number;
   } | null>(null);
 
-  const { data: placeData = [], isLoading } = usePlaceListQuery({
+  /*  전체 관광지 목록 */
+  const { data: placeData = [] } = usePlaceListQuery({
     latitude: userLocation?.lat ?? 0,
     longitude: userLocation?.lng ?? 0,
   });
@@ -92,6 +94,7 @@ export const usePlaceList = () => {
   return {
     selectedCategory,
     setSelectedCategory,
+    allPlaceList: placeData,
     placeList: sortedPlaces,
     searchKeyword,
     setSearchKeyword,

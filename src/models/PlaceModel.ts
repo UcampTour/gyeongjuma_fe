@@ -33,6 +33,8 @@ export interface PlaceListBase {
   isVisited: boolean; // 방문 여부 상태
   imageUrl: string; // 대표 이미지
   distance: number; // 내 위치로부터의 거리 (Integer -> number)
+  add1?: string;
+  add2?: string;
 }
 
 /* -------- Constants -------- */

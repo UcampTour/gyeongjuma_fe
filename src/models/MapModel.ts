@@ -37,12 +37,3 @@ export enum PlaceFilterType {
   OPERATING = "OPERATING",
   UNVISITED = "UNVISITED",
 }
-
-export interface NearByPlaceInfo {
-  id: string; // 관광지 고유 ID
-  title: string;
-  distance: number; // 단위: m
-  isOpen: boolean;
-  congestion: CongestionLevel;
-  image: string;
-}
