@@ -41,18 +41,18 @@ export const usePlaceList = () => {
   }, []);
 
   // 2. 내 위치와 장소 사이의 거리 계산
-  const placesWithDistance = useMemo(() => {
-    return placeData.map((place) => {
-      const distance = userLocation
-        ? getDistance(userLocation.lat, userLocation.lng, place.lat, place.lng)
-        : null;
-      return { ...place, distance };
-    });
-  }, [userLocation]);
+  // const placesWithDistance = useMemo(() => {
+  //   return placeData.map((place) => {
+  //     const distance = userLocation
+  //       ? getDistance(userLocation.lat, userLocation.lng, place.lat, place.lng)
+  //       : null;
+  //     return { ...place, distance };
+  //   });
+  // }, [userLocation]);
 
   // 3. 데이터 필터링
   const filteredPlaces = useMemo(() => {
-    return placesWithDistance.filter((place) => {
+    return placeData.filter((place) => {
       // 카테고리 매칭 여부
       const matchesCategory =
         selectedCategory === PlaceCategory.ALL ||
@@ -66,7 +66,7 @@ export const usePlaceList = () => {
 
       return matchesCategory && matchesKeyword;
     });
-  }, [placesWithDistance, selectedCategory, searchKeyword]);
+  }, [placeData, selectedCategory, searchKeyword]);
 
   // 4. 데이터 정렬
   const sortedPlaces = useMemo(() => {
@@ -95,7 +95,7 @@ export const usePlaceList = () => {
   return {
     selectedCategory,
     setSelectedCategory,
-    placeList: placeData,
+    placeList: sortedPlaces,
     searchKeyword,
     setSearchKeyword,
     sortBy,

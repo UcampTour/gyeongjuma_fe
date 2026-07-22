@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Box, Fade } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import PageHeader from "../../components/common/PageHeader";
-import { QuizStatus } from "../../models/QuizModel";
 import { quizDetailData } from "../../data/quiz/QuizData";
 import QuizPlayView from "../../components/Quiz/QuizPlay/QuizPlayView";
 import { QuizResultView } from "../../components/Quiz/QuizPlay/QuizResultView";
@@ -35,8 +34,6 @@ const QuizPlayPage = () => {
       setCorrectCnt((prev) => prev + 1);
     }
 
-    // setProgressIdx((prev) => prev + 1);
-
     setTimeout(() => {
       if (currentIdx === quizDetailData.totalQuestions - 1) {
         setStage("result");
@@ -53,7 +50,6 @@ const QuizPlayPage = () => {
     setTimeout(() => {
       setCurrentIdx(0);
       setCorrectCnt(0);
-      // setProgressIdx(0);
       setSelectedAnswerId(null);
       setUserAnswers([]);
     }, 200);
@@ -114,15 +110,7 @@ const QuizPlayPage = () => {
         {/* 퀴즈 완료 및 통합 결과/리뷰 화면 */}
         {stage === "result" && (
           <Fade in={stage === "result"}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                flexGrow: 1,
-                height: "100%",
-                pb: 11,
-              }}
-            >
+            <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1, height: "100%", pb: 11 }} >
                 <QuizResultView
                   correctCnt={correctCnt}
                   userAnswers={userAnswers}
