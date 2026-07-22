@@ -7,11 +7,14 @@ export const usePlaceList = () => {
   const [userLocation, setUserLocation] = useState<{
     lat: number;
     lng: number;
-  } | null>(null);
+  }>({
+    lat: 35.856171,
+    lng: 129.224748,
+  });
 
   const { data: placeData = [], isLoading } = usePlaceListQuery({
-    latitude: userLocation?.lat ?? 0,
-    longitude: userLocation?.lng ?? 0,
+    latitude: userLocation?.lat,
+    longitude: userLocation?.lng,
   });
 
   const [selectedCategory, setSelectedCategory] = useState<PlaceCategory>(
@@ -92,10 +95,11 @@ export const usePlaceList = () => {
   return {
     selectedCategory,
     setSelectedCategory,
-    placeList: sortedPlaces,
+    placeList: placeData,
     searchKeyword,
     setSearchKeyword,
     sortBy,
     setSortBy,
+    isLoading,
   };
 };

@@ -10,6 +10,7 @@ interface PlaceListProps {
 const PlaceList = ({ placeList }: PlaceListProps) => {
   const navigate = useNavigate();
 
+  console.log("지금 그려질 리스트:", placeList);
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       {placeList.map((place) => (
