@@ -1,19 +1,37 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { QuizCategory, type QuizListItem } from "../models/QuizModel"
-import { dummyQuizListData } from "../data/quiz/QuizData";
+import { fetchQuizList } from "../api/quizService";
 
 export const useQuizList = () => {
 
   const [selectedCategory, setSelectedCategory] = useState<QuizCategory>(QuizCategory.ALL);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedQuiz, setSelectedQuiz] = useState<QuizListItem | null>(null);
+  const [quizData, setQuizData] = useState<QuizListItem[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const getQuizzes = async () => {
+      try {
+        setIsLoading(true);
+        const data = await fetchQuizList();
+        setQuizData(data.quizList);
+      } catch (error) {
+        console.error("퀴즈 목록 불러오기 실패: ", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getQuizzes();
+  }, []);
 
   const filteredQuizList = useMemo(() => {
 
-    return dummyQuizListData.filter((quiz) => {
+    return quizData.filter((quiz) => {
       return selectedCategory === QuizCategory.ALL || quiz.quizStatus === selectedCategory;
     });
-  }, [selectedCategory]);
+  }, [quizData, selectedCategory]);
 
   const handleQuizClick = (quiz: QuizListItem) => {
     setSelectedQuiz(quiz);

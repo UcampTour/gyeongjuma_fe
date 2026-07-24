@@ -30,7 +30,7 @@ const LoginPage = () => {
       login(
         response.accessToken,
         response.refreshToken,
-        { memberId: response.memberId, nickname: response.nickname },
+        { memberId: response.memberId, nickname: response.nickname ?? "" },
         response.isNewMember,
       );
       navigate(response.isNewMember ? "/register" : "/");

@@ -3,14 +3,18 @@
 /**
  * 퀴즈 리스트 데이터 인터페이스
  */
+export interface QuizListResponse {
+  quizList: QuizListItem[];
+}
+
 export interface QuizListItem {
-  id: number;
-  title: string;
+  quizId: number;
+  quizTitle: string;
   description: string;
-  image: string;
+  imageUrl: string;
   totalQuestions: number;
   solvedQuestions: number;
-  quizStatus: QuizStatus
+  quizStatus: QuizStatus;
 }
 
 /**

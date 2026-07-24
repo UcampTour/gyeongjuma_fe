@@ -52,7 +52,7 @@ export const QuizCard = ({ quiz, onClick }: QuizCardProps) => {
       <Box sx={{ position: "relative", width: 100, height: 100, flexShrink: 0 }}>
         <CardMedia
           component="img"
-          image={quiz.image}
+          image={quiz.imageUrl}
           sx={{ width: "100%", height: "100%", borderRadius: "12px", objectFit: "cover", bgcolor: "#F5F2EB" }}
         />
         {isLocked && (
@@ -67,7 +67,7 @@ export const QuizCard = ({ quiz, onClick }: QuizCardProps) => {
       <Box sx={{ flex: 1, pr: 0.5, display: "flex", flexDirection: "column", justifyContent: "space-between", minWidth: 0, overflow: "hidden" }}>
         <Box>
           <Typography sx={{ fontWeight: 800, fontSize: "17px", color: "#111111", mb: 0.3, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-            {quiz.title}
+            {quiz.quizTitle}
           </Typography>
           <Typography sx={{ color: "#958D80", fontSize: "12.5px", lineHeight: 1.3, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
             {quiz.description}
