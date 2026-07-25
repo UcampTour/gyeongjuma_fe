@@ -1,0 +1,13 @@
+{
+  "category": {
+    "all": "all",
+    "tourist": "tourist",
+    "historic": "historic",
+    "other": "other"
+  },
+  "sortType": {
+    "default": "default",
+    "likes": "likes",
+    "distance": "distance"
+  }
+}

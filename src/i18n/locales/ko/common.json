@@ -1,0 +1,14 @@
+{
+  "bottomNav": {
+    "explore": "지도",
+    "places": "관광지",
+    "quiz": "퀴즈",
+    "profile": "프로필",
+    "home": "홈"
+  },
+  "label": {
+    "congestionLevel": "예상혼잡도",
+    "isOpen": "운영중",
+    "unvisited": "미방문지"
+  }
+}
