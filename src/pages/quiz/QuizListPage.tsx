@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import QuizProgressCard from "../../components/Quiz/QuizList/QuizProgressCard";
 import QuizList from "../../components/Quiz/QuizList/QuizList";
 import PageHeader from "../../components/common/PageHeader";
@@ -15,7 +15,16 @@ const QuizListPage = () => {
     selectedQuiz,
     handleQuizClick,
     drawerClose,
+    isLoading,
   } = useQuizList();
+
+  if (isLoading || !quizList) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", bgcolor: "#F7F5EE" }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ bgcolor: "#F7F5EE", minHeight: "100vh", pb: 16 }}>

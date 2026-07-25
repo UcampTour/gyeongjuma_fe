@@ -4,7 +4,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import {
   statusBadgeStyles,
-  type PlaceListItem,
+  type PlaceListBase,
 } from "../../../models/PlaceModel";
 import StatusBadge from "../../common/StatusBadge";
 import CommonStamp from "../../common/CommonStamp";
@@ -13,7 +13,7 @@ import { memo } from "react";
 import { OperationStatus } from "../../../models/commonModel";
 
 interface PlaceCardProps {
-  place: PlaceListItem;
+  place: PlaceListBase;
   onClick: () => void;
 }
 
@@ -28,7 +28,7 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
 
   return (
     <Card
-      key={place.id}
+      key={place.placeId}
       elevation={0}
       onClick={onClick}
       sx={{
@@ -51,7 +51,7 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
         <CardMedia
           component="img"
           image={place.imageUrl}
-          alt={place.name}
+          alt={place.placeName}
           loading="lazy"
           sx={{
             width: "100%",
@@ -61,10 +61,10 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
             bgcolor: "#F5F2EB",
           }}
         />
-        <StatusBadge
+        {/* <StatusBadge
           label={currentBadge.label}
           bgcolor={currentBadge.bgColor}
-        />
+        /> */}
       </Box>
 
       {/* 우측 정보 텍스트 영역 */}
@@ -90,7 +90,8 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
               mb: 0.1,
             }}
           >
-            {t(`places:category.${place.category.toLowerCase()}`)}
+            {/* {t(`places:category.${place.category.toLowerCase()}`)} */}
+            {place.category}
           </Typography>
 
           <Typography
@@ -104,7 +105,7 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
               textOverflow: "ellipsis",
             }}
           >
-            {place.name}
+            {place.placeName}
           </Typography>
 
           <Typography
