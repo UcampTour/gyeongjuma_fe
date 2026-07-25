@@ -1,4 +1,5 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
+import { useAuthStore } from "../store/useAuthStore";
 // 1. Axios 인스턴스 생성 (기본 설정)
 const apiInstance: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8080", // 환경변수 또는 기본 URL
@@ -11,7 +12,8 @@ const apiInstance: AxiosInstance = axios.create({
 // 인터셉터 설정 (TODO. 토큰 주입)
 apiInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("auth-storage");
+    const token = useAuthStore.getState().accessToken;
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }

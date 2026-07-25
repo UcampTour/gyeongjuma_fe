@@ -9,12 +9,16 @@ import { CongestionLevel, OperationStatus } from "./commonModel";
 /**
  * 관광지 목록 Request
  */
-export interface PlaceSearchParams {
-  search?: string;
-  sort?: string; // 기본값 "distance"
+
+export interface PlaceLocPrams {
   latitude: number; // 필수
   longitude: number; // 필수
 }
+export interface PlaceSearchParams extends PlaceLocPrams {
+  search?: string;
+  sort?: string; // 기본값 "distance"
+}
+
 /**
  * 관광지 목록 Response
  */
@@ -33,6 +37,8 @@ export interface PlaceListBase {
   isVisited: boolean; // 방문 여부 상태
   imageUrl: string; // 대표 이미지
   distance: number | null; // 내 위치로부터의 거리 (Integer -> number)
+  addr1?: string;
+  addr2?: string;
 }
 
 /* -------- Constants -------- */

@@ -1,10 +1,13 @@
-import { usePlaceList } from "../usePlaceList";
+import { usePlaceListQuery } from "../../queries/usePlaceListQuery";
 
 export const usePlaceDetail = () => {
-  const { allPlaceList } = usePlaceList();
+  const { data: placeList = [] } = usePlaceListQuery({
+    latitude: 0,
+    longitude: 0,
+  });
 
   const getPlaceDetail = (placeId: number) => {
-    const target = allPlaceList.find((place) => place.placeId === placeId);
+    const target = placeList.find((place) => place.placeId === placeId);
     return target;
   };
   return {

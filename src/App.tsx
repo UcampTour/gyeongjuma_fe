@@ -1,11 +1,12 @@
-import { Outlet } from "react-router-dom"
+import { Outlet } from "react-router-dom";
+import { DialogProvider } from "./providers/DialogProvider";
 
 function App() {
-  return(
+  return (
     <>
       <Outlet />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

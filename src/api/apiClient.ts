@@ -12,6 +12,14 @@ export interface ApiResponse<T> {
   message?: string;
 }
 
+export interface ApiErrorResponse {
+  status: number;
+  error: string;
+  code: string;
+  message: string;
+  timestamp: string;
+}
+
 export interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }

@@ -1,5 +1,10 @@
-import type { PlaceListBase, PlaceSearchParams } from "../models/PlaceModel";
-import { apiClient } from "./apiClient";
+import type {
+  PlaceListBase,
+  PlaceLocPrams,
+  PlaceSearchParams,
+} from "../models/PlaceModel";
+import { api } from "./api";
+import { apiClient, type ApiResponse } from "./apiClient";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -15,6 +20,53 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export const getPlaceList = async (
   params: PlaceSearchParams,
 ): Promise<PlaceListBase[]> => {
-  const response = await apiClient.get(`${BASE_URL}/place`, {params});
+  // const response = await api.get({
+  //   url: `${BASE_URL}/place`,
+  //   params: params,
+  // });
+  const response = await apiClient.get(`${BASE_URL}/place`, { params });
   return response.data.data;
 };
+
+/**
+ * 관광지 방문 인증 처리
+ * @param placeId
+ * @param params
+ * @returns
+ */
+export const certifyVisit = async (placeId: number, params: PlaceLocPrams) => {
+  // const response = await api.post({
+  //   url: `${BASE_URL}/visit/${placeId}`,
+  //   params: params,
+  // });
+
+  const response = await apiClient.post(
+    `${BASE_URL}/visit/${placeId}?latitude=${params.latitude}&longitude=${params.longitude}`, // ?latitude=${params.latitude}&longitude=${params.longitude}
+    // {
+    //   params,
+    // },
+    // {
+    //   param: {
+    //     lattitude: params.latitude,
+    //     longitude: params.longitude,
+    //   },
+    // },
+  );
+  return response.data;
+};
+
+export interface VisitCertifyResponse {
+  visitId: number;
+  placeId: number;
+  distanceMeters: number;
+  radiusMeters: number;
+}
+// "status": "SUCCESS",
+// "message": "방문 인증에 성공했습니다.",
+// "data": {
+//     "visitId": 30,
+//     "placeId": 126209,
+//     "distanceMeters": 1.802794826069598E-4,
+//     "radiusMeters": 100.0
+// },
+// "timestamp": "2026-07-16 16:55:09"

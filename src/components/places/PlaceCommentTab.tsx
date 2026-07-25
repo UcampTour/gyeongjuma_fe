@@ -11,9 +11,10 @@ const PlaceCommentTab = ({ place }: PlaceCommentProps) => {
       sx={{
         mt: 1.5,
         mb: 2,
+        minHeight: "100%",
         bgcolor: "rgba(255, 255, 255, 0.5)",
         border: "1px solid rgba(160, 142, 115, 0.15)",
-        borderRadius: "32px",
+        borderRadius: "20px",
         p: 2.5,
         pt: 3.5,
         boxShadow: "0 4px 20px rgba(160, 142, 115, 0.03)",
@@ -25,7 +26,9 @@ const PlaceCommentTab = ({ place }: PlaceCommentProps) => {
           lineHeight: 1.8,
         }}
       >
-        {description}
+        {place?.description === null || place?.description === ""
+          ? "등록된 해설 정보가 없습니다."
+          : description}
       </Typography>
     </Box>
   );
