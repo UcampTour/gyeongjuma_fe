@@ -15,6 +15,7 @@ export const useQuizList = () => {
       try {
         setIsLoading(true);
         const data = await fetchQuizList();
+        console.log("호출 성공!!!");
         setQuizData(data.quizList);
       } catch (error) {
         console.error("퀴즈 목록 불러오기 실패: ", error);
@@ -51,6 +52,7 @@ export const useQuizList = () => {
     selectedQuiz,
     handleQuizClick,
     drawerClose,
+    isLoading
   }
 }
 

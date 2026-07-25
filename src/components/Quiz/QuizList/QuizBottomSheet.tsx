@@ -72,8 +72,8 @@ const QuizBottomSheet = ({
               }}
             >
               <img
-                src={quiz.image}
-                alt={quiz.title}
+                src={quiz.imageUrl}
+                alt={quiz.quizTitle}
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
             </Box>
@@ -83,7 +83,7 @@ const QuizBottomSheet = ({
                 variant="h6"
                 sx={{ fontWeight: 800, color: "#1F1F1F" }}
               >
-                {quiz.title}
+                {quiz.quizTitle}
               </Typography>
               <Typography sx={{ color: "#7A7265", fontSize: "0.9rem", mt: 1 }}>
                 {quiz.description}
@@ -165,7 +165,7 @@ const QuizBottomSheet = ({
             <Button
               variant="contained"
               fullWidth
-              onClick={() => navigate(`/quiz/${quiz.id}`)}
+              onClick={() => navigate(`/quiz/${quiz.quizId}`)}
               sx={{
                 py: 1.5,
                 borderRadius: "16px",

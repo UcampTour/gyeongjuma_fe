@@ -1,26 +1,35 @@
-import { Box, Typography, Button, Paper, Divider } from "@mui/material";
+import { Box, Typography, Button, Paper, Divider, CircularProgress } from "@mui/material";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import ReplayIcon from "@mui/icons-material/Replay";
 import ListIcon from "@mui/icons-material/List";
-import { quizDetailData } from "../../../data/quiz/QuizData";
+import type { QuizItem, QuizResultResponse } from "../../../models/QuizModel";
 
 interface QuizResultViewProps {
-  correctCnt: number;
-  userAnswers: number[];
-  answerData: number[];
+  quizData: QuizItem;
+  quizResultData: QuizResultResponse;
+  resultLoading: boolean;
   onRetry: () => void;
   onGoToList: () => void;
 }
 
 export const QuizResultView = ({
-  correctCnt,
-  userAnswers,
-  answerData,
+  quizData,
+  quizResultData,
+  resultLoading,
   onRetry,
   onGoToList,
 }: QuizResultViewProps) => {
+
+  if (resultLoading || !quizData) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", bgcolor: "#F7F5EE" }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <>
     <Box
@@ -42,9 +51,9 @@ export const QuizResultView = ({
           textAlign: "center",
         }}
       >
-        총 {quizDetailData.totalQuestions}문제 중{" "}
+        총 {quizData.totalQuestions}문제 중{" "}
         <Box component="span" sx={{ color: "#A08E73", fontWeight: 800 }}>
-          {correctCnt}문제
+          {quizResultData.correctQuestions}문제
         </Box>
         를 맞혔습니다.
       </Typography>
@@ -64,7 +73,7 @@ export const QuizResultView = ({
       >
         <EmojiEventsIcon sx={{ color: "#A08E73", fontSize: "1.1rem" }} />
         <Typography sx={{ fontWeight: 800, color: "#1F1F1F", fontSize: "0.98rem" }}>
-          +{correctCnt * 50} Point
+          +{quizResultData.correctQuestions * 50} Point
         </Typography>
       </Paper>
     </Box>
@@ -87,7 +96,7 @@ export const QuizResultView = ({
         내 정답 확인하기
       </Typography>
       <Typography sx={{ fontSize: "0.8rem", color: "#7A7265", fontWeight: 600 }}>
-        정답률 {Math.round((correctCnt / quizDetailData.totalQuestions) * 100)}%
+        정답률 {Math.round((quizResultData.correctQuestions / quizData.questions.length) * 100)}%
       </Typography>
     </Box>
 
@@ -109,10 +118,11 @@ export const QuizResultView = ({
         },
       }}
     >
-      {quizDetailData.questions.map((q, idx) => {
-        const uAnsId = userAnswers[idx];
-        const cAnsId = answerData[idx];
-        const isCorrect = uAnsId === cAnsId;
+      {quizData.questions.map((q, idx) => {
+        const resItem = quizResultData.questions.find((item) => item.questionId === q.quizId) || quizResultData.questions[idx];
+        const isCorrect = resItem?.isCorrect;
+        const uAnsId = resItem?.userSelectedId;
+        const cAnsId = resItem?.correctOptionId;
 
         return (
           <Box
