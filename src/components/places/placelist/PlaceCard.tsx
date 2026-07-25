@@ -10,7 +10,8 @@ import StatusBadge from "../../common/StatusBadge";
 import CommonStamp from "../../common/CommonStamp";
 import { useTranslation } from "react-i18next";
 import { memo } from "react";
-import { OperationStatus } from "../../../models/commonModel";
+import { CongestionLevel, OperationStatus } from "../../../models/commonModel";
+import defaultPlaceImg from "../../../assets/default_place_img.png";
 
 interface PlaceCardProps {
   place: PlaceListBase;
@@ -21,10 +22,9 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
   const { t } = useTranslation();
 
   const currentBadge =
-    place.operationStatus === OperationStatus.OPEN
-      ? statusBadgeStyles[place.congestion] ||
-        statusBadgeStyles[OperationStatus.OPEN]
-      : statusBadgeStyles[place.operationStatus];
+  place.operationStatus === OperationStatus.OPEN && place.congestion !== CongestionLevel.NONE
+    ? statusBadgeStyles[place.congestion]
+    : statusBadgeStyles[place.operationStatus] || statusBadgeStyles[OperationStatus.NONE];
 
   return (
     <Card
@@ -50,7 +50,7 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
       >
         <CardMedia
           component="img"
-          image={place.imageUrl}
+          image={place.imageUrl ?? defaultPlaceImg}
           alt={place.placeName}
           loading="lazy"
           sx={{
@@ -61,10 +61,10 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
             bgcolor: "#F5F2EB",
           }}
         />
-        {/* <StatusBadge
+        <StatusBadge
           label={currentBadge.label}
           bgcolor={currentBadge.bgColor}
-        /> */}
+        />
       </Box>
 
       {/* 우측 정보 텍스트 영역 */}
