@@ -11,4 +11,5 @@ export const enum OperationStatus {
   OPEN = "OPEN",
   CLOSED = "CLOSED",
   BREAK_TIME = "BREAK_TIME",
+  NONE = "NONE", // 정보없음
 }

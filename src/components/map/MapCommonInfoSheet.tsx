@@ -1,5 +1,4 @@
 import { Sheet, type SheetRef } from "react-modal-sheet";
-import type { NearByPlaceInfo } from "../../models/MapModel";
 import {
   forwardRef,
   useEffect,
@@ -11,11 +10,15 @@ import { Box, Stack, Typography } from "@mui/material";
 import PersonPinCircleIcon from "@mui/icons-material/PersonPinCircle";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useNavigate } from "react-router-dom";
+import type { PlaceListBase } from "../../models/PlaceModel";
+import { nearbyPlaceList } from "../../data/map/nearbyPlaceList";
+import defaultPlaceImage from "../../assets/default_place_img.png";
+import { CongestionLevel, OperationStatus } from "../../models/commonModel";
 interface SheetProps {
   open: boolean;
   onClose: () => void;
   initialSnap: SheetState;
-  placeList?: NearByPlaceInfo[]; // 관광지 목록 데이터
+  placeList?: PlaceListBase[]; // 관광지 목록 데이터
   currentAddress: string | null;
 }
 
@@ -24,16 +27,21 @@ export interface HandleInfoSheetRef {
   expand: () => void; // BottomSheet를 기본 높이로 열기 위한 메서드
   close: () => void; // BottomSheet를 닫기 위한 메서드
 }
-
 export enum SheetState {
-  CLOSED = 0,
-  MINI = 1, // 10%
-  DEFAULT = 2, // 30%
-  EXPANDED = 3, // 60%
-  // FULL = 4,
+  CLOSED,
+  MINI,
+  DEFAULT,
+  EXPANDED,
+  FULL,
 }
-
-export const snapPoints = [0, 0.1, 0.3, 0.7, 1]; // BottomSheet의 스냅 위치
+export const SHEET_SNAP_POINTS = {
+  CLOSED: 0,
+  MINI: 0.1,
+  DEFAULT: 0.3,
+  EXPANDED: 0.7,
+  FULL: 1,
+} as const;
+export const snapPoints = Object.values(SHEET_SNAP_POINTS);
 
 /**
  * BottomSheet Snap Points
@@ -44,6 +52,20 @@ export const snapPoints = [0, 0.1, 0.3, 0.7, 1]; // BottomSheet의 스냅 위치
  * EXPANDED : 60%
  * FULL     : 100%
  */
+
+const STATUS_LABEL = {
+  [OperationStatus.OPEN]: "운영 중",
+  [OperationStatus.CLOSED]: "운영 종료",
+  [OperationStatus.BREAK_TIME]: "브레이크 타임",
+  [OperationStatus.NONE]: "정보 없음",
+} as const;
+
+const CONGESTION_LABEL = {
+  [CongestionLevel.LOW]: "여유로운 시간대",
+  [CongestionLevel.MEDIUM]: "일반적으로 붐비는 정도가 보통인 시간대",
+  [CongestionLevel.HIGH]: "현재 많은 방문객이 몰려 혼잡한 시간대",
+  [CongestionLevel.NONE]: "현재 혼잡도 정보 알 수 없음",
+} as const;
 
 const MapCommonInfoSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
   (
@@ -94,7 +116,7 @@ const MapCommonInfoSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
       },
     }));
 
-    const handleGoToPlace = (placeId: string) => {
+    const handleGoToPlace = (placeId: number) => {
       navigate(`/explore/${placeId}`);
     };
 
@@ -174,7 +196,7 @@ const MapCommonInfoSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
                   variant="subtitle1"
                   sx={{ fontWeight: 700, color: "#BC9A5D" }}
                 >
-                  TOP 10
+                  TOP {nearbyPlaceList.length}
                 </Typography>
               </Stack>
               {placeList && placeList?.length > 0 && (
@@ -188,22 +210,21 @@ const MapCommonInfoSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
                   }}
                 >
                   {placeList?.map((place) => (
-                    <SwiperSlide key={place.id}>
-                      {/* 전체 카드를 감싸는 부모 Box (relative 필수) */}
+                    <SwiperSlide key={place.placeId}>
                       <Box
-                        onClick={() => handleGoToPlace(place.id)}
+                        onClick={() => handleGoToPlace(place?.placeId)}
                         sx={{
                           position: "relative",
                           width: "100%",
                           height: 270,
                           borderRadius: 3,
-                          overflow: "hidden", // 이미지가 테두리 밖으로 나가지 않도록
+                          overflow: "hidden",
                         }}
                       >
-                        {/* 1. 이미지 (컴포넌트를 img 태그로 설정) */}
+                        {/* 1. 이미지 */}
                         <Box
                           component="img"
-                          src={place.image}
+                          src={place.imageUrl || defaultPlaceImage}
                           sx={{
                             width: "100%",
                             height: "100%",
@@ -211,14 +232,14 @@ const MapCommonInfoSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
                           }}
                         />
 
-                        {/* 2. 이미지 위에 얹을 텍스트 레이어 (absolute 필수) */}
+                        {/* 2. 이미지 위에 얹을 텍스트 레이어 */}
                         <Box
                           sx={{
                             position: "absolute",
                             bottom: 0,
                             left: 0,
                             width: "100%",
-                            padding: 2, // MUI 기본 padding (16px)
+                            padding: 2,
 
                             // 글씨가 잘 보이도록 아래쪽에만 반투명한 검은 그라데이션 추가
                             background:
@@ -226,15 +247,17 @@ const MapCommonInfoSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
                             color: "#fff", // 글자색 흰색 고정
                           }}
                         >
-                          {/* 장소 이름이나 설명 (Typography 컴포넌트가 있다면 바꾸셔도 좋습니다) */}
                           <Box sx={{ fontSize: "1.1rem", fontWeight: "bold" }}>
-                            {place.title || "장소 이름"}
+                            {place.placeName ?? "장소 이름"}
                           </Box>
-                          <Box sx={{ fontSize: "0.7rem" }}>운영중</Box>
+                          <Box sx={{ fontSize: "0.7rem" }}>
+                            {STATUS_LABEL[place.operationStatus] ?? "정보 없음"}
+                          </Box>
                           <Box
                             sx={{ fontSize: "0.65rem", opacity: 0.8, mt: 0.5 }}
                           >
-                            일반적으로 붐비는 정도가 보통인 시간대
+                            {CONGESTION_LABEL[place.congestion] ??
+                              "혼잡도 정보 알 수 없음"}
                           </Box>
                         </Box>
                       </Box>
