@@ -1,13 +1,12 @@
-import { Box, Stack, Typography } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import StarIcon from "@mui/icons-material/Star";
 import WifiTetheringIcon from "@mui/icons-material/WifiTethering";
-import LocalParkingIcon from "@mui/icons-material/LocalParking";
+import { Box, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import defaultPlaceImage from "../../assets/default_place_img.png";
 import { usePlaceDetail } from "../../hooks/place/usePlaceDetail";
 import type { PlaceListBase } from "../../models/PlaceModel";
 import InfoRow from "../common/InfoRow";
-import StarIcon from "@mui/icons-material/Star";
 interface PlaceSummaryProps {
   placeId: number;
 }

@@ -1,7 +1,6 @@
-import { Box, LinearProgress, Typography } from "@mui/material"
+import { Box, LinearProgress, Typography } from "@mui/material";
 
 const QuizProgressCard = () => {
-
   return (
     <Box
       sx={{
@@ -17,39 +16,46 @@ const QuizProgressCard = () => {
         pr: 2,
       }}
     >
-      <Typography 
-        sx={{ 
-          fontSize: "13px", 
+      <Typography
+        sx={{
+          fontSize: "13px",
           color: "#5D574E",
-          fontWeight: 800, 
-          flexShrink: 0, 
-          mr: 1.5 
+          fontWeight: 800,
+          flexShrink: 0,
+          mr: 1.5,
         }}
       >
         퀴즈 진척도
       </Typography>
-      
+
       <Box sx={{ display: "flex", alignItems: "center", flex: 1, gap: 1.5 }}>
-        <LinearProgress 
-          variant="determinate" 
-          value={35} 
-          sx={{ 
+        <LinearProgress
+          variant="determinate"
+          value={35}
+          sx={{
             flex: 1,
-            height: 8, 
-            borderRadius: "10px", 
-            bgcolor: "#EBE6D9", 
-            "& .MuiLinearProgress-bar": { 
-              bgcolor: "#A68656", 
-              borderRadius: "10px" 
-            } 
-          }} 
+            height: 8,
+            borderRadius: "10px",
+            bgcolor: "#EBE6D9",
+            "& .MuiLinearProgress-bar": {
+              bgcolor: "#A68656",
+              borderRadius: "10px",
+            },
+          }}
         />
-        <Typography sx={{ fontSize: "12px", fontWeight: 900, color: "#A68656", flexShrink: 0 }}>
+        <Typography
+          sx={{
+            fontSize: "12px",
+            fontWeight: 900,
+            color: "#A68656",
+            flexShrink: 0,
+          }}
+        >
           35%
         </Typography>
       </Box>
     </Box>
-  )
-}
+  );
+};
 
 export default QuizProgressCard;

@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { PlaceListBase } from "../../../models/PlaceModel";
 import PlaceCard from "./PlaceCard";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
 
 interface PlaceListProps {
   placeList: PlaceListBase[];
@@ -24,7 +24,7 @@ const PlaceList = ({ placeList }: PlaceListProps) => {
           setItemLimit((prev) => (prev < placeList.length ? prev + 20 : prev));
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 },
     );
 
     if (observerTarget.current) {
@@ -42,9 +42,9 @@ const PlaceList = ({ placeList }: PlaceListProps) => {
         display: "flex",
         flexDirection: "column",
         gap: 2,
-        flex: 1,           // 남은 공간 채우기
+        flex: 1, // 남은 공간 채우기
         overflowY: "auto", // 이 영역에만 세로 스크롤 생성
-        pr: 1,             // 스크롤바와 카드 간격 확보용 (선택사항)
+        pr: 1, // 스크롤바와 카드 간격 확보용 (선택사항)
       }}
     >
       {displayData.map((place) => (

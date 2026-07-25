@@ -1,8 +1,8 @@
-import { Box, Button, LinearProgress, Typography } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
-import type { QuizItem } from "../../../models/QuizModel";
+import { Box, Button, LinearProgress, Typography } from "@mui/material";
 import type { QuizPlayState } from "../../../hooks/useQuizPlay";
+import type { QuizItem } from "../../../models/QuizModel";
 
 interface QuizPlayViewProps {
   quizState: QuizPlayState;
@@ -19,18 +19,31 @@ const QuizPlayView = ({
   handleAnswer,
   quizData,
 }: QuizPlayViewProps) => {
-
   const totalQuestions = quizData?.questions ? quizData.questions.length : 0;
 
   const statusItems = [
-    { label: "남은 문항", val: `${quizData.totalQuestions - quizState.solvedCount}문항` },
+    {
+      label: "남은 문항",
+      val: `${quizData.totalQuestions - quizState.solvedCount}문항`,
+    },
     { label: "맞은 문항", val: `${quizState.correctCnt}문항` },
     { label: "현재 포인트", val: `${animatedPoint}p` },
   ];
 
   return (
     <>
-      <Box sx={{ display: "flex", justifyContent: "space-around", p: 2, bgcolor: "#FFFFFF", borderRadius: "20px", mt: 1.5, mb: 3, border: "1px solid rgba(160, 142, 115, 0.2)" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-around",
+          p: 2,
+          bgcolor: "#FFFFFF",
+          borderRadius: "20px",
+          mt: 1.5,
+          mb: 3,
+          border: "1px solid rgba(160, 142, 115, 0.2)",
+        }}
+      >
         {statusItems.map((item, i) => (
           <Box key={i} sx={{ textAlign: "center", flex: 1 }}>
             <Typography sx={{ fontSize: "0.75rem", color: "#7A7265" }}>
@@ -89,7 +102,9 @@ const QuizPlayView = ({
       >
         {currentQuestion?.options.map((option: any, index: number) => {
           const isSelected = quizState.selectedAnswerId === option.answerId;
-          const isCorrectOption = quizState.correctAnswerId !== null && option.answerId === quizState.correctAnswerId;
+          const isCorrectOption =
+            quizState.correctAnswerId !== null &&
+            option.answerId === quizState.correctAnswerId;
           const hasAnswered = quizState.selectedAnswerId !== null;
 
           let borderColor = "rgba(160, 142, 115, 0.15)";
@@ -134,7 +149,9 @@ const QuizPlayView = ({
                 bgcolor: buttonBgColor,
                 color: "#1F1F1F",
                 border: `2px solid ${borderColor}`,
-                boxShadow: isSelected ? "inset 0 2px 4px rgba(0,0,0,0.05)" : "0 4px 10px rgba(160, 142, 115, 0.05)",
+                boxShadow: isSelected
+                  ? "inset 0 2px 4px rgba(0,0,0,0.05)"
+                  : "0 4px 10px rgba(160, 142, 115, 0.05)",
                 fontSize: "1rem",
                 fontWeight: 600,
                 textTransform: "none",

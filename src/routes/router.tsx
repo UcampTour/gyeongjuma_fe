@@ -1,19 +1,19 @@
 import { createBrowserRouter, type RouteObject } from "react-router-dom";
 import App from "../App";
-import MainLayout from "../layouts/MainLayout";
-import MapMainPage from "../pages/map/MapMainPage";
-import HomePage from "../pages/home/HomePage";
-import ProfilePage from "../pages/profile/ProfilePage";
-import QuizListPage from "../pages/quiz/QuizListPage";
-import PlaceListPage from "../pages/places/PlaceListPage";
-import QuizPlayPage from "../pages/quiz/QuizPlayPage";
-import LoginPage from "../pages/login/LoginPage";
-import PublicRoute from "../components/auth/PublicRoute";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
-import RegisterPage from "../pages/login/RegisterPage";
+import PublicRoute from "../components/auth/PublicRoute";
 import RegistrationRoute from "../components/auth/RegistrationRoute";
+import MainLayout from "../layouts/MainLayout";
+import HomePage from "../pages/home/HomePage";
+import LoginPage from "../pages/login/LoginPage";
+import RegisterPage from "../pages/login/RegisterPage";
+import MapMainPage from "../pages/map/MapMainPage";
 import MapSearchPage from "../pages/map/MapSearchPage";
 import PlaceDetailPage from "../pages/places/PlaceDetailPage";
+import PlaceListPage from "../pages/places/PlaceListPage";
+import ProfilePage from "../pages/profile/ProfilePage";
+import QuizListPage from "../pages/quiz/QuizListPage";
+import QuizPlayPage from "../pages/quiz/QuizPlayPage";
 
 const routes: RouteObject[] = [
   {

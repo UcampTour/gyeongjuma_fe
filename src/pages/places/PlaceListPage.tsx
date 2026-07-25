@@ -3,8 +3,8 @@ import CommonSearchBar from "../../components/common/CommonSearchBar";
 import PageHeader from "../../components/common/PageHeader";
 import PlaceCategoryFilter from "../../components/places/placelist/PlaceCategoryFilter";
 import PlaceList from "../../components/places/placelist/PlaceList";
-import { usePlaceList } from "../../hooks/usePlaceList";
 import PlaceListSorter from "../../components/places/placelist/PlaceListSorter";
+import { usePlaceList } from "../../hooks/usePlaceList";
 
 const PlaceListPage = () => {
   const {

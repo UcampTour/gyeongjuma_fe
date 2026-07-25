@@ -1,4 +1,4 @@
-import { Paper, Stack, Typography, Box } from "@mui/material";
+import { Box, Paper, Stack, Typography } from "@mui/material";
 
 type LegendItem = {
   label: string;

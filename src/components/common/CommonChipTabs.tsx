@@ -1,4 +1,4 @@
-import { Stack, Chip } from "@mui/material";
+import { Chip, Stack } from "@mui/material";
 
 export interface TabItem {
   label: string;

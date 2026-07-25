@@ -1,12 +1,12 @@
-import { PlaceFilterType } from "../../models/MapModel";
-import MapMarker from "./MapMarker";
+import highCongestionMarker from "../../assets/map/congestion_high.png";
+import lowCongestionMarker from "../../assets/map/congestion_low.png";
+import mediumCongestionMarker from "../../assets/map/congestion_medium.png";
 import normalMarker from "../../assets/map/normal_marker.png";
 import operatingMarker from "../../assets/map/operating_marker.png";
 import unvisitedFilterMarker from "../../assets/map/unvisited_filter_marker.png";
-import lowCongestionMarker from "../../assets/map/congestion_low.png";
-import mediumCongestionMarker from "../../assets/map/congestion_medium.png";
-import highCongestionMarker from "../../assets/map/congestion_high.png";
+import { PlaceFilterType } from "../../models/MapModel";
 import type { PlaceListBase } from "../../models/PlaceModel";
+import MapMarker from "./MapMarker";
 
 /**
  *  관광지 마커 컴포넌트
