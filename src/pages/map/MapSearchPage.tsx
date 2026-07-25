@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import CommonSearchBar from "../../components/common/CommonSearchBar";
-import { Box, Button, Stack, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
+import { Box, Button, Stack, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import CommonSearchBar from "../../components/common/CommonSearchBar";
 import MapSearchItem from "../../components/map/MapSearchItem";
 
 const dummyPlaceMarkerList = [

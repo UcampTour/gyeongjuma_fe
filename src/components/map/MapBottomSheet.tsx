@@ -1,4 +1,7 @@
-import { Sheet, type SheetRef } from "react-modal-sheet";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import CloseIcon from "@mui/icons-material/Close";
+import { Box, Stack, Typography } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
 import {
   forwardRef,
   useImperativeHandle,
@@ -6,13 +9,10 @@ import {
   useRef,
   useState,
 } from "react";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import IconButton from "@mui/material/IconButton";
-import { Box, Stack, Typography } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import PlaceSummaryPage from "./PlaceSummaryPage";
-import type { PlaceListBase } from "../../models/PlaceModel";
+import { Sheet, type SheetRef } from "react-modal-sheet";
 import { useNavigate } from "react-router-dom";
+import type { PlaceListBase } from "../../models/PlaceModel";
+import PlaceSummaryPage from "./PlaceSummaryPage";
 interface SheetProps {
   open: boolean;
   place: PlaceListBase | null;

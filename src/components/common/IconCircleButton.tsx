@@ -1,7 +1,7 @@
-import type { ReactNode } from "react";
 import IconButton from "@mui/material/IconButton";
-import type { SxProps } from "@mui/system";
 import type { Theme } from "@mui/material/styles";
+import type { SxProps } from "@mui/system";
+import type { ReactNode } from "react";
 
 interface IconCircleButtonProps {
   icon: ReactNode;

@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from "react"
-import { QuizCategory, type QuizListItem } from "../models/QuizModel"
+import { useEffect, useMemo, useState } from "react";
 import { fetchQuizList } from "../api/quizService";
+import { QuizCategory, type QuizListItem } from "../models/QuizModel";
 
 export const useQuizList = () => {
-
-  const [selectedCategory, setSelectedCategory] = useState<QuizCategory>(QuizCategory.ALL);
+  const [selectedCategory, setSelectedCategory] = useState<QuizCategory>(
+    QuizCategory.ALL,
+  );
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedQuiz, setSelectedQuiz] = useState<QuizListItem | null>(null);
   const [quizData, setQuizData] = useState<QuizListItem[]>([]);
@@ -28,21 +29,23 @@ export const useQuizList = () => {
   }, []);
 
   const filteredQuizList = useMemo(() => {
-
     return quizData.filter((quiz) => {
-      return selectedCategory === QuizCategory.ALL || quiz.quizStatus === selectedCategory;
+      return (
+        selectedCategory === QuizCategory.ALL ||
+        quiz.quizStatus === selectedCategory
+      );
     });
   }, [quizData, selectedCategory]);
 
   const handleQuizClick = (quiz: QuizListItem) => {
     setSelectedQuiz(quiz);
     setDrawerOpen(true);
-  }
+  };
 
   const drawerClose = () => {
     setDrawerOpen(false);
     setSelectedQuiz(null);
-  }
+  };
 
   return {
     selectedCategory,
@@ -52,7 +55,6 @@ export const useQuizList = () => {
     selectedQuiz,
     handleQuizClick,
     drawerClose,
-    isLoading
-  }
-}
-
+    isLoading,
+  };
+};

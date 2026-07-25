@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import type { HandleInfoSheetRef } from "../../components/map/MapCommonInfoSheet";
 import type { HandleSheetRef } from "../../components/map/MapBottomSheet";
+import type { HandleInfoSheetRef } from "../../components/map/MapCommonInfoSheet";
 import type { PlaceListBase } from "../../models/PlaceModel";
 
 interface UseMapEventProps {

@@ -8,7 +8,7 @@ import { useQuizPlay } from "../../hooks/useQuizPlay";
 const QuizPlayPage = () => {
   const navigate = useNavigate();
   const { quizId } = useParams();
-  
+
   const {
     quizData,
     loading,
@@ -21,10 +21,17 @@ const QuizPlayPage = () => {
     quizState,
   } = useQuizPlay(quizId);
 
-  
   if (loading || !quizData) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", bgcolor: "#F7F5EE" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          bgcolor: "#F7F5EE",
+        }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -58,13 +65,32 @@ const QuizPlayPage = () => {
         <PageHeader {...getHeaderProps()} />
       </Box>
 
-      <Box sx={{ width: "100%", maxWidth: "500px", height: "100%", display: "flex", flexDirection: "column", boxSizing: "border-box", px: 2, pb: 3, overflow: "hidden" }}>
-        
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: "500px",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          boxSizing: "border-box",
+          px: 2,
+          pb: 3,
+          overflow: "hidden",
+        }}
+      >
         {/* 퀴즈 풀이 화면 */}
         {quizState.stage === "playing" && (
           <Fade in={quizState.stage === "playing"}>
-            <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1, height: "100%", pb: 11 }}>
-              <QuizPlayView 
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                flexGrow: 1,
+                height: "100%",
+                pb: 11,
+              }}
+            >
+              <QuizPlayView
                 quizState={quizState}
                 animatedPoint={animatedPoint}
                 currentQuestion={currentQuestion}
@@ -78,14 +104,22 @@ const QuizPlayPage = () => {
         {/* 퀴즈 완료 및 통합 결과/리뷰 화면 */}
         {quizState.stage === "result" && (
           <Fade in={quizState.stage === "result"}>
-            <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1, height: "100%", pb: 11 }} >
-                <QuizResultView
-                  quizData={quizData}
-                  quizResultData={quizResultData!}
-                  resultLoading={resultLoading}
-                  onRetry={() => handleComplete(() => setStage("playing"))}
-                  onGoToList={() => handleComplete(() => navigate("/quiz"))}
-                />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                flexGrow: 1,
+                height: "100%",
+                pb: 11,
+              }}
+            >
+              <QuizResultView
+                quizData={quizData}
+                quizResultData={quizResultData!}
+                resultLoading={resultLoading}
+                onRetry={() => handleComplete(() => setStage("playing"))}
+                onGoToList={() => handleComplete(() => navigate("/quiz"))}
+              />
             </Box>
           </Fade>
         )}

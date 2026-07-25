@@ -1,34 +1,32 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useKakaoMap } from "../../hooks/map/useKakaoMap";
 
-import { Box, Stack } from "@mui/material";
-import IconCircleButton from "../../components/common/IconCircleButton";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
 import GpsFixedIcon from "@mui/icons-material/GpsFixed";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import { Box, Stack } from "@mui/material";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import CommonFilterChip from "../../components/common/CommonFilterChip";
+import CommonLoading from "../../components/common/CommonLoading";
+import CommonSearchBar from "../../components/common/CommonSearchBar";
+import IconCircleButton from "../../components/common/IconCircleButton";
 import CurrentLocationMarker from "../../components/map/CurrentLocationMarker";
+import MapBottomSheet, {
+  type HandleSheetRef,
+} from "../../components/map/MapBottomSheet";
 import MapCommonInfoSheet, {
   SheetState,
   type HandleInfoSheetRef,
 } from "../../components/map/MapCommonInfoSheet";
-import CommonLoading from "../../components/common/CommonLoading";
-import PlaceMarker from "../../components/map/PlaceMarker";
-import CommonSearchBar from "../../components/common/CommonSearchBar";
-import { useTranslation } from "react-i18next";
-import CommonFilterChip from "../../components/common/CommonFilterChip";
-import MapBottomSheet, {
-  type HandleSheetRef,
-} from "../../components/map/MapBottomSheet";
-import { useNavigate } from "react-router-dom";
-import { PlaceFilterType } from "../../models/MapModel";
-import { nearbyPlaceList } from "../../data/map/nearbyPlaceList";
-import { useCurrentLocation } from "../../hooks/useCurrentLocation";
 import MapLegend from "../../components/map/MapLegend";
-import { useMapFilter } from "../../hooks/map/useMapFilter";
-import { useMapNavigation } from "../../hooks/map/useMapNavigation";
+import PlaceMarker from "../../components/map/PlaceMarker";
 import { useCommonLoading } from "../../hooks/common/useCommonLoading";
 import { useMapEvent } from "../../hooks/map/useMapEvent";
+import { useMapFilter } from "../../hooks/map/useMapFilter";
+import { useMapNavigation } from "../../hooks/map/useMapNavigation";
+import { useCurrentLocation } from "../../hooks/useCurrentLocation";
+import { PlaceFilterType } from "../../models/MapModel";
 import type { PlaceListBase } from "../../models/PlaceModel";
-// import { usePlaceList } from "../../hooks/usePlaceList";
 import { useNearbyPlaceListQuery } from "../../queries/useNearbyPlaceListQuery";
 import { usePlaceListQuery } from "../../queries/usePlaceListQuery";
 

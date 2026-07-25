@@ -1,6 +1,6 @@
-import { InputAdornment, TextField, IconButton } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
+import SearchIcon from "@mui/icons-material/Search";
+import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { useRef } from "react";
 
 interface CommonSearchBarProps {
