@@ -1,16 +1,17 @@
 import { useNavigate } from "react-router-dom";
+import {
+  logout as apiLogout,
+  withdraw as apiWithdraw,
+} from "../../api/authService";
 import { useAuthStore } from "../../store/useAuthStore";
-import { logout as apiLogout, withdraw as apiWithdraw } from "../../api/authService";
 
 const ProfilePage = () => {
-
   const navigate = useNavigate();
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const logout = useAuthStore((state) => state.logout);
 
   const handleLogout = async () => {
-
-    if(!isLoggedIn) return;
+    if (!isLoggedIn) return;
 
     try {
       await apiLogout();
@@ -23,8 +24,7 @@ const ProfilePage = () => {
   };
 
   const handleWithdraw = async () => {
-
-    if(!isLoggedIn) return;
+    if (!isLoggedIn) return;
 
     try {
       await apiWithdraw();
@@ -42,7 +42,7 @@ const ProfilePage = () => {
       <button onClick={handleLogout}>로그아웃</button>
       <button onClick={handleWithdraw}>탈퇴</button>
     </>
-  )
-}
+  );
+};
 
-export default ProfilePage
+export default ProfilePage;

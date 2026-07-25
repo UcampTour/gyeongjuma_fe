@@ -1,10 +1,10 @@
 import { Box, CircularProgress } from "@mui/material";
-import QuizProgressCard from "../../components/Quiz/QuizList/QuizProgressCard";
-import QuizList from "../../components/Quiz/QuizList/QuizList";
 import PageHeader from "../../components/common/PageHeader";
-import QuizCategoryFilter from "../../components/Quiz/QuizList/QuizCategoryFilter";
-import { useQuizList } from "../../hooks/useQuizList";
 import QuizBottomSheet from "../../components/Quiz/QuizList/QuizBottomSheet";
+import QuizCategoryFilter from "../../components/Quiz/QuizList/QuizCategoryFilter";
+import QuizList from "../../components/Quiz/QuizList/QuizList";
+import QuizProgressCard from "../../components/Quiz/QuizList/QuizProgressCard";
+import { useQuizList } from "../../hooks/useQuizList";
 
 const QuizListPage = () => {
   const {
@@ -20,7 +20,15 @@ const QuizListPage = () => {
 
   if (isLoading || !quizList) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", bgcolor: "#F7F5EE" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          bgcolor: "#F7F5EE",
+        }}
+      >
         <CircularProgress />
       </Box>
     );

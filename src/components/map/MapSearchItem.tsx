@@ -1,6 +1,6 @@
-import { Box, IconButton, Stack, Typography } from "@mui/material";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
 import LaunchIcon from "@mui/icons-material/Launch";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import { Box, IconButton, Stack, Typography } from "@mui/material";
 
 export interface MapSearchItemProps {
   title: string;

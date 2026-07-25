@@ -1,12 +1,12 @@
+import { Box, Button, Container, Typography } from "@mui/material";
 import { GoogleLogin } from "@react-oauth/google";
-import { Box, Button, Typography, Container } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../../store/useAuthStore";
-import { login as googleLogin } from "../../api/authService";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { login as googleLogin } from "../../api/authService";
+import logo from "../../assets/gyeongjuma_logo.png";
 import kakaoIcon from "../../assets/login/kakaoLoginIcon.png";
 import naverIcon from "../../assets/login/naverLoginIcon.png";
-import logo from "../../assets/gyeongjuma_logo.png";
+import { useAuthStore } from "../../store/useAuthStore";
 
 const LoginPage = () => {
   const navigate = useNavigate();

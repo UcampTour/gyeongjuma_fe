@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
-import placeMarkerImage from "../../assets/map/test_marker.png";
 import currentLocationImage from "../../assets/map/test_current_marker.png";
+import placeMarkerImage from "../../assets/map/test_marker.png";
 import type { MapLocation } from "../../models/MapModel";
 
 interface MapMarkerProps {

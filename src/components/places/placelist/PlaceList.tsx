@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { PlaceListBase } from "../../../models/PlaceModel";
 import PlaceCard from "./PlaceCard";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
 
 interface PlaceListProps {
   placeList: PlaceListBase[];

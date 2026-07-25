@@ -1,6 +1,14 @@
-import { useEffect, useState } from "react"
-import { QuizStatus, type QuizItem, type QuizResultResponse } from "../models/QuizModel";
-import { fetchQuizDetail, fetchQuizResult, submitQuizAnswer } from "../api/quizService";
+import { useEffect, useState } from "react";
+import {
+  fetchQuizDetail,
+  fetchQuizResult,
+  submitQuizAnswer,
+} from "../api/quizService";
+import {
+  QuizStatus,
+  type QuizItem,
+  type QuizResultResponse,
+} from "../models/QuizModel";
 import { useAnimatedNumber } from "./useAnimatedNumber";
 
 export interface QuizPlayState {
@@ -13,11 +21,11 @@ export interface QuizPlayState {
 }
 
 export const useQuizPlay = (quizId: string | undefined) => {
-
   const [quizData, setQuizData] = useState<QuizItem | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const [quizResultData, setQuizResultData] = useState<QuizResultResponse | null>(null);
+  const [quizResultData, setQuizResultData] =
+    useState<QuizResultResponse | null>(null);
   const [resultLoading, setResultLoading] = useState(true);
 
   const [quizState, setQuizState] = useState<QuizPlayState>({
@@ -39,9 +47,12 @@ export const useQuizPlay = (quizId: string | undefined) => {
         setLoading(true);
         const data = await fetchQuizDetail(quizId);
         setQuizData(data);
-        
+
         if (data.quizStatus === QuizStatus.PROGRESS) {
-          setQuizState((prev) => ({ ...prev, currentIdx: data.lastQuestionIndex }));
+          setQuizState((prev) => ({
+            ...prev,
+            currentIdx: data.lastQuestionIndex,
+          }));
         }
       } catch (error) {
         console.error("퀴즈 데이터 불러오기 실패.", error);
@@ -55,7 +66,7 @@ export const useQuizPlay = (quizId: string | undefined) => {
   // 2. 퀴즈 결과 패치
   useEffect(() => {
     if (quizState.stage !== "result" || !quizId) return;
-    
+
     const getQuizResult = async () => {
       try {
         setResultLoading(true);
@@ -90,14 +101,18 @@ export const useQuizPlay = (quizId: string | undefined) => {
       setQuizState((prev) => ({
         ...prev,
         correctAnswerId: responseData.correctAnswerId,
-        correctCnt: responseData.isCorrect ? prev.correctCnt + 1 : prev.correctCnt,
+        correctCnt: responseData.isCorrect
+          ? prev.correctCnt + 1
+          : prev.correctCnt,
       }));
 
       setTimeout(() => {
         setQuizState((prev) => ({
           ...prev,
           stage: responseData.isLastQuestion ? "result" : prev.stage,
-          currentIdx: responseData.isLastQuestion ? prev.currentIdx : prev.currentIdx + 1,
+          currentIdx: responseData.isLastQuestion
+            ? prev.currentIdx
+            : prev.currentIdx + 1,
           selectedAnswerId: null,
           correctAnswerId: null,
         }));
@@ -138,5 +153,4 @@ export const useQuizPlay = (quizId: string | undefined) => {
     handleComplete,
     quizState,
   };
-
-}
+};

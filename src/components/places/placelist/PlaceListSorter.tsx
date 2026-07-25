@@ -1,6 +1,6 @@
 import { FormControl, MenuItem, Select } from "@mui/material";
-import { PlaceSortType } from "../../../models/PlaceModel";
 import { useTranslation } from "react-i18next";
+import { PlaceSortType } from "../../../models/PlaceModel";
 
 interface PlaceListSorterProps {
   sortBy: PlaceSortType;
@@ -31,11 +31,11 @@ const PlaceListSorter = ({ sortBy, setSortBy }: PlaceListSorterProps) => {
           "& .MuiOutlinedInput-notchedOutline": { border: "1px solid #E3DCCE" },
           fontWeight: 500,
           // Select 내부의 텍스트를 Flex로 중앙 정렬
-          "& .MuiSelect-select": { 
-             display: "flex", 
-             alignItems: "center",
-             height: "100%", 
-             boxSizing: "border-box" 
+          "& .MuiSelect-select": {
+            display: "flex",
+            alignItems: "center",
+            height: "100%",
+            boxSizing: "border-box",
           },
         }}
       >

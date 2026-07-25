@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { PlaceCategory, PlaceSortType } from "../models/PlaceModel";
-import { getDistance } from "../utils/geo";
 import { usePlaceListQuery } from "../queries/usePlaceListQuery";
+import { getDistance } from "../utils/geo";
 
 export const usePlaceList = () => {
   const [userLocation, setUserLocation] = useState<{
