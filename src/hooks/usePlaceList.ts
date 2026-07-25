@@ -41,6 +41,14 @@ export const usePlaceList = () => {
   }, []);
 
   // 2. 내 위치와 장소 사이의 거리 계산
+  const placesWithDistance = useMemo(() => {
+    return placeData.map((place) => {
+      const distance = userLocation
+        ? getDistance(userLocation.lat, userLocation.lng, place.lat, place.lng)
+        : null;
+      return { ...place, distance };
+    });
+  }, [placeData, userLocation]);
   // const placesWithDistance = useMemo(() => {
   //   return placeData.map((place) => {
   //     const distance = userLocation

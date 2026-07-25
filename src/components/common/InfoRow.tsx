@@ -1,4 +1,4 @@
-import { Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 
 const InfoRow = ({
   icon,
@@ -23,7 +23,7 @@ const InfoRow = ({
       {label}
     </Typography>
 
-    <Typography
+    <Box
       sx={{
         flex: 1,
         fontWeight: 400,
@@ -31,7 +31,7 @@ const InfoRow = ({
       }}
     >
       {value}
-    </Typography>
+    </Box>
   </Stack>
 );
 

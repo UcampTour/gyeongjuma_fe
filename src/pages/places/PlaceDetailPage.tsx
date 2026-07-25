@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Box, IconButton, Stack, Typography } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -8,13 +8,20 @@ import CommonChipTabs from "../../components/common/CommonChipTabs";
 import { useNavigate, useParams } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import CloseIcon from "@mui/icons-material/Close";
-import { CongestionLevel } from "../../models/commonModel";
 import CommonStamp from "../../components/common/CommonStamp";
 import PlaceCommentTab from "../../components/places/PlaceCommentTab";
 import PlaceInfoTab from "../../components/places/PlaceInfoTab";
-import { usePlaceDetail } from "../../hooks/place/usePlaceDetail";
-import type { PlaceListBase } from "../../models/PlaceModel";
 import { useTranslation } from "react-i18next";
+import { useCommonDialog } from "../../hooks/common/useCommonDialog";
+import { usePlaceListQuery } from "../../queries/usePlaceListQuery";
+import { useCurrentLocation } from "../../hooks/useCurrentLocation";
+import { certifyVisit } from "../../api/placeApi";
+import type { AxiosError } from "axios";
+import type { ApiErrorResponse } from "../../api/apiClient";
+import { queryClient } from "../../config/queryClient";
+import { useCommonLoading } from "../../hooks/common/useCommonLoading";
+import type { LoadingProps } from "../../components/common/CommonLoading";
+import CommonLoading from "../../components/common/CommonLoading";
 export interface PlaceDetailProps {
   placeId?: number; //number;
 }
@@ -22,20 +29,24 @@ export interface PlaceDetailProps {
 const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { alert, confirm } = useCommonDialog();
+
+  const { currentLocation, updateCurrentLocation } = useCurrentLocation();
+  const [loading, setLoading] = useState<LoadingProps>();
+
+  const commonLoading = useCommonLoading(loading);
+
   const { placeId: paramPlaceId } = useParams<{ placeId: string }>();
-  const [place, setPlace] = useState<PlaceListBase>();
-  const [activeTab, setActiveTab] = useState(0);
   const placeId = propPlaceId || Number(paramPlaceId);
 
-  const [stage, setStage] = useState("start");
-  const { getPlaceDetail } = usePlaceDetail();
+  const { data: placeList = [] } = usePlaceListQuery({
+    latitude: 0,
+    longitude: 0,
+  });
 
-  useEffect(() => {
-    if (!placeId) return;
-    // placeId를 기반으로 API 호출하여 관광지 상세 정보를 가져오는 로직
-    const target = getPlaceDetail(placeId);
-    setPlace(target);
-  }, [placeId]);
+  const place = placeList.find((p) => p.placeId === placeId);
+
+  const [activeTab, setActiveTab] = useState(0);
 
   const TABS: TabItem[] = [
     {
@@ -61,6 +72,72 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
   };
   const handleClose = () => {
     navigate("/explore");
+  };
+
+  /**
+   * 방문 인증 관리
+   */
+  const handleClickStamp = async () => {
+    //
+    console.log("handle click stamp");
+    if (!place) return;
+    if (place?.isVisited) {
+      await alert("이미 방문완료된 관광지입니다.");
+      return;
+    }
+
+    const ok = await confirm({
+      title: "방문 인증 처리",
+      message: "방문인증 처리하시겠습니까?",
+    });
+
+    if (!ok) return;
+
+    handleRegistPlace();
+  };
+
+  /**
+   * 방문인증 처리
+   */
+  const handleRegistPlace = async () => {
+    setLoading({
+      isLoading: true,
+      loadingMsg: "방문 인증 처리 중",
+    });
+    //
+    console.log("handleRegistPlace");
+    if (!place) return;
+
+    const location = await updateCurrentLocation();
+
+    if (!location) return;
+    try {
+      const response = await certifyVisit(place.placeId, {
+        latitude: 35.83052237,
+        longitude: 129.22839984,
+        // latitude: location.lat ?? 0,
+        // longitude: location.lng ?? 0,
+      });
+      console.log(response);
+      if (response) {
+        setLoading({
+          isLoading: false,
+        });
+      }
+      if (response.status === "SUCCESS") {
+        await alert("방문인증 완료!!");
+
+        queryClient.invalidateQueries({
+          queryKey: ["places"],
+        });
+      }
+    } catch (err) {
+      setLoading({
+        isLoading: false,
+      });
+      const error = err as AxiosError<ApiErrorResponse>;
+      alert(error.response?.data.message ?? "시스템 에러 발생");
+    }
   };
   return (
     <>
@@ -118,10 +195,11 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
                 ? t("map:label.isVisited")
                 : t("map:label.unVisited")
             }
-            size={80}
+            size={85}
             sx={{
               transform: "rotate(8deg)",
             }}
+            onClick={handleClickStamp}
           />
         </Stack>
         {/* // activeTab === 0 &&  */}
@@ -164,6 +242,7 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
           {activeTab === 1 && <PlaceCommentTab place={place} />}
 
           {activeTab === 2 && <Box>오디오 영역</Box>}
+          {/* 퀴즈 */}
           {activeTab === 3 && (
             <Box
               sx={{
@@ -174,11 +253,13 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
                 pb: 11,
               }}
             >
-              {/* <QuizStart quiz={quizDetailData} setStage={setStage} /> */}
+              퀴즈 시작 연결 필요
             </Box>
           )}
         </Box>
       </Box>
+      {/* 로딩창 */}
+      <CommonLoading loading={commonLoading} />
     </>
   );
 };
