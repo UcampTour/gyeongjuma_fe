@@ -8,7 +8,7 @@ export interface QuizListResponse {
 }
 
 export interface QuizListItem {
-  quizId: number;
+  placeQuizInfoId: number;
   quizTitle: string;
   description: string;
   imageUrl: string;
@@ -21,14 +21,14 @@ export interface QuizListItem {
  * 퀴즈 상세 정보 인터페이스 목록
  */
 export interface QuizItem {
-  quizId: number;
+  placeQuizInfoId: number;
   placeId: number;
   title: string;
   description: string;
   imageUrl: string;
   totalQuestions: number;
   correctQuestions: number;
-  lastQuestionIndex?: number;
+  lastQuestionIndex: number;
   quizStatus: QuizStatus;
   questions: QuizQuestion[];
 }
@@ -64,7 +64,7 @@ export interface QuizSubmitResponse {
  *  퀴즈 결과 인터페이스
  */
 export interface QuizResultResponse {
-  quizId: number;
+  placeQuizInfoId: number;
   totalQuestions: number;
   correctQuestions: number;
   points: number;

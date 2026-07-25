@@ -12,7 +12,7 @@ export interface QuizPlayState {
   correctAnswerId: number | null;
 }
 
-export const useQuizPlay = (quizId: string) => {
+export const useQuizPlay = (quizId: string | undefined) => {
 
   const [quizData, setQuizData] = useState<QuizItem | null>(null);
   const [loading, setLoading] = useState(true);
@@ -112,7 +112,7 @@ export const useQuizPlay = (quizId: string) => {
     callback();
     setTimeout(() => {
       setQuizState({
-        stage: "start",
+        stage: "playing",
         currentIdx: 0,
         correctCnt: 0,
         solvedCount: 0,

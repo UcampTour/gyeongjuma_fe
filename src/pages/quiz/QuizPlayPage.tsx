@@ -8,6 +8,7 @@ import { useQuizPlay } from "../../hooks/useQuizPlay";
 const QuizPlayPage = () => {
   const navigate = useNavigate();
   const { quizId } = useParams();
+  
   const {
     quizData,
     loading,
@@ -34,15 +35,9 @@ const QuizPlayPage = () => {
   const getHeaderProps = () => {
     switch (quizState.stage) {
       case "playing":
-        return {
-          title: quizData.title,
-          customBack: () => setStage("start"),
-        };
+        return { title: quizData.title };
       case "result":
-        return {
-          title: "퀴즈 완료 및 결과",
-          customBack: () => handleComplete(() => setStage("start")),
-        };
+        return { title: "퀴즈 완료 및 결과" };
       default:
         return { title: "" };
     }
@@ -86,7 +81,7 @@ const QuizPlayPage = () => {
             <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1, height: "100%", pb: 11 }} >
                 <QuizResultView
                   quizData={quizData}
-                  quizResultData={quizResultData}
+                  quizResultData={quizResultData!}
                   resultLoading={resultLoading}
                   onRetry={() => handleComplete(() => setStage("playing"))}
                   onGoToList={() => handleComplete(() => navigate("/quiz"))}

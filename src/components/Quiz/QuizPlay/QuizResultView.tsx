@@ -53,7 +53,7 @@ export const QuizResultView = ({
       >
         총 {quizData.totalQuestions}문제 중{" "}
         <Box component="span" sx={{ color: "#A08E73", fontWeight: 800 }}>
-          {quizResultData.correctQuestions}문제
+          {quizResultData?.correctQuestions}문제
         </Box>
         를 맞혔습니다.
       </Typography>

@@ -12,7 +12,7 @@ const QuizList = ({ quizList, handleQuizClick }: QuizListProps) => {
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       {quizList.map((quiz) => (
         <QuizCard 
-          key={quiz.quizId} 
+          key={quiz.placeQuizInfoId} 
           quiz={quiz} 
           onClick={() => handleQuizClick(quiz)} // 클릭 이벤트 연결
         />

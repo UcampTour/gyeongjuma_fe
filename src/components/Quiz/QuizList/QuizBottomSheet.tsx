@@ -165,7 +165,7 @@ const QuizBottomSheet = ({
             <Button
               variant="contained"
               fullWidth
-              onClick={() => navigate(`/quiz/${quiz.quizId}`)}
+              onClick={() => navigate(`/quiz/${quiz.placeQuizInfoId}`)}
               sx={{
                 py: 1.5,
                 borderRadius: "16px",

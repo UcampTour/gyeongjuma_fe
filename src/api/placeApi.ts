@@ -1,5 +1,5 @@
 import type { PlaceListBase, PlaceSearchParams } from "../models/PlaceModel";
-import { api } from "./api";
+import { apiClient } from "./apiClient";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -11,9 +11,6 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export const getPlaceList = async (
   params: PlaceSearchParams,
 ): Promise<PlaceListBase[]> => {
-  const response = await api.get({
-    url: `${BASE_URL}/place`,
-    params: params,
-  });
+  const response = await apiClient.get(`${BASE_URL}/place`, {params});
   return response.data.data;
 };

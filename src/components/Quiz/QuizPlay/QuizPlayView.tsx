@@ -23,7 +23,7 @@ const QuizPlayView = ({
   const totalQuestions = quizData?.questions ? quizData.questions.length : 0;
 
   const statusItems = [
-    { label: "남은 문항", val: `${totalQuestions - quizState.solvedCount}문항` },
+    { label: "남은 문항", val: `${quizData.totalQuestions - quizState.solvedCount}문항` },
     { label: "맞은 문항", val: `${quizState.correctCnt}문항` },
     { label: "현재 포인트", val: `${animatedPoint}p` },
   ];
@@ -45,7 +45,7 @@ const QuizPlayView = ({
 
       <LinearProgress
         variant="determinate"
-        value={(quizState.solvedCount / totalQuestions) * 100}
+        value={(quizState.solvedCount / quizData.totalQuestions) * 100}
         sx={{
           height: 8,
           borderRadius: 5,

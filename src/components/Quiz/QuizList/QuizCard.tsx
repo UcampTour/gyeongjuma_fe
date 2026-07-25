@@ -8,7 +8,7 @@ import { QuizStatus, type QuizListItem } from "../../../models/QuizModel";
 
 interface QuizCardProps {
   quiz: QuizListItem;
-  onClick: () => void; // 부모로부터 전달받는 클릭 핸들러
+  onClick: () => void;
 }
 
 export const QuizCard = ({ quiz, onClick }: QuizCardProps) => {
