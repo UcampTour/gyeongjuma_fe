@@ -1,19 +1,19 @@
+import {
+  Box,
+  Button,
+  Container,
+  FormControl,
+  FormHelperText,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { checkNickname, registerExtraInfo } from "../../api/authService";
-import { useAuthStore } from "../../store/useAuthStore";
-import {
-  Box,
-  Typography,
-  TextField,
-  Button,
-  FormControl,
-  Select,
-  MenuItem,
-  Container,
-  FormHelperText,
-} from "@mui/material";
 import logo from "../../assets/gyeongjuma_logo.png";
+import { useAuthStore } from "../../store/useAuthStore";
 
 const RegisterPage = () => {
   const [nickname, setNickname] = useState("");

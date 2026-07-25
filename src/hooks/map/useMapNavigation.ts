@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { MapLocation } from "../../models/MapModel";
 import type { LoadingProps } from "../../components/common/CommonLoading";
+import type { MapLocation } from "../../models/MapModel";
 
 /* 경주역 */
 const GYEONGJU_CENTER = {

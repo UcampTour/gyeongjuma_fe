@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState, useTransition } from "react";
-import { PlaceFilterType } from "../../models/MapModel";
+import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import type { LoadingProps } from "../../components/common/CommonLoading";
 import type { MapLegendConfig } from "../../components/map/MapLegend";
 import { CongestionLevel, OperationStatus } from "../../models/commonModel";
-import type { LoadingProps } from "../../components/common/CommonLoading";
-import { useTranslation } from "react-i18next";
+import { PlaceFilterType } from "../../models/MapModel";
 import type { PlaceListBase } from "../../models/PlaceModel";
 
 export const useMapFilter = (places: PlaceListBase[]) => {

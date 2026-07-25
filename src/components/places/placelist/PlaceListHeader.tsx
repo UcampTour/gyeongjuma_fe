@@ -1,6 +1,6 @@
 import { Box, FormControl, MenuItem, Select, Typography } from "@mui/material";
-import { PlaceSortType } from "../../../models/PlaceModel";
 import { useTranslation } from "react-i18next";
+import { PlaceSortType } from "../../../models/PlaceModel";
 
 interface PlaceListHeaderProps {
   sortBy: PlaceSortType;

@@ -1,15 +1,15 @@
-import { Box, Chip, Stack } from "@mui/material";
-import GroupsIcon from "@mui/icons-material/Groups";
-import ScheduleIcon from "@mui/icons-material/Schedule";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
+import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import GroupsIcon from "@mui/icons-material/Groups";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ReviewsOutlinedIcon from "@mui/icons-material/ReviewsOutlined";
 import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
-import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
-import TourIcon from "@mui/icons-material/Tour";
-import InfoRow from "../common/InfoRow";
-import type { PlaceListBase } from "../../models/PlaceModel";
+import ScheduleIcon from "@mui/icons-material/Schedule";
 import StarIcon from "@mui/icons-material/Star";
+import TourIcon from "@mui/icons-material/Tour";
+import { Box, Chip, Stack } from "@mui/material";
+import type { PlaceListBase } from "../../models/PlaceModel";
+import InfoRow from "../common/InfoRow";
 interface PlaceInfoTabProps {
   place?: PlaceListBase;
 }

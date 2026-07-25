@@ -1,17 +1,17 @@
-import { Box, Card, CardMedia, Typography } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import { Box, Card, CardMedia, Typography } from "@mui/material";
 // import StarIcon from "@mui/icons-material/Star";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { memo } from "react";
+import { useTranslation } from "react-i18next";
+import defaultPlaceImg from "../../../assets/default_place_img.png";
+import { CongestionLevel, OperationStatus } from "../../../models/commonModel";
 import {
   statusBadgeStyles,
   type PlaceListBase,
 } from "../../../models/PlaceModel";
-import StatusBadge from "../../common/StatusBadge";
 import CommonStamp from "../../common/CommonStamp";
-import { useTranslation } from "react-i18next";
-import { memo } from "react";
-import { CongestionLevel, OperationStatus } from "../../../models/commonModel";
-import defaultPlaceImg from "../../../assets/default_place_img.png";
+import StatusBadge from "../../common/StatusBadge";
 
 interface PlaceCardProps {
   place: PlaceListBase;
@@ -22,9 +22,11 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
   const { t } = useTranslation();
 
   const currentBadge =
-  place.operationStatus === OperationStatus.OPEN && place.congestion !== CongestionLevel.NONE
-    ? statusBadgeStyles[place.congestion]
-    : statusBadgeStyles[place.operationStatus] || statusBadgeStyles[OperationStatus.NONE];
+    place.operationStatus === OperationStatus.OPEN &&
+    place.congestion !== CongestionLevel.NONE
+      ? statusBadgeStyles[place.congestion]
+      : statusBadgeStyles[place.operationStatus] ||
+        statusBadgeStyles[OperationStatus.NONE];
 
   return (
     <Card

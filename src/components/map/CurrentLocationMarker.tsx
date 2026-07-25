@@ -1,5 +1,5 @@
-import MapMarker from "./MapMarker";
 import image from "../../assets/map/test_current_marker.png";
+import MapMarker from "./MapMarker";
 
 export interface CurrentLocationMarkerProps {
   map: any; // useKakaoMap 훅이 반환한 카카오맵 객체

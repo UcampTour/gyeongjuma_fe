@@ -3,8 +3,7 @@ import type {
   PlaceLocPrams,
   PlaceSearchParams,
 } from "../models/PlaceModel";
-import { api } from "./api";
-import { apiClient, type ApiResponse } from "./apiClient";
+import { apiClient } from "./apiClient";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
