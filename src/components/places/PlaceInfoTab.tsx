@@ -2,7 +2,6 @@ import { Box, Chip, Stack } from "@mui/material";
 import GroupsIcon from "@mui/icons-material/Groups";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import LocalParkingIcon from "@mui/icons-material/LocalParking";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ReviewsOutlinedIcon from "@mui/icons-material/ReviewsOutlined";
 import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
@@ -52,7 +51,7 @@ const PlaceInfoTab = ({ place }: PlaceInfoTabProps) => {
         <InfoRow
           icon={<LocationOnIcon />}
           label="주소"
-          value={`${place?.add1 ?? ""} ${place?.add2 ?? ""}`.trim()}
+          value={`${place?.addr1 ?? ""} ${place?.addr2 ?? ""}`.trim()}
         />
 
         <InfoRow

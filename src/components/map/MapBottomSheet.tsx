@@ -10,9 +10,9 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import IconButton from "@mui/material/IconButton";
 import { Box, Stack, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import PlaceDetailPage from "../../pages/places/PlaceDetailPage";
 import PlaceSummaryPage from "./PlaceSummaryPage";
 import type { PlaceListBase } from "../../models/PlaceModel";
+import { useNavigate } from "react-router-dom";
 interface SheetProps {
   open: boolean;
   place: PlaceListBase | null;
@@ -61,6 +61,7 @@ const MapBottomSheet = forwardRef<HandleSheetRef, SheetProps>(
 
     // 전체화면 상태 여부
     const isFull = snapIndex === SheetState.FULL;
+    const navigate = useNavigate();
 
     return (
       <Sheet
@@ -141,15 +142,16 @@ const MapBottomSheet = forwardRef<HandleSheetRef, SheetProps>(
                 {snapIndex === SheetState.SUMMARY && (
                   <Box
                     sx={{ height: "100%" }}
-                    onClick={() => sheetRef.current?.snapTo(SheetState.FULL)}
+                    onClick={() => navigate(`/explore/${place?.placeId}`)}
+                    // onClick={() => sheetRef.current?.snapTo(SheetState.FULL)}
                   >
                     <PlaceSummaryPage placeId={place.placeId} />
                   </Box>
                 )}
 
-                {snapIndex === SheetState.FULL && (
+                {/* {snapIndex === SheetState.FULL && (
                   <PlaceDetailPage placeId={place.placeId} />
-                )}
+                )} */}
               </>
             )}
           </Sheet.Content>

@@ -1,5 +1,5 @@
 import { Box, Stack, Typography } from "@mui/material";
-import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import WifiTetheringIcon from "@mui/icons-material/WifiTethering";
 import LocalParkingIcon from "@mui/icons-material/LocalParking";
 import { useEffect, useState } from "react";
@@ -7,7 +7,7 @@ import defaultPlaceImage from "../../assets/default_place_img.png";
 import { usePlaceDetail } from "../../hooks/place/usePlaceDetail";
 import type { PlaceListBase } from "../../models/PlaceModel";
 import InfoRow from "../common/InfoRow";
-
+import StarIcon from "@mui/icons-material/Star";
 interface PlaceSummaryProps {
   placeId: number;
 }
@@ -42,7 +42,14 @@ const PlaceSummaryPage = ({ placeId }: PlaceSummaryProps) => {
           {place?.placeName}
         </Typography>
 
-        <InfoRow
+        <Stack direction={"row"} spacing={2}>
+          <LocationOnIcon color="action" />
+          <Typography>
+            {place?.addr1} {place?.addr2}
+          </Typography>
+        </Stack>
+
+        {/* <InfoRow
           icon={<LocationOnOutlinedIcon color="action" />}
           label="주소"
           value={
@@ -56,7 +63,7 @@ const PlaceSummaryPage = ({ placeId }: PlaceSummaryProps) => {
               )}
             </>
           }
-        />
+        /> */}
 
         <InfoRow
           icon={<WifiTetheringIcon color="action" />}
@@ -65,7 +72,7 @@ const PlaceSummaryPage = ({ placeId }: PlaceSummaryProps) => {
         />
 
         <InfoRow
-          icon={<LocalParkingIcon color="action" />}
+          icon={<StarIcon color="warning" />}
           label="평점"
           value={
             place?.reviewCount
@@ -75,13 +82,13 @@ const PlaceSummaryPage = ({ placeId }: PlaceSummaryProps) => {
         />
 
         <InfoRow
-          icon={<LocationOnOutlinedIcon color="action" />}
+          icon={<LocationOnIcon color="action" />}
           label="거리"
           value={`현재 위치로부터 ${place?.distance ?? "-"} m`}
         />
 
         <InfoRow
-          icon={<LocationOnOutlinedIcon color="action" />}
+          icon={<LocationOnIcon color="action" />}
           label="운영"
           value={place?.operationStatus}
         />
