@@ -1,0 +1,9 @@
+{
+  "bottomNav": {
+    "explore": "explore",
+    "places": "places",
+    "quiz": "quiz",
+    "profile": "profile",
+    "home": "home"
+  }
+}

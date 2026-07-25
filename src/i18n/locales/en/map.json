@@ -1,0 +1,9 @@
+{
+  "search": {
+    "placeholder": "관광지를 검색해보세요"
+  },
+  "buttons": {
+    "currentLocation": "current location",
+    "nearbyAttractions": "주변 관광지"
+  }
+}
