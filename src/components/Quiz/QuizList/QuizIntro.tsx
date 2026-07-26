@@ -4,10 +4,14 @@ import QuizIcon from "@mui/icons-material/Quiz";
 import { Box, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-import { QuizStatus, type QuizListItem } from "../../../models/QuizModel";
+import {
+  QuizStatus,
+  type QuizItem,
+  type QuizListItem,
+} from "../../../models/QuizModel";
 
 interface QuizDetailContentProps {
-  quiz: QuizListItem | undefined;
+  quiz: QuizItem | QuizListItem | undefined;
   showImage?: boolean;
 }
 
