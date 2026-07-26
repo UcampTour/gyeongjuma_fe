@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useKakaoMap } from "../../hooks/map/useKakaoMap";
 
 import GpsFixedIcon from "@mui/icons-material/GpsFixed";
@@ -114,11 +114,11 @@ const MapMainPage = () => {
   /**
    * 마커 클릭 이벤트 핸들러
    */
-  const handleMarkerClick = (place: PlaceListBase) => {
+  const handleMarkerClick = useCallback((place: PlaceListBase) => {
     setIsRecommendOpen(false);
     setSelectedPlace(place);
-    sheetRef.current?.expand(); // BottomSheet를 기본 높이로 열기
-  };
+    sheetRef.current?.expand();
+  }, []);
 
   const legendConfig = useMemo(
     () => getLegendConfig(selectedFilter, placeData),
@@ -154,19 +154,19 @@ const MapMainPage = () => {
       : undefined);
 
   // 1. 컴포넌트 내부 상단에 마커 리스트 메모이제이션 추가
-  // const renderedMarkers = useMemo(() => {
-  //   if (loading || !map || !placeData) return null;
+  const renderedMarkers = useMemo(() => {
+    if (loading || !map || !placeData) return null;
 
-  //   return placeData.map((place) => (
-  //     <PlaceMarker
-  //       filter={selectedFilter}
-  //       key={place.placeId}
-  //       place={place}
-  //       map={map}
-  //       onClick={handleMarkerClick}
-  //     />
-  //   ));
-  // }, [placeData, map, selectedFilter, loading]); // 의존성 배열 관리
+    return placeData.map((place) => (
+      <PlaceMarker
+        filter={selectedFilter}
+        key={place.placeId}
+        place={place}
+        map={map}
+        onClick={handleMarkerClick}
+      />
+    ));
+  }, [placeData, map, selectedFilter, loading]); // 의존성 배열 관리
 
   return (
     <>
@@ -283,8 +283,8 @@ const MapMainPage = () => {
       </Box>
 
       {/* 관광지 마커 렌더링 */}
-      {/* {renderedMarkers} */}
-      {!loading &&
+      {renderedMarkers}
+      {/* {!loading &&
         map &&
         placeData &&
         placeData.map((place) => (
@@ -295,7 +295,7 @@ const MapMainPage = () => {
             map={map}
             onClick={handleMarkerClick}
           />
-        ))}
+        ))} */}
 
       {/* 현재 위치 마커 렌더링 */}
       {currentLocation && (

@@ -44,7 +44,7 @@ const PlaceSummaryPage = ({ placeId }: PlaceSummaryProps) => {
         <Stack direction={"row"} spacing={2}>
           <LocationOnIcon color="action" />
           <Typography>
-            {place?.addr1} {place?.addr2}
+            {place?.add1} {place?.add2}
           </Typography>
         </Stack>
 

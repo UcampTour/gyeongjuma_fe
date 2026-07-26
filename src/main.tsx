@@ -6,7 +6,6 @@ import "pretendard/dist/web/static/pretendard.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
-import "../index.css";
 import { queryClient } from "./config/queryClient";
 import "./i18n";
 import { DialogProvider } from "./providers/DialogProvider";

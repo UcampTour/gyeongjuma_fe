@@ -1,7 +1,6 @@
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { Box, Card, CardMedia, Typography } from "@mui/material";
-// import StarIcon from "@mui/icons-material/Star";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import defaultPlaceImg from "../../../assets/default_place_img.png";

@@ -9,6 +9,7 @@ import LoginPage from "../pages/login/LoginPage";
 import RegisterPage from "../pages/login/RegisterPage";
 import MapMainPage from "../pages/map/MapMainPage";
 import MapSearchPage from "../pages/map/MapSearchPage";
+import AudioDetailPage from "../pages/places/AudioDetailPage";
 import PlaceDetailPage from "../pages/places/PlaceDetailPage";
 import PlaceListPage from "../pages/places/PlaceListPage";
 import ProfilePage from "../pages/profile/ProfilePage";
@@ -30,6 +31,10 @@ const routes: RouteObject[] = [
               {
                 index: true,
                 element: <HomePage />,
+              },
+              {
+                path: "audio/:audioId",
+                element: <AudioDetailPage />,
               },
               {
                 path: "explore",

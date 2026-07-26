@@ -95,21 +95,33 @@ export const useMapFilter = (places: PlaceListBase[]) => {
               label: "운영중",
               value: OperationStatus.OPEN,
               color: "#4CAF50",
-              count: places.filter((p) => p.operationStatus === "OPEN").length,
+              count: places.filter(
+                (p) => p.operationStatus === OperationStatus.OPEN,
+              ).length,
             },
             {
               label: "운영종료",
               value: OperationStatus.CLOSED,
-              color: "#999",
-              count: places.filter((p) => p.operationStatus === "CLOSED")
-                .length,
+              color: "#f09898",
+              count: places.filter(
+                (p) => p.operationStatus === OperationStatus.CLOSED,
+              ).length,
             },
             {
               label: "브레이크 타임",
               value: OperationStatus.BREAK_TIME,
               color: "#ffb46d",
-              count: places.filter((p) => p.operationStatus === "BREAK_TIME")
-                .length,
+              count: places.filter(
+                (p) => p.operationStatus === OperationStatus.BREAK_TIME,
+              ).length,
+            },
+            {
+              label: "정보없음",
+              value: OperationStatus.NONE,
+              color: "#c5c4c4",
+              count: places.filter(
+                (p) => p.operationStatus === OperationStatus.NONE,
+              ).length,
             },
           ],
         };

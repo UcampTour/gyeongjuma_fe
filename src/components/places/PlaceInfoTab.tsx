@@ -19,11 +19,32 @@ const PlaceInfoTab = ({ place }: PlaceInfoTabProps) => {
     <Box sx={{ py: 2 }}>
       <Stack spacing={3}>
         <InfoRow
+          icon={<LocationOnIcon />}
+          label="주소"
+          // value={`${place?.add1 ?? ""} ${place?.add2 ?? ""}`.trim()}
+          value={`${place?.add1}\n ${place?.add2}`}
+        />
+        <InfoRow
+          icon={<ScheduleIcon />}
+          label="운영 상태"
+          value={
+            <Chip
+              label={place?.operationStatus ?? "정보 없음"}
+              size="small"
+              color="default"
+            />
+          }
+        />
+        <InfoRow
+          icon={<RouteOutlinedIcon />}
+          label="현재 위치"
+          value={`${Math.round(place?.distance ?? 0).toLocaleString()}m`}
+        />
+        <InfoRow
           icon={<CategoryOutlinedIcon />}
           label="카테고리"
           value={place?.category}
         />
-
         <InfoRow
           icon={<GroupsIcon />}
           label="예상 혼잡도"
@@ -37,47 +58,20 @@ const PlaceInfoTab = ({ place }: PlaceInfoTabProps) => {
         />
 
         <InfoRow
-          icon={<ScheduleIcon />}
-          label="운영 상태"
-          value={
-            <Chip
-              label={place?.operationStatus ?? "정보 없음"}
-              size="small"
-              color="default"
-            />
-          }
-        />
-
-        <InfoRow
-          icon={<LocationOnIcon />}
-          label="주소"
-          value={`${place?.addr1 ?? ""} ${place?.addr2 ?? ""}`.trim()}
-        />
-
-        <InfoRow
-          icon={<RouteOutlinedIcon />}
-          label="현재 위치"
-          value={`${Math.round(place?.distance ?? 0).toLocaleString()}m`}
-        />
-
-        <InfoRow
           icon={<StarIcon />}
           label="평점"
           value={place?.rating ? `${place?.rating?.toFixed(1)} 점` : "0.0점"}
         />
-
         <InfoRow
           icon={<ReviewsOutlinedIcon />}
           label="리뷰"
           value={`${place?.reviewCount ?? 0}개`}
         />
-
         <InfoRow
           icon={<FavoriteBorderIcon />}
           label="좋아요"
           value={`${place?.likes ?? 0}개`}
         />
-
         <InfoRow
           icon={<TourIcon />}
           label="방문 여부"

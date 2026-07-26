@@ -1,8 +1,8 @@
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import CloseIcon from "@mui/icons-material/Close";
-import { Box, IconButton, Stack, Typography } from "@mui/material";
+import { Alert, Box, IconButton, Stack, Typography } from "@mui/material";
 import type { AxiosError } from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import "swiper/css";
@@ -10,17 +10,24 @@ import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { ApiErrorResponse } from "../../api/apiClient";
 import { certifyVisit } from "../../api/placeApi";
+import { fetchQuizDetail } from "../../api/quizService";
+import defaultPlaceImage from "../../assets/default_place_img.png";
 import type { TabItem } from "../../components/common/CommonChipTabs";
 import CommonChipTabs from "../../components/common/CommonChipTabs";
 import type { LoadingProps } from "../../components/common/CommonLoading";
 import CommonLoading from "../../components/common/CommonLoading";
 import CommonStamp from "../../components/common/CommonStamp";
+import AudioList from "../../components/places/audio/AudioList";
 import PlaceCommentTab from "../../components/places/PlaceCommentTab";
 import PlaceInfoTab from "../../components/places/PlaceInfoTab";
+import QuizIntro from "../../components/Quiz/QuizList/QuizIntro";
 import { queryClient } from "../../config/queryClient";
 import { useCommonDialog } from "../../hooks/common/useCommonDialog";
 import { useCommonLoading } from "../../hooks/common/useCommonLoading";
 import { useCurrentLocation } from "../../hooks/useCurrentLocation";
+import { useQuizList } from "../../hooks/useQuizList";
+import { QuizStatus, type QuizItem } from "../../models/QuizModel";
+import { useAudioQuery } from "../../queries/useAudioQuery";
 import { usePlaceListQuery } from "../../queries/usePlaceListQuery";
 export interface PlaceDetailProps {
   placeId?: number; //number;
@@ -31,7 +38,7 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
   const navigate = useNavigate();
   const { alert, confirm } = useCommonDialog();
 
-  const { currentLocation, updateCurrentLocation } = useCurrentLocation();
+  const { updateCurrentLocation } = useCurrentLocation();
   const [loading, setLoading] = useState<LoadingProps>();
 
   const commonLoading = useCommonLoading(loading);
@@ -47,6 +54,22 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
   const place = placeList.find((p) => p.placeId === placeId);
 
   const [activeTab, setActiveTab] = useState(0);
+
+  const { quizInfo } = useQuizList(placeId);
+  const [quizData, setQuizData] = useState<QuizItem>();
+  const { data: audioList = [], isLoading: isAudioLoading } =
+    useAudioQuery(placeId);
+
+  useEffect(() => {
+    if (!quizInfo) return;
+
+    fetchAndSetQuizInfo(quizInfo.placeQuizInfoId);
+  }, [quizInfo]);
+
+  const fetchAndSetQuizInfo = async (quizInfoId: number) => {
+    const data = await fetchQuizDetail(quizInfoId);
+    setQuizData(data);
+  };
 
   const TABS: TabItem[] = [
     {
@@ -78,8 +101,6 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
    * 방문 인증 관리
    */
   const handleClickStamp = async () => {
-    //
-    console.log("handle click stamp");
     if (!place) return;
     if (place?.isVisited) {
       await alert("이미 방문완료된 관광지입니다.");
@@ -104,8 +125,6 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
       isLoading: true,
       loadingMsg: "방문 인증 처리 중",
     });
-    //
-    console.log("handleRegistPlace");
     if (!place) return;
 
     const location = await updateCurrentLocation();
@@ -113,19 +132,18 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
     if (!location) return;
     try {
       const response = await certifyVisit(place.placeId, {
-        latitude: 35.83052237,
-        longitude: 129.22839984,
-        // latitude: location.lat ?? 0,
-        // longitude: location.lng ?? 0,
+        latitude: location.lat ?? 0,
+        longitude: location.lng ?? 0,
       });
-      console.log(response);
       if (response) {
         setLoading({
           isLoading: false,
         });
       }
       if (response.status === "SUCCESS") {
-        await alert("방문인증 완료!!");
+        await alert(
+          "방문 인증 완료 🎉\n이제 퀴즈에 도전해 포인트를 획득해 보세요.",
+        );
 
         queryClient.invalidateQueries({
           queryKey: ["places"],
@@ -166,7 +184,6 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
         sx={{
           position: "relative",
           px: 3,
-          py: 1,
         }}
       >
         <Stack
@@ -178,14 +195,14 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
           }}
         >
           {/* 타이틀 영역 */}
-          <Stack sx={{ mb: 3, mt: 5, gap: 1 }}>
+          <Stack direction="column" sx={{ mb: 3, mt: 2, gap: 1 }}>
             <Typography sx={{ fontSize: "25px", fontWeight: 700 }}>
               {place?.placeName ?? ""}
             </Typography>
 
-            {/* <Typography sx={{ fontSize: "18px", fontWeight: 700 }}>
-              {place?.enPlaceName ?? ""}
-            </Typography> */}
+            <Typography sx={{ fontSize: "15px", fontWeight: 700 }}>
+              {place?.placeName ?? "영어"}
+            </Typography>
           </Stack>
 
           {/* 우측 상단 스탬프 */}
@@ -202,32 +219,30 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
             onClick={handleClickStamp}
           />
         </Stack>
-        {/* // activeTab === 0 &&  */}
-        {place?.imageUrl && (
-          <Swiper
-            spaceBetween={12}
-            slidesPerView={0}
-            grabCursor
-            style={{
-              width: "100%",
-              height: 220,
-            }}
-          >
-            <SwiperSlide key={place?.placeId}>
-              <Box
-                component="img"
-                src={place?.imageUrl}
-                alt={place?.placeName}
-                sx={{
-                  width: "100%",
-                  height: 220,
-                  borderRadius: 3,
-                  objectFit: "cover",
-                }}
-              />
-            </SwiperSlide>
-          </Swiper>
-        )}
+
+        <Swiper
+          spaceBetween={12}
+          slidesPerView={0}
+          grabCursor
+          style={{
+            width: "100%",
+            height: 220,
+          }}
+        >
+          <SwiperSlide key={place?.placeId}>
+            <Box
+              component="img"
+              src={place?.imageUrl ?? defaultPlaceImage}
+              alt={place?.placeName}
+              sx={{
+                width: "100%",
+                height: 220,
+                borderRadius: 3,
+                objectFit: "cover",
+              }}
+            />
+          </SwiperSlide>
+        </Swiper>
 
         {/* 관광지 상세 페이지 > 탭 */}
         <CommonChipTabs
@@ -236,25 +251,68 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
           setActiveTab={setActiveTab}
         />
 
-        <Box>
+        <Box
+          sx={{
+            maxHeight: "50vh",
+            overflowY: "auto",
+            pb: "100px",
+
+            // IE, Edge
+            msOverflowStyle: "none",
+
+            // Firefox
+            scrollbarWidth: "none",
+
+            // Chrome, Safari
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+          }}
+        >
           {activeTab === 0 && <PlaceInfoTab place={place} />}
 
           {activeTab === 1 && <PlaceCommentTab place={place} />}
 
-          {activeTab === 2 && <Box>오디오 영역</Box>}
+          {activeTab === 2 && <AudioList audioList={audioList} />}
           {/* 퀴즈 */}
           {activeTab === 3 && (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                flexGrow: 1,
-                height: "100%",
-                pb: 11,
-              }}
-            >
-              퀴즈 시작 연결 필요
-            </Box>
+            <>
+              <Box
+                sx={{
+                  mt: 1.5,
+                  mb: 2,
+                  // minHeight: "100%",
+                }}
+              >
+                {
+                  // !quizData ? (
+                  //   <Alert severity="info">
+                  //     아직 준비된 퀴즈가 없어요.
+                  //     <br />곧 새로운 퀴즈가 추가될 예정이니 기대해 주세요! 😊
+                  //   </Alert>
+                  // ) :
+
+                  quizData?.quizStatus === QuizStatus.AVAILABLE ? (
+                    <Alert severity="success">
+                      퀴즈를 풀고 포인트를 획득해 보세요. 🎉
+                    </Alert>
+                  ) : quizData?.quizStatus === QuizStatus.LOCKED ? (
+                    <Alert severity="warning">
+                      스탬프를 클릭해서 방문 인증을 완료해 주세요! 🔒
+                    </Alert>
+                  ) : quizData?.quizStatus === QuizStatus.COMPLETED ? (
+                    <Alert severity="success">
+                      이미 퀴즈를 완료했습니다. 👏
+                    </Alert>
+                  ) : quizData?.quizStatus === QuizStatus.PROGRESS ? (
+                    <Alert severity="info">진행 중인 퀴즈가 있습니다. ✍️</Alert>
+                  ) : (
+                    <></>
+                  )
+                }
+              </Box>
+              <QuizIntro quiz={quizData} showImage={false} />
+            </>
           )}
         </Box>
       </Box>
