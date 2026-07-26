@@ -37,8 +37,8 @@ export interface PlaceListBase {
   isVisited: boolean; // 방문 여부 상태
   imageUrl: string; // 대표 이미지
   distance: number | null; // 내 위치로부터의 거리 (Integer -> number)
-  addr1?: string;
-  addr2?: string;
+  add1?: string;
+  add2?: string;
 }
 
 /* -------- Constants -------- */
@@ -95,4 +95,12 @@ export interface PlaceSearchParams {
   sort?: string; // 기본값 "distance"
   latitude: number; // 필수
   longitude: number; // 필수
+}
+
+// 방문인증
+export interface VisitCertifyResponse {
+  visitId: number;
+  placeId: number;
+  distanceMeters: number;
+  radiusMeters: number;
 }

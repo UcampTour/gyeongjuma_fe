@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { fetchQuizList } from "../api/quizService";
 import { QuizCategory, type QuizListItem } from "../models/QuizModel";
 
-export const useQuizList = () => {
+export const useQuizList = (placeId?: number) => {
   const [selectedCategory, setSelectedCategory] = useState<QuizCategory>(
     QuizCategory.ALL,
   );
@@ -47,7 +47,13 @@ export const useQuizList = () => {
     setSelectedQuiz(null);
   };
 
+  const quizInfo = useMemo(
+    () => quizData.find((quiz) => quiz.placeId === placeId),
+    [quizData, placeId],
+  );
+
   return {
+    quizData,
     selectedCategory,
     setSelectedCategory,
     quizList: filteredQuizList,
@@ -56,5 +62,6 @@ export const useQuizList = () => {
     handleQuizClick,
     drawerClose,
     isLoading,
+    quizInfo,
   };
 };
