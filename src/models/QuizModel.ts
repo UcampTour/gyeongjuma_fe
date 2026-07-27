@@ -9,6 +9,7 @@ export interface QuizListResponse {
 
 export interface QuizListItem {
   placeQuizInfoId: number;
+  placeId: number;
   quizTitle: string;
   description: string;
   imageUrl: string;
@@ -31,13 +32,15 @@ export interface QuizItem {
   lastQuestionIndex: number;
   quizStatus: QuizStatus;
   questions: QuizQuestion[];
+  quizTitle?: string;
+  solvedQuestions?: number;
 }
 
 interface QuizQuestion {
   quizId: number; // 나중에 바꾸자
   question: string;
   options: QuizOption[];
-  isCorrect?: boolean | null;          
+  isCorrect?: boolean | null;
   isSolved?: boolean;
 }
 
@@ -87,11 +90,10 @@ export const QuizStatus = {
   PROGRESS: "PROGRESS",
   COMPLETED: "COMPLETED",
 } as const;
-export type QuizStatus = typeof QuizStatus[keyof typeof QuizStatus];
+export type QuizStatus = (typeof QuizStatus)[keyof typeof QuizStatus];
 
 export const QuizCategory = {
   ...QuizStatus,
   ALL: "ALL",
 } as const;
-export type QuizCategory = typeof QuizCategory[keyof typeof QuizCategory];
-
+export type QuizCategory = (typeof QuizCategory)[keyof typeof QuizCategory];

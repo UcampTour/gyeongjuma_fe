@@ -1,3 +1,4 @@
+import MenuBookIcon from "@mui/icons-material/MenuBook";
 import { Box, Typography } from "@mui/material";
 import type { PlaceListBase } from "../../models/PlaceModel";
 
@@ -6,30 +7,40 @@ export interface PlaceCommentProps {
 }
 const PlaceCommentTab = ({ place }: PlaceCommentProps) => {
   const description = place?.description?.replace(/\.\s*/g, ".\n\n");
+
   return (
     <Box
       sx={{
-        mt: 1.5,
-        mb: 2,
-        minHeight: "100%",
-        bgcolor: "rgba(255, 255, 255, 0.5)",
-        border: "1px solid rgba(160, 142, 115, 0.15)",
-        borderRadius: "20px",
-        p: 2.5,
-        pt: 3.5,
-        boxShadow: "0 4px 20px rgba(160, 142, 115, 0.03)",
+        mt: 2,
+        p: 4,
+        borderRadius: "24px",
+        bgcolor: "#FCFBF8",
+        border: "1px dashed #D9CDBD",
+        textAlign: "center",
       }}
     >
-      <Typography
-        sx={{
-          whiteSpace: "pre-line",
-          lineHeight: 1.8,
-        }}
-      >
-        {place?.description === null || place?.description === ""
-          ? "등록된 해설 정보가 없습니다."
-          : description}
-      </Typography>
+      {place?.description === null || place?.description === "" ? (
+        <>
+          <MenuBookIcon
+            sx={{
+              fontSize: 64,
+              color: "#C7B8A3",
+              mb: 2,
+            }}
+          />
+          <Typography
+            sx={{
+              fontWeight: 700,
+              fontSize: "0.975rem",
+              color: "#5A534A",
+            }}
+          >
+            아직 준비된 해설이 없어요.
+          </Typography>
+        </>
+      ) : (
+        description
+      )}
     </Box>
   );
 };

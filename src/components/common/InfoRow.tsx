@@ -17,7 +17,7 @@ const InfoRow = ({
         width: 80,
         color: "text.secondary",
         fontWeight: 700,
-        fontSize: "0.975rem",
+        fontSize: "0.875rem",
       }}
     >
       {label}
@@ -27,7 +27,7 @@ const InfoRow = ({
       sx={{
         flex: 1,
         fontWeight: 400,
-        fontSize: "0.9rem",
+        fontSize: "0.795rem",
       }}
     >
       {value}

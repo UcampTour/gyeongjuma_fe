@@ -1,4 +1,5 @@
-import { Sheet, type SheetRef } from "react-modal-sheet";
+import PersonPinCircleIcon from "@mui/icons-material/PersonPinCircle";
+import { Box, Stack, Typography } from "@mui/material";
 import {
   forwardRef,
   useEffect,
@@ -6,14 +7,13 @@ import {
   useRef,
   useState,
 } from "react";
-import { Box, Stack, Typography } from "@mui/material";
-import PersonPinCircleIcon from "@mui/icons-material/PersonPinCircle";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Sheet, type SheetRef } from "react-modal-sheet";
 import { useNavigate } from "react-router-dom";
-import type { PlaceListBase } from "../../models/PlaceModel";
-import { nearbyPlaceList } from "../../data/map/nearbyPlaceList";
+import { Swiper, SwiperSlide } from "swiper/react";
 import defaultPlaceImage from "../../assets/default_place_img.png";
+import { nearbyPlaceList } from "../../data/map/nearbyPlaceList";
 import { CongestionLevel, OperationStatus } from "../../models/commonModel";
+import type { PlaceListBase } from "../../models/PlaceModel";
 interface SheetProps {
   open: boolean;
   onClose: () => void;
