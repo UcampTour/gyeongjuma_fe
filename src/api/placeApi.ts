@@ -5,7 +5,6 @@ import type {
 } from "../models/PlaceModel";
 import { apiClient } from "./apiClient";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 /**
  * 관광지 목록 조회
@@ -19,7 +18,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export const getPlaceList = async (
   params: PlaceSearchParams,
 ): Promise<PlaceListBase[]> => {
-  const response = await apiClient.get(`${BASE_URL}/place`, { params });
+  const response = await apiClient.get("/place", { params });
   return response.data.data;
 };
 
@@ -31,7 +30,7 @@ export const getPlaceList = async (
  */
 export const certifyVisit = async (placeId: number, params: PlaceLocPrams) => {
   const response = await apiClient.post(
-    `${BASE_URL}/visit/${placeId}?latitude=${params.latitude}&longitude=${params.longitude}`, // ?latitude=${params.latitude}&longitude=${params.longitude}
+    `/visit/${placeId}?latitude=${params.latitude}&longitude=${params.longitude}`, // ?latitude=${params.latitude}&longitude=${params.longitude}
   );
   return response.data;
 };
