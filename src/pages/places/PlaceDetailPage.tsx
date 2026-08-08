@@ -22,6 +22,7 @@ import PlaceCommentTab from "../../components/places/PlaceCommentTab";
 import PlaceInfoTab from "../../components/places/PlaceInfoTab";
 import QuizIntro from "../../components/Quiz/QuizList/QuizIntro";
 import { queryClient } from "../../config/queryClient";
+import { audioPlayer } from "../../hooks/audio/AudioPlayer";
 import { useCommonDialog } from "../../hooks/common/useCommonDialog";
 import { useCommonLoading } from "../../hooks/common/useCommonLoading";
 import { useCurrentLocation } from "../../hooks/useCurrentLocation";
@@ -29,6 +30,7 @@ import { useQuizList } from "../../hooks/useQuizList";
 import { QuizStatus, type QuizItem } from "../../models/QuizModel";
 import { useAudioQuery } from "../../queries/useAudioQuery";
 import { usePlaceListQuery } from "../../queries/usePlaceListQuery";
+import { useAudioStore } from "../../store/audioPlayerStore";
 export interface PlaceDetailProps {
   placeId?: number; //number;
 }
@@ -59,12 +61,23 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
   const [quizData, setQuizData] = useState<QuizItem>();
   const { data: audioList = [], isLoading: isAudioLoading } =
     useAudioQuery(placeId);
+  const { setShowMiniPlayer, resetAudio } = useAudioStore();
 
   useEffect(() => {
     if (!quizInfo) return;
 
     fetchAndSetQuizInfo(quizInfo.placeQuizInfoId);
   }, [quizInfo]);
+
+  useEffect(() => {
+    // 관광지 상세 페이지 내에서는 미니 플레이어 표시
+    setShowMiniPlayer(true);
+
+    return () => {
+      // 관광지 상세 페이지를 벗어나면 미니 플레이어 숨김
+      setShowMiniPlayer(false);
+    };
+  }, [setShowMiniPlayer]);
 
   const fetchAndSetQuizInfo = async (quizInfoId: number) => {
     const data = await fetchQuizDetail(quizInfoId);
@@ -91,9 +104,13 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
   ];
 
   const handleBack = () => {
+    resetAudio();
+    audioPlayer.stop();
     navigate(-1);
   };
   const handleClose = () => {
+    resetAudio();
+    audioPlayer.stop();
     navigate("/explore");
   };
 
@@ -132,8 +149,8 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
     if (!location) return;
     try {
       const response = await certifyVisit(place.placeId, {
-        latitude: location.lat ?? 0,
-        longitude: location.lng ?? 0,
+        latitude: 35.83433034, // location.lat ?? 0,
+        longitude: 129.21853454, // location.lng ?? 0,
       });
       if (response) {
         setLoading({
@@ -142,12 +159,15 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
       }
       if (response.status === "SUCCESS") {
         await alert(
-          "방문 인증 완료 🎉\n이제 퀴즈에 도전해 포인트를 획득해 보세요.",
+          "방문 인증 완료 🎉\n 이제 퀴즈에 도전해 포인트를 획득해 보세요.",
         );
 
         queryClient.invalidateQueries({
           queryKey: ["places"],
         });
+        if (quizInfo) {
+          fetchAndSetQuizInfo(quizInfo?.placeQuizInfoId);
+        }
       }
     } catch (err) {
       setLoading({

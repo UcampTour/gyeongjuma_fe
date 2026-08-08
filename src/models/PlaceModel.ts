@@ -104,3 +104,14 @@ export interface VisitCertifyResponse {
   distanceMeters: number;
   radiusMeters: number;
 }
+
+export interface AudioItemRes {
+  audioId: number;
+  placeId: number;
+  title: string;
+  script: string;
+  audioUrl: string;
+  imageUrl: string;
+  playTime: string;
+  placeName: string;
+}
