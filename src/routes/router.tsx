@@ -33,7 +33,7 @@ const routes: RouteObject[] = [
                 element: <HomePage />,
               },
               {
-                path: "audio/:audioId",
+                path: "audio/:placeId/:audioId",
                 element: <AudioDetailPage />,
               },
               {

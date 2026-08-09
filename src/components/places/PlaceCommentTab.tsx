@@ -16,7 +16,8 @@ const PlaceCommentTab = ({ place }: PlaceCommentProps) => {
         borderRadius: "24px",
         bgcolor: "#FCFBF8",
         border: "1px dashed #D9CDBD",
-        textAlign: "center",
+        textAlign: "left",
+        whiteSpace: "pre-line",
       }}
     >
       {place?.description === null || place?.description === "" ? (
