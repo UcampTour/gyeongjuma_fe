@@ -1,437 +1,313 @@
-import { useState } from "react";
-import { Box, Typography, Button, Card, CardMedia } from "@mui/material";
+import { Box, Typography, Card, Chip, LinearProgress } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import MapIcon from "@mui/icons-material/Map";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
+import EditIcon from "@mui/icons-material/Edit";
 import SettingsIcon from "@mui/icons-material/Settings";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import PageHeader from "../../components/common/PageHeader";
-import defaultPlaceImg from "../../assets/default_place_img.png";
 
-const MyPage = () => {
-  // 탭 상태: 'timeline' (발자취) 또는 'bookmark' (즐겨찾기)
-  const [activeTab, setActiveTab] = useState<"timeline" | "bookmark">("timeline");
+const ProfilePage = () => {
+  const navigate = useNavigate();
+  
+  // 실제 DB 데이터 매핑 예시
+  const nickname = "경주마스터99";
+  const profileImgUrl = null; // 프로필 이미지 URL (null일 경우 기본 아바타)
+  const difficulty = "NORMAL"; // 선호하는 난이도 (difficulty: EASY / NORMAL / HARD)
+  const locale = "KO"; // 사용자 언어/지역 설정 (locale)
+  const distance = 12500; // 총 이동 거리 (distance, 미터 단위 가정 예시: 12.5km)
 
-  // [확장성 개선 포인트] 뱃지가 계속 추가되어도 동적으로 대응할 수 있는 발자취 데이터
-  const [timelineData, setTimelineData] = useState([
-    {
-      id: 1,
-      name: "불국사",
-      date: "2026.05.01 방문",
-      image: defaultPlaceImg,
-    },
-    {
-      id: 2,
-      name: "첨성대",
-      date: "2026.05.03 방문",
-      image: defaultPlaceImg,
-    },
-    {
-      id: 3,
-      name: "동궁과 월지",
-      date: "2026.05.05 방문",
-      image: defaultPlaceImg,
-    },
-    // 추후 데이터가 늘어나도 아래처럼 아이템만 추가되면 자동으로 길과 뱃지가 이어집니다.
-    // {
-    //   id: 4,
-    //   name: "대릉원",
-    //   date: "2026.05.07 방문",
-    //   image: defaultPlaceImg,
-    // },
-  ]);
+  const point = 1000;         // 보유 포인트 (point)
+  const totalPoint = 3500;    // 누적 포인트
+  const visitCount = 4;
+  const quizCount = 3;
+  const courseCount = 1;
 
-  // 뱃지 개수에 맞춰 SVG 길의 높이와 곡선(Path)을 동적으로 계산합니다.
-  // 뱃지 하나당 약 110px 정도의 수직 공간을 할당하여 개수가 늘어나도 길이 끊기지 않게 합니다.
-  const badgeCount = timelineData.length;
-  const svgHeight = Math.max(360, badgeCount * 110);
+  const totalActions = visitCount + quizCount + courseCount;
+  const currentLevel = Math.floor(totalActions / 5) + 1;
+  const nextLevelMax = currentLevel * 5;
+  const levelPercent = Math.min(Math.round((totalActions / nextLevelMax) * 100), 100);
 
-  // 동적 SVG Path 생성 함수 (지그재그 곡선을 아이템 개수에 맞춰 아래로 자연스럽게 연장)
-  const generateDynamicPath = (count: number) => {
-    if (count <= 1) return "M 80 50 L 80 60";
-    
-    let path = "M 80 50"; // 첫 번째 뱃지 위치 (좌측)
-    let currentY = 50;
-
-    for (let i = 0; i < count - 1; i++) {
-      const nextY = currentY + 110;
-      const isEvenStep = i % 2 === 0; 
-      // 짝수 번째 스텝: 좌측(80) -> 우측(240)으로 굽이치며 이동
-      // 홀수 번째 스텝: 우측(240) -> 좌측(80)으로 굽이치며 이동
-      const startX = isEvenStep ? 80 : 240;
-      const endX = isEvenStep ? 240 : 80;
-
-      path += ` C ${startX} ${currentY + 55}, ${endX} ${nextY - 55}, ${endX} ${nextY}`;
-      currentY = nextY;
+  // 난이도 라벨 변환 함수
+  const getDifficultyLabel = (diff: string) => {
+    switch (diff) {
+      case "EASY": return "쉬움";
+      case "HARD": return "어려움";
+      case "NORMAL":
+      default: return "보통";
     }
-    return path;
+  };
+
+  // 미터(m) 단위를 보기 쉽게 km로 변환하는 함수
+  const formatDistance = (meters: number) => {
+    if (meters >= 1000) {
+      return `${(meters / 1000).toFixed(1)} km`;
+    }
+    return `${meters} m`;
   };
 
   return (
     <Box sx={{ bgcolor: "#F7F5EE", minHeight: "100vh", pb: 16 }}>
-      {/* 페이지 헤더 */}
       <PageHeader title="프로필" />
 
       <Box sx={{ px: 2, pt: 1 }}>
-        {/* 1. 프로필 카드 영역 */}
+        
+        {/* 1. 기본 프로필 정보 카드 */}
         <Card
           elevation={0}
           sx={{
             bgcolor: "#FFFFFF",
-            borderRadius: "16px",
+            borderRadius: "20px",
             p: 2.5,
             mb: 2,
-            boxShadow: "0 4px 12px rgba(142,114,73,0.04)",
-            position: "relative",
+            boxShadow: "0 8px 24px rgba(142,114,73,0.06)",
+            border: "1px solid #EFECE6",
           }}
         >
-          <Box
-            sx={{
-              position: "absolute",
-              top: 16,
-              right: 16,
-              cursor: "pointer",
-              color: "#888888",
-            }}
-          >
-            <SettingsIcon sx={{ fontSize: "20px" }} />
-          </Box>
-
           <Box sx={{ display: "flex", alignItems: "center", mb: 2.5 }}>
             <Box
               sx={{
-                width: 60,
-                height: 60,
-                borderRadius: "50%",
-                bgcolor: "#F5F2EB",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                mr: 2,
-                overflow: "hidden",
-                border: "1px solid #E3DCCE",
+                width: 60, height: 60, borderRadius: "50%", bgcolor: "#F5F2EB",
+                display: "flex", alignItems: "center", justifyContent: "center", mr: 2,
+                overflow: "hidden", border: "2px solid #E3DCCE",
+                flexShrink: 0
               }}
             >
-              <Typography sx={{ fontSize: "24px" }}>🧑‍💻</Typography>
+              {profileImgUrl ? (
+                <img src={profileImgUrl} alt="profile" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              ) : (
+                <Typography sx={{ fontSize: "24px" }}>🧑‍💻</Typography>
+              )}
             </Box>
-            <Box>
-              <Typography
-                sx={{ fontWeight: 800, fontSize: "18px", color: "#111111", mb: 0.5 }}
-              >
-                닉네임
-              </Typography>
-              <Button
-                variant="outlined"
-                size="small"
-                sx={{
-                  height: "26px",
-                  borderRadius: "13px",
-                  borderColor: "#E3DCCE",
-                  color: "#7A7265",
-                  fontSize: "11px",
-                  textTransform: "none",
-                  px: 1.5,
-                  "&:hover": { borderColor: "#AC8E61", bgcolor: "#FDFBF7" },
-                }}
-              >
-                내 정보 수정
-              </Button>
+
+            <Box sx={{ flex: 1, minWidth: 0 }}>
+              {/* 난이도 및 로케일 정보 표시 영역 (닉네임 위) */}
+              <Box sx={{ display: "flex", alignItems: "center", gap: 0.8, mb: 0.8, flexWrap: "wrap" }}>
+                <Chip 
+                  label={`난이도: ${getDifficultyLabel(difficulty)}`} 
+                  size="small" 
+                  sx={{ height: 18, fontSize: "10px", fontWeight: 700, bgcolor: "#FAF8F5", color: "#AC8E61", border: "1px solid #E3DCCE" }} 
+                />
+                <Chip 
+                  label={`언어: ${locale}`} 
+                  size="small" 
+                  sx={{ height: 18, fontSize: "10px", fontWeight: 700, bgcolor: "#FAF8F5", color: "#958D80", border: "1px solid #E3DCCE" }} 
+                />
+              </Box>
+
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
+                <Typography sx={{ fontWeight: 800, fontSize: "18px", color: "#111111" }}>
+                  {nickname}
+                </Typography>
+              </Box>
             </Box>
           </Box>
 
+          {/* 보유 포인트 & 누적 포인트 분리형 박스 */}
           <Box
             sx={{
-              display: "flex",
-              bgcolor: "#FAF8F5",
-              borderRadius: "12px",
-              py: 1.5,
+              display: "flex", bgcolor: "#FAF8F5", borderRadius: "14px", py: 1.5,
               border: "1px solid #F0ECE1",
             }}
           >
             <Box sx={{ flex: 1, textAlign: "center" }}>
-              <Typography sx={{ fontSize: "12px", color: "#958D80", mb: 0.3 }}>
-                누적 포인트
-              </Typography>
-              <Typography sx={{ fontWeight: 800, fontSize: "16px", color: "#AC8E61" }}>
-                1,000P
-              </Typography>
+              <Typography sx={{ fontSize: "12px", color: "#958D80", mb: 0.3 }}>보유 포인트</Typography>
+              <Typography sx={{ fontWeight: 800, fontSize: "16px", color: "#AC8E61" }}>1,000P</Typography>
             </Box>
             <Box sx={{ width: "1px", bgcolor: "#E3DCCE", my: 0.5 }} />
             <Box sx={{ flex: 1, textAlign: "center" }}>
-              <Typography sx={{ fontSize: "12px", color: "#958D80", mb: 0.3 }}>
-                방문 관광지
-              </Typography>
-              <Typography sx={{ fontWeight: 800, fontSize: "16px", color: "#111111" }}>
-                {badgeCount} / 25
-              </Typography>
+              <Typography sx={{ fontSize: "12px", color: "#958D80", mb: 0.3 }}>누적 포인트</Typography>
+              <Typography sx={{ fontWeight: 800, fontSize: "16px", color: "#111111" }}>3,500P</Typography>
             </Box>
           </Box>
         </Card>
 
-        {/* 2. 여행 진행도 대시보드 카드 */}
+        {/* 2. 나의 여행 진행도 & 3대 활동 요약 카드 (총 이동 거리 추가) */}
         <Card
           elevation={0}
           sx={{
             bgcolor: "#FFFFFF",
-            borderRadius: "16px",
+            borderRadius: "20px",
             p: 2.5,
             mb: 3,
-            boxShadow: "0 4px 12px rgba(142,114,73,0.04)",
+            boxShadow: "0 8px 24px rgba(142,114,73,0.06)",
+            border: "1px solid #EFECE6",
           }}
         >
-          <Typography
-            sx={{ fontWeight: 800, fontSize: "15px", color: "#111111", mb: 1.5 }}
-          >
+          <Typography sx={{ fontWeight: 800, fontSize: "15px", color: "#111111", mb: 2 }}>
             ✈️ 나의 여행 진행도
           </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              bgcolor: "#F7F5EE",
-              p: 2,
-              borderRadius: "12px",
-            }}
-          >
-            <Box>
-              <Typography sx={{ fontSize: "13px", color: "#7A7265", mb: 0.5 }}>
-                경주 탐험 달성률
+
+          {/* 여행 레벨 및 단일 진행 바 영역 (퍼센티지 문구 적용) */}
+          <Box sx={{ bgcolor: "#F7F5EE", p: 2, borderRadius: "16px", border: "1px solid #EFECE6", mb: 2 }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1.5 }}>
+              <Typography sx={{ fontWeight: 800, fontSize: "14px", color: "#AC8E61" }}>
+                Lv.{currentLevel} 초보 탐험가
               </Typography>
-              <Typography sx={{ fontWeight: 800, fontSize: "20px", color: "#AC8E61" }}>
-                {Math.round((badgeCount / 25) * 100)}% 완료
+              <Typography sx={{ fontSize: "11px", color: "#7A7265", fontWeight: 700 }}>
+                달성률 {levelPercent}%
               </Typography>
             </Box>
-            <Box
+            
+            <LinearProgress 
+              variant="determinate" 
+              value={levelPercent} 
               sx={{
-                width: 48,
-                height: 48,
-                borderRadius: "50%",
-                bgcolor: "#AC8E61",
-                color: "#FFFFFF",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontWeight: 800,
-                fontSize: "14px",
-              }}
-            >
-              {Math.round((badgeCount / 25) * 100)}%
+                height: 8, 
+                borderRadius: 4, 
+                bgcolor: "#E3DCCE",
+                "& .MuiLinearProgress-bar": { bgcolor: "#AC8E61", borderRadius: 4 }
+              }} 
+            />
+          </Box>
+
+          {/* 활동 요약 뱃지 (총 이동 거리 포함 4분할 또는 배치) */}
+          <Box sx={{ display: "flex", gap: 1, mb: 1 }}>
+            <Box sx={{ flex: 1, bgcolor: "#FAF8F5", p: 1.5, borderRadius: "12px", textAlign: "center", border: "1px solid #F0ECE1" }}>
+              <Typography sx={{ fontSize: "11px", color: "#958D80", mb: 0.5, fontWeight: 600 }}>방문 장소</Typography>
+              <Typography sx={{ fontSize: "14px", fontWeight: 800, color: "#111111" }}>{visitCount}곳</Typography>
+            </Box>
+
+            <Box sx={{ flex: 1, bgcolor: "#FAF8F5", p: 1.5, borderRadius: "12px", textAlign: "center", border: "1px solid #F0ECE1" }}>
+              <Typography sx={{ fontSize: "11px", color: "#958D80", mb: 0.5, fontWeight: 600 }}>맞춘 퀴즈</Typography>
+              <Typography sx={{ fontSize: "14px", fontWeight: 800, color: "#4A709C" }}>{quizCount}개</Typography>
+            </Box>
+          </Box>
+
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Box sx={{ flex: 1, bgcolor: "#FAF8F5", p: 1.5, borderRadius: "12px", textAlign: "center", border: "1px solid #F0ECE1" }}>
+              <Typography sx={{ fontSize: "11px", color: "#958D80", mb: 0.5, fontWeight: 600 }}>완주 코스</Typography>
+              <Typography sx={{ fontSize: "14px", fontWeight: 800, color: "#C05656" }}>{courseCount}개</Typography>
+            </Box>
+
+             <Box sx={{ flex: 1, bgcolor: "#FAF8F5", p: 1.5, borderRadius: "12px", textAlign: "center", border: "1px solid #F0ECE1" }}>
+              <Typography sx={{ fontSize: "11px", color: "#958D80", mb: 0.5, fontWeight: 600 }}>총 이동거리</Typography>
+              <Typography sx={{ fontSize: "13px", fontWeight: 800, color: "#AC8E61" }}>{formatDistance(distance)}</Typography>
             </Box>
           </Box>
         </Card>
 
-        {/* 3. 탭 메뉴 */}
-        <Box
-          sx={{
-            display: "flex",
-            borderBottom: "1px solid #E3DCCE",
-            mb: 2.5,
-          }}
-        >
-          <Box
-            onClick={() => setActiveTab("timeline")}
+        {/* 3. 상세 페이지 이동 내비게이션 카드들 */}
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+          <Card
+            elevation={0}
+            onClick={() => navigate("/profile/timeline")}
             sx={{
-              flex: 1,
-              textAlign: "center",
-              py: 1.5,
-              cursor: "pointer",
-              fontWeight: activeTab === "timeline" ? 800 : 500,
-              fontSize: "15px",
-              color: activeTab === "timeline" ? "#AC8E61" : "#958D80",
-              borderBottom: activeTab === "timeline" ? "2px solid #AC8E61" : "none",
-              transition: "all 0.2s",
+              display: "flex", alignItems: "center", justifyContent: "space-between",
+              bgcolor: "#FFFFFF", borderRadius: "16px", p: 2.2, cursor: "pointer",
+              boxShadow: "0 4px 12px rgba(142,114,73,0.04)", border: "1px solid #EFECE6",
+              transition: "transform 0.15s ease, border-color 0.15s ease",
+              "&:hover": { transform: "translateY(-2px)", borderColor: "#AC8E61" }
             }}
           >
-            내 발자취
-          </Box>
-          <Box
-            onClick={() => setActiveTab("bookmark")}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Box sx={{ width: 42, height: 42, borderRadius: "12px", bgcolor: "#F5F2EB", display: "flex", alignItems: "center", justifyContent: "center", color: "#AC8E61" }}>
+                <MapIcon />
+              </Box>
+              <Box>
+                <Typography sx={{ fontWeight: 800, fontSize: "15px", color: "#111111" }}>내 발자취 모음</Typography>
+                <Typography sx={{ fontSize: "12px", color: "#958D80" }}>구불구불한 오솔길 위 탐험 기록 보기</Typography>
+              </Box>
+            </Box>
+            <ChevronRightIcon sx={{ color: "#B8B0A2" }} />
+          </Card>
+
+          <Card
+            elevation={0}
+            onClick={() => navigate("/profile/bookmark")}
             sx={{
-              flex: 1,
-              textAlign: "center",
-              py: 1.5,
-              cursor: "pointer",
-              fontWeight: activeTab === "bookmark" ? 800 : 500,
-              fontSize: "15px",
-              color: activeTab === "bookmark" ? "#AC8E61" : "#958D80",
-              borderBottom: activeTab === "bookmark" ? "2px solid #AC8E61" : "none",
-              transition: "all 0.2s",
+              display: "flex", alignItems: "center", justifyContent: "space-between",
+              bgcolor: "#FFFFFF", borderRadius: "16px", p: 2.2, cursor: "pointer",
+              boxShadow: "0 4px 12px rgba(142,114,73,0.04)", border: "1px solid #EFECE6",
+              transition: "transform 0.15s ease, border-color 0.15s ease",
+              "&:hover": { transform: "translateY(-2px)", borderColor: "#AC8E61" }
             }}
           >
-            즐겨찾기
-          </Box>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Box sx={{ width: 42, height: 42, borderRadius: "12px", bgcolor: "#FAF1F1", display: "flex", alignItems: "center", justifyContent: "center", color: "#C05656" }}>
+                <BookmarkIcon />
+              </Box>
+              <Box>
+                <Typography sx={{ fontWeight: 800, fontSize: "15px", color: "#111111" }}>즐겨찾기 장소</Typography>
+                <Typography sx={{ fontSize: "12px", color: "#958D80" }}>내가 찜한 관광지 리스트 확인</Typography>
+              </Box>
+            </Box>
+            <ChevronRightIcon sx={{ color: "#B8B0A2" }} />
+          </Card>
+
+          <Card
+            elevation={0}
+            onClick={() => navigate("/profile/exchange")}
+            sx={{
+              display: "flex", alignItems: "center", justifyContent: "space-between",
+              bgcolor: "#FFFFFF", borderRadius: "16px", p: 2.2, cursor: "pointer",
+              boxShadow: "0 4px 12px rgba(142,114,73,0.04)", border: "1px solid #EFECE6",
+              transition: "transform 0.15s ease, border-color 0.15s ease",
+              "&:hover": { transform: "translateY(-2px)", borderColor: "#AC8E61" }
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Box sx={{ width: 42, height: 42, borderRadius: "12px", bgcolor: "#FDF8F0", display: "flex", alignItems: "center", justifyContent: "center", color: "#D4A373" }}>
+                <CardGiftcardIcon />
+              </Box>
+              <Box>
+                <Typography sx={{ fontWeight: 800, fontSize: "15px", color: "#111111" }}>포인트 교환소</Typography>
+                <Typography sx={{ fontSize: "12px", color: "#958D80" }}>모은 포인트로 상품 및 쿠폰 교환</Typography>
+              </Box>
+            </Box>
+            <ChevronRightIcon sx={{ color: "#B8B0A2" }} />
+          </Card>
+
+          <Card
+            elevation={0}
+            onClick={() => navigate("/profile/edit")}
+            sx={{
+              display: "flex", alignItems: "center", justifyContent: "space-between",
+              bgcolor: "#FFFFFF", borderRadius: "16px", p: 2.2, cursor: "pointer",
+              boxShadow: "0 4px 12px rgba(142,114,73,0.04)", border: "1px solid #EFECE6",
+              transition: "transform 0.15s ease, border-color 0.15s ease",
+              "&:hover": { transform: "translateY(-2px)", borderColor: "#AC8E61" }
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Box sx={{ width: 42, height: 42, borderRadius: "12px", bgcolor: "#F0F4F8", display: "flex", alignItems: "center", justifyContent: "center", color: "#4A709C" }}>
+                <EditIcon />
+              </Box>
+              <Box>
+                <Typography sx={{ fontWeight: 800, fontSize: "15px", color: "#111111" }}>내 정보 수정</Typography>
+                <Typography sx={{ fontSize: "12px", color: "#958D80" }}>닉네임 및 프로필 이미지 변경</Typography>
+              </Box>
+            </Box>
+            <ChevronRightIcon sx={{ color: "#B8B0A2" }} />
+          </Card>
+
+          <Card
+            elevation={0}
+            onClick={() => navigate("/settings")}
+            sx={{
+              display: "flex", alignItems: "center", justifyContent: "space-between",
+              bgcolor: "#FFFFFF", borderRadius: "16px", p: 2.2, cursor: "pointer",
+              boxShadow: "0 4px 12px rgba(142,114,73,0.04)", border: "1px solid #EFECE6",
+              transition: "transform 0.15s ease, border-color 0.15s ease",
+              "&:hover": { transform: "translateY(-2px)", borderColor: "#AC8E61" }
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Box sx={{ width: 42, height: 42, borderRadius: "12px", bgcolor: "#F3F3F3", display: "flex", alignItems: "center", justifyContent: "center", color: "#666666" }}>
+                <SettingsIcon />
+              </Box>
+              <Box>
+                <Typography sx={{ fontWeight: 800, fontSize: "15px", color: "#111111" }}>앱 설정</Typography>
+                <Typography sx={{ fontSize: "12px", color: "#958D80" }}>알림, 공지사항 및 환경 설정</Typography>
+              </Box>
+            </Box>
+            <ChevronRightIcon sx={{ color: "#B8B0A2" }} />
+          </Card>
         </Box>
-
-        {/* 4. 탭 콘텐츠 영역 */}
-        {activeTab === "timeline" ? (
-          /* [발자취 탭: 뱃지가 추가되어도 동적으로 연장되는 구불구불한 오솔길] */
-          <Box
-            sx={{
-              position: "relative",
-              display: "flex",
-              flexDirection: "column",
-              py: 2,
-              px: 2,
-              minHeight: `${svgHeight}px`,
-            }}
-          >
-            {/* 동적으로 계산되는 SVG 오솔길 */}
-            <svg
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                zIndex: 0,
-                pointerEvents: "none",
-              }}
-              viewBox={`0 0 320 ${svgHeight}`}
-              fill="none"
-              preserveAspectRatio="none"
-            >
-              {/* 길 바깥 테두리 */}
-              <path
-                d={generateDynamicPath(badgeCount)}
-                stroke="#E3DCCE"
-                strokeWidth="14"
-                strokeLinecap="round"
-                fill="none"
-              />
-              {/* 길 안쪽 면 */}
-              <path
-                d={generateDynamicPath(badgeCount)}
-                stroke="#FDFBF7"
-                strokeWidth="8"
-                strokeLinecap="round"
-                fill="none"
-              />
-            </svg>
-
-            {/* 각 뱃지 아이템 (지그재그 배치 및 동적 간격) */}
-            {timelineData.map((item, index) => {
-              const isEven = index % 2 === 0;
-
-              return (
-                <Box
-                  key={item.id}
-                  sx={{
-                    position: "relative",
-                    zIndex: 1,
-                    display: "flex",
-                    flexDirection: isEven ? "row" : "row-reverse",
-                    alignItems: "center",
-                    justifyContent: "flex-start",
-                    pl: isEven ? "35px" : "0px",
-                    pr: isEven ? "0px" : "35px",
-                    mb: index === timelineData.length - 1 ? 0 : "46px",
-                    alignSelf: isEven ? "flex-start" : "flex-end",
-                  }}
-                >
-                  {/* 원형 뱃지 본체 */}
-                  <Box
-                    sx={{
-                      width: 64,
-                      height: 64,
-                      borderRadius: "50%",
-                      overflow: "hidden",
-                      border: "3px solid #AC8E61",
-                      boxShadow: "0 4px 12px rgba(142,114,73,0.15)",
-                      bgcolor: "#FFFFFF",
-                      flexShrink: 0,
-                    }}
-                  >
-                    <CardMedia
-                      component="img"
-                      image={item.image}
-                      alt={item.name}
-                      sx={{ width: "100%", height: "100%", objectFit: "cover" }}
-                    />
-                  </Box>
-
-                  {/* 뱃지 이름 및 방문일자 텍스트 */}
-                  <Box
-                    sx={{
-                      mx: 2,
-                      textAlign: isEven ? "left" : "right",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      maxWidth: "150px",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontWeight: 800,
-                        fontSize: "14px",
-                        color: "#111111",
-                        mb: 0.2,
-                        lineHeight: 1.2,
-                      }}
-                    >
-                      {item.name}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: "10px",
-                        color: "#958D80",
-                        fontWeight: 600,
-                        letterSpacing: "-0.2px",
-                      }}
-                    >
-                      {item.date}
-                    </Typography>
-                  </Box>
-                </Box>
-              );
-            })}
-          </Box>
-        ) : (
-          /* [즐겨찾기 탭 내용] */
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <Card
-              elevation={0}
-              sx={{
-                display: "flex",
-                bgcolor: "#FFFFFF",
-                borderRadius: "16px",
-                p: 1.5,
-                boxShadow: "0 4px 12px rgba(142,114,73,0.04)",
-              }}
-            >
-              <Box sx={{ width: 80, height: 80, flexShrink: 0, mr: 1.5 }}>
-                <CardMedia
-                  component="img"
-                  image={defaultPlaceImg}
-                  alt="첨성대"
-                  sx={{ width: "100%", height: "100%", borderRadius: "12px", objectFit: "cover" }}
-                />
-              </Box>
-              <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                <Box>
-                  <Typography sx={{ fontSize: "11px", color: "#AC8E61", fontWeight: 600 }}>
-                    유적지
-                  </Typography>
-                  <Typography sx={{ fontWeight: 800, fontSize: "16px", color: "#111111" }}>
-                    첨성대
-                  </Typography>
-                </Box>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 2, color: "#7A7265", fontSize: "12px" }}>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <LocationOnIcon sx={{ fontSize: "13px", color: "#B8B0A2", mr: 0.3 }} />
-                    1.2km
-                  </Box>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <FavoriteIcon sx={{ fontSize: "13px", color: "#C05656", mr: 0.3 }} />
-                    142
-                  </Box>
-                </Box>
-              </Box>
-            </Card>
-          </Box>
-        )}
       </Box>
     </Box>
   );
 };
 
-export default MyPage;
+export default ProfilePage;

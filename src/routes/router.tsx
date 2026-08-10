@@ -15,6 +15,7 @@ import PlaceListPage from "../pages/places/PlaceListPage";
 import ProfilePage from "../pages/profile/ProfilePage";
 import QuizListPage from "../pages/quiz/QuizListPage";
 import QuizPlayPage from "../pages/quiz/QuizPlayPage";
+import TimelinePage from "../pages/profile/TimeLinePage";
 
 const routes: RouteObject[] = [
   {
@@ -63,7 +64,20 @@ const routes: RouteObject[] = [
               },
               {
                 path: "profile",
-                element: <ProfilePage />,
+                children: [
+                  {
+                    index: true,
+                    element: <ProfilePage />,
+                  },
+                  {
+                    path: "timeline",
+                    element: <TimelinePage />, 
+                  },
+                  // {
+                  //   path: "bookmark",
+                  //   element: <BookmarkPage />, // 즐겨찾기 상세 페이지 컴포넌트
+                  // },
+                ],
               },
               {
                 path: "quiz",
