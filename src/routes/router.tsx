@@ -16,6 +16,9 @@ import ProfilePage from "../pages/profile/ProfilePage";
 import QuizListPage from "../pages/quiz/QuizListPage";
 import QuizPlayPage from "../pages/quiz/QuizPlayPage";
 import TimelinePage from "../pages/profile/TimeLinePage";
+import BookmarkPage from "../pages/profile/BookMarkPage";
+import ProfileEdit from "../pages/profile/ProfileEditPage";
+import SettingsPage from "../pages/profile/SettingsPage";
 
 const routes: RouteObject[] = [
   {
@@ -73,10 +76,18 @@ const routes: RouteObject[] = [
                     path: "timeline",
                     element: <TimelinePage />, 
                   },
-                  // {
-                  //   path: "bookmark",
-                  //   element: <BookmarkPage />, // 즐겨찾기 상세 페이지 컴포넌트
-                  // },
+                  {
+                    path: "bookmark",
+                    element: <BookmarkPage />, // 즐겨찾기 상세 페이지 컴포넌트
+                  },
+                  {
+                    path: "edit",
+                    element: <ProfileEdit />,
+                  },
+                  {
+                    path: "setting",
+                    element: <SettingsPage />,
+                  },
                 ],
               },
               {
