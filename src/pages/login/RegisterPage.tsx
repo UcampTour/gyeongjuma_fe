@@ -17,7 +17,7 @@ import { useAuthStore } from "../../store/useAuthStore";
 
 const RegisterPage = () => {
   const [nickname, setNickname] = useState("");
-  const [difficulty, setDifficulty] = useState("EASY");
+  const [difficulty, setDifficulty] = useState("NORMAL");
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
 
   const navigate = useNavigate();
@@ -173,7 +173,6 @@ const RegisterPage = () => {
               onChange={(e) => setDifficulty(e.target.value)}
               sx={{ borderRadius: 3, height: "40px" }}
             >
-              <MenuItem value="EASY">EASY</MenuItem>
               <MenuItem value="NORMAL">NORMAL</MenuItem>
               <MenuItem value="HARD">HARD</MenuItem>
             </Select>
