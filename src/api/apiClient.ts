@@ -4,7 +4,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import { reissue } from "./authService";
 
 const BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api/";
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api";
 
 // 인터페이스
 export interface ApiResponse<T> {
