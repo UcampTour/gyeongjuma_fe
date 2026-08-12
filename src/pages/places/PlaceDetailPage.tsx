@@ -149,8 +149,8 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
     if (!location) return;
     try {
       const response = await certifyVisit(place.placeId, {
-        latitude: 35.83433034, // location.lat ?? 0,
-        longitude: 129.21853454, // location.lng ?? 0,
+        latitude: location.lat ?? 0,
+        longitude: location.lng ?? 0,
       });
       if (response) {
         setLoading({
