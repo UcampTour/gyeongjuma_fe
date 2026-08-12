@@ -5,7 +5,7 @@ import MapIcon from "@mui/icons-material/Map";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import EditIcon from "@mui/icons-material/Edit";
-import SettingsIcon from "@mui/icons-material/Settings";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useState } from "react";
 import CommonDialog from "../common/CommonDialog";
 
@@ -108,16 +108,16 @@ const ProfileMenu = () => {
             </Box>
             <Box>
               <Typography sx={{ fontWeight: 800, fontSize: "15px", color: "#111111" }}>내 정보 수정</Typography>
-              <Typography sx={{ fontSize: "12px", color: "#958D80" }}>닉네임 및 프로필 이미지 변경</Typography>
+              <Typography sx={{ fontSize: "12px", color: "#958D80" }}>닉네임 및 기타 정보 변경</Typography>
             </Box>
           </Box>
           <ChevronRightIcon sx={{ color: "#B8B0A2" }} />
         </Card>
 
-        {/* 환경 설정 메뉴 */}
+        {/* 더보기 메뉴 */}
         <Card
           elevation={0}
-          onClick={() => navigate("/profile/setting")}
+          onClick={() => navigate("/profile/more")}
           sx={{
             display: "flex", alignItems: "center", justifyContent: "space-between",
             bgcolor: "#FFFFFF", borderRadius: "16px", p: 2.2, cursor: "pointer",
@@ -128,11 +128,11 @@ const ProfileMenu = () => {
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             <Box sx={{ width: 42, height: 42, borderRadius: "12px", bgcolor: "#F3F3F3", display: "flex", alignItems: "center", justifyContent: "center", color: "#666666" }}>
-              <SettingsIcon />
+              <MoreHorizIcon />
             </Box>
             <Box>
-              <Typography sx={{ fontWeight: 800, fontSize: "15px", color: "#111111" }}>앱 설정</Typography>
-              <Typography sx={{ fontSize: "12px", color: "#958D80" }}>알림, 공지사항 및 환경 설정</Typography>
+              <Typography sx={{ fontWeight: 800, fontSize: "15px", color: "#111111" }}>더보기</Typography>
+              <Typography sx={{ fontSize: "12px", color: "#958D80" }}>계정 및 서비스 안내</Typography>
             </Box>
           </Box>
           <ChevronRightIcon sx={{ color: "#B8B0A2" }} />

@@ -16,9 +16,9 @@ import ProfilePage from "../pages/profile/ProfilePage";
 import QuizListPage from "../pages/quiz/QuizListPage";
 import QuizPlayPage from "../pages/quiz/QuizPlayPage";
 import TimelinePage from "../pages/profile/TimeLinePage";
-import BookmarkPage from "../pages/profile/BookMarkPage";
 import ProfileEdit from "../pages/profile/ProfileEditPage";
-import SettingsPage from "../pages/profile/SettingsPage";
+import ProfileMorePage from "../pages/profile/ProfileMorePage";
+import BookmarkPage from "../pages/profile/BookmarkPage";
 
 const routes: RouteObject[] = [
   {
@@ -85,8 +85,8 @@ const routes: RouteObject[] = [
                     element: <ProfileEdit />,
                   },
                   {
-                    path: "setting",
-                    element: <SettingsPage />,
+                    path: "more",
+                    element: <ProfileMorePage />,
                   },
                 ],
               },

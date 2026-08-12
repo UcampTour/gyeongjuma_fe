@@ -4,7 +4,7 @@ import PageHeader from "../../components/common/PageHeader";
 import PlaceCategoryFilter from "../../components/places/placelist/PlaceCategoryFilter";
 import PlaceList from "../../components/places/placelist/PlaceList";
 import PlaceListSorter from "../../components/places/placelist/PlaceListSorter";
-import { usePlaceList } from "../../hooks/usePlaceList";
+import { usePlaceList } from "../../hooks/place/usePlaceList";
 
 const PlaceListPage = () => {
   const {

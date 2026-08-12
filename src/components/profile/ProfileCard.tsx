@@ -1,7 +1,7 @@
 import { Box, Card, Chip, Typography } from "@mui/material";
 
 interface ProfileCardProps {
-  profileImgUrl: string;
+  profileImgUrl: string | null;
   difficulty: string;
   locale: string;
   nickname: string;

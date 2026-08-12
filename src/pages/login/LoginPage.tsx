@@ -2,7 +2,7 @@ import { Box, Button, Container, Typography } from "@mui/material";
 import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login as googleLogin } from "../../api/authService";
+import { login as googleLogin } from "../../api/authApi";
 import logo from "../../assets/gyeongjuma_logo.png";
 import kakaoIcon from "../../assets/login/kakaoLoginIcon.png";
 import naverIcon from "../../assets/login/naverLoginIcon.png";

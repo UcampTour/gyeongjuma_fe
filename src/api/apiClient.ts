@@ -1,7 +1,7 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
 import router from "../routes/router";
 import { useAuthStore } from "../store/useAuthStore";
-import { reissue } from "./authService";
+import { reissue } from "./authApi";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 

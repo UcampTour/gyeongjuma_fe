@@ -3,22 +3,12 @@ import PageHeader from "../../components/common/PageHeader";
 import ProfileCard from "../../components/profile/ProfileCard";
 import TravelProgress from "../../components/profile/TravelProgress";
 import ProfileMenu from "../../components/profile/ProfileMenu";
-
-const profileData = {
-  nickname: "경주마스터99",
-  profileImgUrl: null,
-  difficulty: "NORMAL",
-  locale: "KO",
-  distance: 12500,
-  point: 1000,
-  totalPoint: 3500,
-  visitCount: 4,
-  quizCount: 3,
-  courseCount: 1,
-}
+import { useProfile } from "../../hooks/profile/useProfile";
 
 const ProfilePage = () => {
 
+  const { profileData } = useProfile();
+  
   return (
     <Box sx={{ bgcolor: "#F7F5EE", minHeight: "100vh", pb: 16 }}>
       <PageHeader title="프로필" />

@@ -1,15 +1,7 @@
-import { useEffect, useState } from "react";
-import {
-  fetchQuizDetail,
-  fetchQuizResult,
-  submitQuizAnswer,
-} from "../api/quizService";
-import {
-  QuizStatus,
-  type QuizItem,
-  type QuizResultResponse,
-} from "../models/QuizModel";
-import { useAnimatedNumber } from "./useAnimatedNumber";
+import { useState } from "react";
+import { submitQuizAnswer } from "../../api/quizApi";
+import { useAnimatedNumber } from "../common/useAnimatedNumber";
+import { useQuizDetailQuery, useQuizResultQuery } from "../../queries/useQuizQuery";
 
 export interface QuizPlayState {
   stage: string;
@@ -21,12 +13,9 @@ export interface QuizPlayState {
 }
 
 export const useQuizPlay = (quizId: string | undefined) => {
-  const [quizData, setQuizData] = useState<QuizItem | null>(null);
-  const [loading, setLoading] = useState(true);
 
-  const [quizResultData, setQuizResultData] =
-    useState<QuizResultResponse | null>(null);
-  const [resultLoading, setResultLoading] = useState(true);
+  // 퀴즈 상세 정보 가져오기
+  const { data: quizData = null, isLoading } = useQuizDetailQuery(quizId ?? "");
 
   const [quizState, setQuizState] = useState<QuizPlayState>({
     stage: "playing",
@@ -37,51 +26,15 @@ export const useQuizPlay = (quizId: string | undefined) => {
     correctAnswerId: null,
   });
 
+  // 퀴즈 결과 정보 가져오기
+  const { data: quizResultData = null, isLoading: resultLoading } = useQuizResultQuery(quizId ?? "", {
+    enabled: quizState.stage === "result" && !!quizId
+  });
+
   const animatedPoint = useAnimatedNumber(quizState.correctCnt * 50, 400);
 
-  // 1. 퀴즈 상세 정보 가져오기
-  useEffect(() => {
-    const getQuizDetail = async () => {
-      if (!quizId) return;
-      try {
-        setLoading(true);
-        const data = await fetchQuizDetail(quizId);
-        setQuizData(data);
 
-        if (data.quizStatus === QuizStatus.PROGRESS) {
-          setQuizState((prev) => ({
-            ...prev,
-            currentIdx: data.lastQuestionIndex,
-          }));
-        }
-      } catch (error) {
-        console.error("퀴즈 데이터 불러오기 실패.", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getQuizDetail();
-  }, [quizId]);
-
-  // 2. 퀴즈 결과 패치
-  useEffect(() => {
-    if (quizState.stage !== "result" || !quizId) return;
-
-    const getQuizResult = async () => {
-      try {
-        setResultLoading(true);
-        const responseData = await fetchQuizResult(quizId);
-        setQuizResultData(responseData);
-      } catch (error) {
-        console.error("퀴즈 결과 불러오기 실패: ", error);
-      } finally {
-        setResultLoading(false);
-      }
-    };
-    getQuizResult();
-  }, [quizState.stage, quizId]);
-
-  // 3. 정답 제출 핸들러
+  // 정답 제출 핸들러
   const handleAnswer = async (selectedOptionId: number) => {
     if (quizState.selectedAnswerId !== null || !quizId || !quizData) return;
 
@@ -144,7 +97,7 @@ export const useQuizPlay = (quizId: string | undefined) => {
 
   return {
     quizData,
-    loading,
+    isLoading,
     quizResultData,
     resultLoading,
     animatedPoint,
