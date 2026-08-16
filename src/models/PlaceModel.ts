@@ -35,6 +35,7 @@ export interface PlaceListBase {
   congestion: CongestionLevel; // 혼잡도
   operationStatus: OperationStatus; // 운영 상태
   isVisited: boolean; // 방문 여부 상태
+  isFavorite: boolean; // 즐겨찾기 여부 상태
   imageUrl: string; // 대표 이미지
   distance: number | null; // 내 위치로부터의 거리 (Integer -> number)
   add1?: string;

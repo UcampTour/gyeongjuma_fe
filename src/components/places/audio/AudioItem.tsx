@@ -9,6 +9,10 @@ export interface AudioItemProps {
 
 const AudioItem = ({ item }: AudioItemProps) => {
   const navigate = useNavigate();
+
+  /**
+   * 재생시간 포맷 변환
+   */
   const formatPlayTime = (seconds: string | number) => {
     const total = Number(seconds);
     const min = Math.floor(total / 60);
