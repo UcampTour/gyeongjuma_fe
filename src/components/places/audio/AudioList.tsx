@@ -42,7 +42,7 @@ const AudioList = ({ audioList }: AudioListProps) => {
           mt: 2,
           px: 3,
           py: 5,
-          borderRadius: 3,
+          borderRadius: "24px",
           bgcolor: "#FCFBF8",
           border: "1px dashed #D9CDBD",
           display: "flex",
@@ -148,6 +148,7 @@ const AudioList = ({ audioList }: AudioListProps) => {
           sx={{
             py: 1,
             px: 0.5,
+            borderRadius: "16px",
             // borderRadius: "16px",
             fontWeight: 700,
             fontSize: "0.955rem",

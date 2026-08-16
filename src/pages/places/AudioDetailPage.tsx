@@ -38,47 +38,42 @@ const AudioDetailPage = () => {
 
   /**
    * 0.5초마다
-   * currentTime state 업데이트
-   * duration state 업데이트
-   * - 오디오가 로드되면 duration이 0에서 실제 값으로 변경됨
+   * currentTime, duration 및 실제 isPlaying 상태 동기화
    */
   useEffect(() => {
     const timer = setInterval(() => {
       if (audioPlayer.hasAudio()) {
         const current = audioPlayer.getCurrentTime();
         const total = audioPlayer.getDuration();
+        const playing = audioPlayer.isPlaying(); // ★ 실제 재생 여부 확인
 
         setCurrentTime(current);
         setDuration(total);
+        setPlaying(playing); // ★ UI 아이콘 상태 동기화
       }
     }, 500);
 
     return () => {
       clearInterval(timer);
     };
-  }, []);
+  }, [setPlaying]);
 
   useEffect(() => {
     if (!audioData?.audioUrl) return;
 
     const currentAudio = audioPlayer.getCurrentAudio();
 
-    // 이미 같은 오디오
+    // 이미 같은 오디오가 재생 중인 경우
     if (currentAudio?.audioId === audioData.audioId && audioPlayer.hasAudio()) {
       const playing = audioPlayer.isPlaying();
-
       setPlaying(playing);
-
       return;
     }
-
-    // 기존 오디오 정지
-    // audioPlayer.stop();
 
     // 새 오디오 재생
     audioPlayer.play(audioData);
 
-    // Zustand에 현재 오디오 저장
+    // 현재 오디오 및 재생 상태 저장
     setAudio({
       title: audioData.title,
       imageUrl: audioData.imageUrl,
@@ -86,9 +81,8 @@ const AudioDetailPage = () => {
       placeId: audioData.placeId,
     });
 
-    // 재생 상태
     setPlaying(true);
-  }, [audioData]);
+  }, [audioData, setAudio, setPlaying]);
 
   /**
    * 상세 페이지를 벗어나면 오디오 정리

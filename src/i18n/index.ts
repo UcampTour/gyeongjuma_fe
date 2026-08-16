@@ -1,10 +1,11 @@
 import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
+import { initReactI18next } from "react-i18next";
 
 import commonKo from "./locales/ko/common.json";
 import mapKo from "./locales/ko/map.json";
 import placesKo from "./locales/ko/places.json";
+import quizKo from "./locales/ko/quiz.json";
 
 import commonEn from "./locales/en/common.json";
 import mapEn from "./locales/en/map.json";
@@ -24,6 +25,7 @@ i18n
         common: commonKo,
         map: mapKo,
         places: placesKo,
+        quiz: quizKo,
       },
       en: {
         common: commonEn,

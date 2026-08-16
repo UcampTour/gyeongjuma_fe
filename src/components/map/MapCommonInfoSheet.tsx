@@ -11,7 +11,6 @@ import { Sheet, type SheetRef } from "react-modal-sheet";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import defaultPlaceImage from "../../assets/default_place_img.png";
-import { nearbyPlaceList } from "../../data/map/nearbyPlaceList";
 import { CongestionLevel, OperationStatus } from "../../models/commonModel";
 import type { PlaceListBase } from "../../models/PlaceModel";
 interface SheetProps {
@@ -196,7 +195,7 @@ const MapCommonInfoSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
                   variant="subtitle1"
                   sx={{ fontWeight: 700, color: "#BC9A5D" }}
                 >
-                  TOP {nearbyPlaceList.length}
+                  TOP {placeList?.length}
                 </Typography>
               </Stack>
               {placeList && placeList?.length > 0 && (

@@ -5,7 +5,6 @@ import type {
 } from "../models/PlaceModel";
 import { apiClient } from "./apiClient";
 
-
 /**
  * 관광지 목록 조회
  * @param {PlaceSearchParams} params
@@ -32,5 +31,15 @@ export const certifyVisit = async (placeId: number, params: PlaceLocPrams) => {
   const response = await apiClient.post(
     `/visit/${placeId}?latitude=${params.latitude}&longitude=${params.longitude}`, // ?latitude=${params.latitude}&longitude=${params.longitude}
   );
+  return response.data;
+};
+
+/**
+ * 관광지 즐겨찾기 처리
+ * @param placeId
+ * @returns
+ */
+export const favoritePlace = async (placeId: number) => {
+  const response = await apiClient.post(`/favorites/${placeId}`);
   return response.data;
 };

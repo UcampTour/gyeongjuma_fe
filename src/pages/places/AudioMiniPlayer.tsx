@@ -1,3 +1,4 @@
+import CloseIcon from "@mui/icons-material/Close";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
@@ -17,6 +18,7 @@ const AudioMiniPlayer = () => {
     isPlaying,
     setPlaying,
     showMiniPlayer,
+    resetAudio,
   } = useAudioStore();
   const navigate = useNavigate();
 
@@ -51,6 +53,19 @@ const AudioMiniPlayer = () => {
 
   const handleNext = () => {
     // 다음 오디오 재생
+  };
+
+  /**
+   * 미니 플레이어 닫기
+   */
+  const handleClose = (event: React.MouseEvent) => {
+    event.stopPropagation();
+
+    // 실제 오디오 정지
+    audioPlayer.stop();
+
+    // Zustand 상태 초기화
+    resetAudio();
   };
 
   return (
@@ -147,6 +162,18 @@ const AudioMiniPlayer = () => {
           </IconButton>
           <IconButton sx={{ color: "white" }}>
             <SkipNextIcon sx={{ fontSize: 35 }} onClick={handleNext} />
+          </IconButton>
+          {/* 닫기 */}
+          <IconButton
+            size="small"
+            sx={{
+              color: "rgba(255,255,255,0.7)",
+              ml: 0.5,
+              p: 0.5,
+            }}
+            onClick={handleClose}
+          >
+            <CloseIcon sx={{ fontSize: 18 }} />
           </IconButton>
         </Stack>
       </Box>
