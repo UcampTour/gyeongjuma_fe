@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { PlaceCategory, PlaceSortType } from "../models/PlaceModel";
-import { usePlaceListQuery } from "../queries/usePlaceListQuery";
-import { getDistance } from "../utils/geo";
+import { PlaceCategory, PlaceSortType } from "../../models/PlaceModel";
+import { usePlaceListQuery } from "../../queries/usePlaceListQuery";
 
 export const usePlaceList = () => {
   const [userLocation, setUserLocation] = useState<{
@@ -41,14 +40,6 @@ export const usePlaceList = () => {
   }, []);
 
   // 2. 내 위치와 장소 사이의 거리 계산
-  const placesWithDistance = useMemo(() => {
-    return placeData.map((place) => {
-      const distance = userLocation
-        ? getDistance(userLocation.lat, userLocation.lng, place.lat, place.lng)
-        : null;
-      return { ...place, distance };
-    });
-  }, [placeData, userLocation]);
   // const placesWithDistance = useMemo(() => {
   //   return placeData.map((place) => {
   //     const distance = userLocation

@@ -1,47 +1,45 @@
-import { useNavigate } from "react-router-dom";
-import {
-  logout as apiLogout,
-  withdraw as apiWithdraw,
-} from "../../api/authService";
-import { useAuthStore } from "../../store/useAuthStore";
+import { Box } from "@mui/material";
+import PageHeader from "../../components/common/PageHeader";
+import ProfileCard from "../../components/profile/ProfileCard";
+import TravelProgress from "../../components/profile/TravelProgress";
+import ProfileMenu from "../../components/profile/ProfileMenu";
+import { useProfile } from "../../hooks/profile/useProfile";
 
 const ProfilePage = () => {
-  const navigate = useNavigate();
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-  const logout = useAuthStore((state) => state.logout);
 
-  const handleLogout = async () => {
-    if (!isLoggedIn) return;
-
-    try {
-      await apiLogout();
-      alert("로그아웃 완료");
-      logout();
-      navigate("/login", { replace: true });
-    } catch (error) {
-      console.error("로그아웃 실패:", error);
-    }
-  };
-
-  const handleWithdraw = async () => {
-    if (!isLoggedIn) return;
-
-    try {
-      await apiWithdraw();
-      alert("탈퇴 완료");
-      logout();
-      navigate("/login", { replace: true });
-    } catch (error) {
-      console.error("탈퇴 실패:", error);
-    }
-  };
-
+  const { profileData } = useProfile();
+  
   return (
-    <>
-      <h1>Profile Page</h1>
-      <button onClick={handleLogout}>로그아웃</button>
-      <button onClick={handleWithdraw}>탈퇴</button>
-    </>
+    <Box sx={{ bgcolor: "#F7F5EE", minHeight: "100vh", pb: 16 }}>
+      <PageHeader title="프로필" />
+
+      <Box sx={{ px: 2, pt: 1 }}>
+        
+        {/* 1. 기본 프로필 정보 카드 */}
+        <ProfileCard
+          difficulty={profileData.difficulty}
+          locale={profileData.locale}
+          nickname={profileData.nickname}
+          point={profileData.point}
+          totalPoint={profileData.totalPoint}
+          profileImgUrl={profileData.profileImgUrl}
+        />
+
+        {/* 2. 나의 여행 진행도 카드 */}
+        <TravelProgress
+          courseCount={profileData.courseCount}
+          distance={profileData.distance}
+          quizCount={profileData.quizCount}
+          visitCount={profileData.visitCount}
+        />
+      
+
+        {/* 3. 상세 페이지 이동 내비게이션 카드들 */}
+        <ProfileMenu />
+      
+      </Box>
+
+    </Box>
   );
 };
 

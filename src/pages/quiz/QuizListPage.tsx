@@ -4,7 +4,7 @@ import QuizBottomSheet from "../../components/Quiz/QuizList/QuizBottomSheet";
 import QuizCategoryFilter from "../../components/Quiz/QuizList/QuizCategoryFilter";
 import QuizList from "../../components/Quiz/QuizList/QuizList";
 import QuizProgressCard from "../../components/Quiz/QuizList/QuizProgressCard";
-import { useQuizList } from "../../hooks/useQuizList";
+import { useQuizList } from "../../hooks/quiz/useQuizList";
 
 const QuizListPage = () => {
   const {

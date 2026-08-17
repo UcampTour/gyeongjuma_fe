@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import PageHeader from "../../components/common/PageHeader";
 import QuizPlayView from "../../components/Quiz/QuizPlay/QuizPlayView";
 import { QuizResultView } from "../../components/Quiz/QuizPlay/QuizResultView";
-import { useQuizPlay } from "../../hooks/useQuizPlay";
+import { useQuizPlay } from "../../hooks/quiz/useQuizPlay";
 
 const QuizPlayPage = () => {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ const QuizPlayPage = () => {
 
   const {
     quizData,
-    loading,
+    isLoading,
     quizResultData,
     resultLoading,
     animatedPoint,
@@ -21,7 +21,7 @@ const QuizPlayPage = () => {
     quizState,
   } = useQuizPlay(quizId);
 
-  if (loading || !quizData) {
+  if (isLoading || !quizData) {
     return (
       <Box
         sx={{

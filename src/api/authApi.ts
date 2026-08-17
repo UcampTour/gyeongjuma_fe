@@ -3,7 +3,6 @@ import { useAuthStore } from "../store/useAuthStore";
 import { apiClient, type ApiResponse } from "./apiClient";
 import { authClient } from "./authClient";
 
-// 여기서 AuthStore 안쓰는 방향으로...
 // 1. 소셜 로그인
 export const login = async (request: SignupRequest): Promise<SingupResponse> => {
   const response = await apiClient.post<ApiResponse<SingupResponse>>("/members/login", request);

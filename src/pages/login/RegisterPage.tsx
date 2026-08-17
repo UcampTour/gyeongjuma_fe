@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { checkNickname, registerExtraInfo } from "../../api/authService";
+import { checkNickname, registerExtraInfo } from "../../api/authApi";
 import logo from "../../assets/gyeongjuma_logo.png";
 import { useAuthStore } from "../../store/useAuthStore";
 

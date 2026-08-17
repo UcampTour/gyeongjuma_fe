@@ -12,7 +12,7 @@ import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { ApiErrorResponse } from "../../api/apiClient";
 import { certifyVisit } from "../../api/placeApi";
-import { fetchQuizDetail } from "../../api/quizService";
+import { fetchQuizDetail } from "../../api/quizApi";
 import defaultPlaceImage from "../../assets/default_place_img.png";
 import type { TabItem } from "../../components/common/CommonChipTabs";
 import CommonChipTabs from "../../components/common/CommonChipTabs";
@@ -29,11 +29,11 @@ import { useCommonDialog } from "../../hooks/common/useCommonDialog";
 import { useCommonLoading } from "../../hooks/common/useCommonLoading";
 import { useFavoriteMutation } from "../../hooks/place/useFavoriteMutaion";
 import { useCurrentLocation } from "../../hooks/useCurrentLocation";
-import { useQuizList } from "../../hooks/useQuizList";
 import { type QuizItem } from "../../models/QuizModel";
 import { useAudioQuery } from "../../queries/useAudioQuery";
 import { usePlaceListQuery } from "../../queries/usePlaceListQuery";
 import { useAudioStore } from "../../store/audioPlayerStore";
+import { useQuizList } from "../../hooks/quiz/useQuizList";
 
 const PlaceDetailPage = () => {
   const { t } = useTranslation();
