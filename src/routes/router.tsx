@@ -1,4 +1,4 @@
-import { createBrowserRouter, type RouteObject } from "react-router-dom";
+import { createBrowserRouter, Navigate, type RouteObject } from "react-router-dom";
 import App from "../App";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 import PublicRoute from "../components/auth/PublicRoute";
@@ -19,6 +19,12 @@ import TimelinePage from "../pages/profile/TimeLinePage";
 import ProfileEdit from "../pages/profile/ProfileEditPage";
 import ProfileMorePage from "../pages/profile/ProfileMorePage";
 import BookmarkPage from "../pages/profile/BookmarkPage";
+import AdminLayout from "../layouts/AdminLayout";
+import AdminUserPage from "../pages/admin/AdminUserPage";
+import AdminQuizPage from "../pages/admin/quiz/AdminQuizPage";
+import AdminCoursePage from "../pages/admin/AdminCoursePage";
+import AdminPlacePage from "../pages/admin/AdminPlacePage";
+import AdminQuizFormPage from "../pages/admin/quiz/AdminQuizFormPage";
 
 const routes: RouteObject[] = [
   {
@@ -127,6 +133,43 @@ const routes: RouteObject[] = [
           },
         ],
       },
+      
+      // 4. Admin 임시
+      {
+        path: "admin",
+        element: <AdminLayout />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to="users" replace />,
+          },
+          {
+            path: "users",
+            element: <AdminUserPage />,
+          },
+          {
+            path: "quizzes",
+            children: [
+              {
+                index: true,
+                element: <AdminQuizPage />
+              },
+              {
+                path: "form",
+                element: <AdminQuizFormPage />
+              }
+            ]
+          },
+          {
+            path: "courses",
+            element: <AdminCoursePage />,
+          },
+          {
+            path: "places",
+            element: <AdminPlacePage />,
+          },
+        ],
+      }
     ],
   },
 ];
