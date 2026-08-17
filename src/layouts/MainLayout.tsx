@@ -1,46 +1,60 @@
 import { Box, Container } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import BottomNavigationBar from "../components/common/BottomNavigationBar";
+import AudioMiniPlayer from "../pages/places/AudioMiniPlayer";
 
 const MainLayout = () => {
   return (
-    <Container
-      maxWidth="xs"
-      disableGutters
-      sx={{
-        bgcolor: "#F9F6EE",
-        height: "100dvh",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <Box sx={{ flex: 1, overflowY: "auto" }}>
-        <Outlet />
-      </Box>
-
-      {/* Sheet가 렌더링될 위치 */}
-      <Box
-        id="sheet-root"
+    <>
+      <Container
+        maxWidth="xs"
+        disableGutters
         sx={{
-          position: "absolute",
-          inset: 0,
-          pointerEvents: "none",
-          zIndex: 1100,
+          bgcolor: "#F9F6EE",
+          height: "100dvh",
+          display: "flex",
+          flexDirection: "column",
         }}
-      />
+      >
+        <Box sx={{ flex: 1, overflowY: "auto" }}>
+          <Outlet />
+        </Box>
 
+        {/* Sheet가 렌더링될 위치 */}
+        <Box
+          id="sheet-root"
+          sx={{
+            position: "absolute",
+            inset: 0,
+            pointerEvents: "none",
+            zIndex: 1100,
+          }}
+        />
+
+        <Box
+          sx={{
+            position: "fixed",
+            bottom: 0,
+            width: "100%",
+            maxWidth: 444,
+            zIndex: 1200,
+          }}
+        >
+          <BottomNavigationBar />
+        </Box>
+      </Container>
       <Box
         sx={{
           position: "fixed",
-          bottom: 0,
+          bottom: 56,
           width: "100%",
           maxWidth: 444,
           zIndex: 1200,
         }}
       >
-        <BottomNavigationBar />
+        <AudioMiniPlayer />
       </Box>
-    </Container>
+    </>
   );
 };
 

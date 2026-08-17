@@ -3,7 +3,8 @@ import router from "../routes/router";
 import { useAuthStore } from "../store/useAuthStore";
 import { reissue } from "./authApi";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+const BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api";
 
 // 인터페이스
 export interface ApiResponse<T> {

@@ -1,6 +1,8 @@
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import CloseIcon from "@mui/icons-material/Close";
-import { Alert, Box, IconButton, Stack, Typography } from "@mui/material";
+import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
+import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
+import { Box, IconButton, Stack, Typography } from "@mui/material";
 import type { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -22,18 +24,18 @@ import PlaceCommentTab from "../../components/places/PlaceCommentTab";
 import PlaceInfoTab from "../../components/places/PlaceInfoTab";
 import QuizIntro from "../../components/Quiz/QuizList/QuizIntro";
 import { queryClient } from "../../config/queryClient";
+import { audioPlayer } from "../../hooks/audio/AudioPlayer";
 import { useCommonDialog } from "../../hooks/common/useCommonDialog";
 import { useCommonLoading } from "../../hooks/common/useCommonLoading";
+import { useFavoriteMutation } from "../../hooks/place/useFavoriteMutaion";
 import { useCurrentLocation } from "../../hooks/useCurrentLocation";
-import { QuizStatus, type QuizItem } from "../../models/QuizModel";
+import { type QuizItem } from "../../models/QuizModel";
 import { useAudioQuery } from "../../queries/useAudioQuery";
 import { usePlaceListQuery } from "../../queries/usePlaceListQuery";
+import { useAudioStore } from "../../store/audioPlayerStore";
 import { useQuizList } from "../../hooks/quiz/useQuizList";
-export interface PlaceDetailProps {
-  placeId?: number; //number;
-}
 
-const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
+const PlaceDetailPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { alert, confirm } = useCommonDialog();
@@ -44,7 +46,7 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
   const commonLoading = useCommonLoading(loading);
 
   const { placeId: paramPlaceId } = useParams<{ placeId: string }>();
-  const placeId = propPlaceId || Number(paramPlaceId);
+  const placeId = Number(paramPlaceId);
 
   const { data: placeList = [] } = usePlaceListQuery({
     latitude: 0,
@@ -59,12 +61,29 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
   const [quizData, setQuizData] = useState<QuizItem>();
   const { data: audioList = [], isLoading: isAudioLoading } =
     useAudioQuery(placeId);
+  const { setShowMiniPlayer, resetAudio } = useAudioStore();
+
+  /**
+   * 즐겨찾기 처리
+   */
+  const { mutate: toggleFavorite, isPending: isFavoritePending } =
+    useFavoriteMutation();
 
   useEffect(() => {
     if (!quizInfo) return;
 
     fetchAndSetQuizInfo(quizInfo.placeQuizInfoId);
   }, [quizInfo]);
+
+  useEffect(() => {
+    // 관광지 상세 페이지 내에서는 미니 플레이어 표시
+    setShowMiniPlayer(true);
+
+    return () => {
+      // 관광지 상세 페이지를 벗어나면 미니 플레이어 숨김
+      setShowMiniPlayer(false);
+    };
+  }, [setShowMiniPlayer]);
 
   const fetchAndSetQuizInfo = async (quizInfoId: number) => {
     const data = await fetchQuizDetail(quizInfoId);
@@ -91,9 +110,13 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
   ];
 
   const handleBack = () => {
+    resetAudio();
+    audioPlayer.stop();
     navigate(-1);
   };
   const handleClose = () => {
+    resetAudio();
+    audioPlayer.stop();
     navigate("/explore");
   };
 
@@ -124,6 +147,8 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
     setLoading({
       isLoading: true,
       loadingMsg: "방문 인증 처리 중",
+      description:
+        "관광지에 도착했는지 확인하고 있어요.\n 잠시만 기다려 주세요!",
     });
     if (!place) return;
 
@@ -142,12 +167,15 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
       }
       if (response.status === "SUCCESS") {
         await alert(
-          "방문 인증 완료 🎉\n이제 퀴즈에 도전해 포인트를 획득해 보세요.",
+          `방문 인증 완료 🎉\n ${place?.placeName} 스탬프 획득 완료! \n이제 퀴즈에 도전해 포인트를 획득해 보세요.`,
         );
 
         queryClient.invalidateQueries({
           queryKey: ["places"],
         });
+        if (quizInfo) {
+          fetchAndSetQuizInfo(quizInfo?.placeQuizInfoId);
+        }
       }
     } catch (err) {
       setLoading({
@@ -157,27 +185,44 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
       alert(error.response?.data.message ?? "시스템 에러 발생");
     }
   };
+
+  /**
+   * 즐겨찾기 처리/해제
+   */
+  const handleLike = () => {
+    if (!place) return;
+
+    toggleFavorite(place.placeId);
+  };
+
   return (
     <>
       <Box>
-        {!propPlaceId && (
-          <Stack
-            direction="row"
-            spacing={1}
-            sx={{
-              p: 1,
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <IconButton onClick={handleBack}>
-              <ArrowBackIosNewIcon />
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            p: 1,
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <IconButton onClick={handleBack}>
+            <ArrowBackIosNewIcon />
+          </IconButton>
+          <Stack direction="row">
+            <IconButton onClick={handleLike} disabled={isFavoritePending}>
+              {place?.isFavorite ? (
+                <FavoriteRoundedIcon sx={{ color: "red" }} />
+              ) : (
+                <FavoriteBorderRoundedIcon sx={{ color: "inherit" }} />
+              )}
             </IconButton>
             <IconButton>
               <CloseIcon onClick={handleClose} />
             </IconButton>
           </Stack>
-        )}
+        </Stack>
       </Box>
 
       <Box
@@ -219,7 +264,7 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
             onClick={handleClickStamp}
           />
         </Stack>
-
+        {/* 관광지 이미지  */}
         <Swiper
           spaceBetween={12}
           slidesPerView={0}
@@ -244,7 +289,7 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
           </SwiperSlide>
         </Swiper>
 
-        {/* 관광지 상세 페이지 > 탭 */}
+        {/* 관광지 상세 페이지 > 탭 목록 */}
         <CommonChipTabs
           tabs={TABS}
           activeTab={activeTab}
@@ -269,48 +314,18 @@ const PlaceDetailPage = ({ placeId: propPlaceId }: PlaceDetailProps) => {
             },
           }}
         >
+          {/* 정보 탭 */}
           {activeTab === 0 && <PlaceInfoTab place={place} />}
 
+          {/* 해설 탭 */}
           {activeTab === 1 && <PlaceCommentTab place={place} />}
 
+          {/* 오디오 탭 */}
           {activeTab === 2 && <AudioList audioList={audioList} />}
-          {/* 퀴즈 */}
+
+          {/* 퀴즈 탭*/}
           {activeTab === 3 && (
             <>
-              <Box
-                sx={{
-                  mt: 1.5,
-                  mb: 2,
-                  // minHeight: "100%",
-                }}
-              >
-                {
-                  // !quizData ? (
-                  //   <Alert severity="info">
-                  //     아직 준비된 퀴즈가 없어요.
-                  //     <br />곧 새로운 퀴즈가 추가될 예정이니 기대해 주세요! 😊
-                  //   </Alert>
-                  // ) :
-
-                  quizData?.quizStatus === QuizStatus.AVAILABLE ? (
-                    <Alert severity="success">
-                      퀴즈를 풀고 포인트를 획득해 보세요. 🎉
-                    </Alert>
-                  ) : quizData?.quizStatus === QuizStatus.LOCKED ? (
-                    <Alert severity="warning">
-                      스탬프를 클릭해서 방문 인증을 완료해 주세요! 🔒
-                    </Alert>
-                  ) : quizData?.quizStatus === QuizStatus.COMPLETED ? (
-                    <Alert severity="success">
-                      이미 퀴즈를 완료했습니다. 👏
-                    </Alert>
-                  ) : quizData?.quizStatus === QuizStatus.PROGRESS ? (
-                    <Alert severity="info">진행 중인 퀴즈가 있습니다. ✍️</Alert>
-                  ) : (
-                    <></>
-                  )
-                }
-              </Box>
               <QuizIntro quiz={quizData} showImage={false} />
             </>
           )}

@@ -1,6 +1,9 @@
 import HeadphonesOutlinedIcon from "@mui/icons-material/HeadphonesOutlined";
 import { Box, Button, Stack, styled, Switch, Typography } from "@mui/material";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { audioPlayer } from "../../../hooks/audio/AudioPlayer";
+import { useAudioStore } from "../../../store/audioPlayerStore";
 import AudioItem from "./AudioItem";
 
 export interface AudioListProps {
@@ -8,8 +11,30 @@ export interface AudioListProps {
 }
 
 const AudioList = ({ audioList }: AudioListProps) => {
+  const { setAudio, setPlaying } = useAudioStore();
   const [hardMode, setHardMode] = useState<boolean>(false);
+  const navigate = useNavigate();
 
+  /**
+   * 전체듣기
+   */
+  const handlePlayAll = () => {
+    const firstAudio = audioList[0];
+
+    // 1. 재생목록 설정 + 첫 번째 오디오 재생
+    audioPlayer.playPlaylist(audioList);
+
+    setAudio({
+      title: firstAudio.title,
+      imageUrl: firstAudio.imageUrl,
+      audioId: firstAudio.audioId,
+      placeId: firstAudio.placeId,
+    });
+
+    setPlaying(true);
+
+    navigate(`/audio/${firstAudio.placeId}/${firstAudio.audioId}`);
+  };
   if (audioList.length === 0) {
     return (
       <Box
@@ -17,7 +42,7 @@ const AudioList = ({ audioList }: AudioListProps) => {
           mt: 2,
           px: 3,
           py: 5,
-          borderRadius: 3,
+          borderRadius: "24px",
           bgcolor: "#FCFBF8",
           border: "1px dashed #D9CDBD",
           display: "flex",
@@ -123,12 +148,15 @@ const AudioList = ({ audioList }: AudioListProps) => {
           sx={{
             py: 1,
             px: 0.5,
+            borderRadius: "16px",
             // borderRadius: "16px",
             fontWeight: 700,
             fontSize: "0.955rem",
             bgcolor: "#A08E73", // "#2C2C2C",
             boxShadow: "none",
           }}
+          disabled={audioList.length === 0}
+          onClick={handlePlayAll}
         >
           전체듣기
         </Button>
