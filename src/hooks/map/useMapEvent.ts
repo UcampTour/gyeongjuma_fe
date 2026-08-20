@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import type { HandleSheetRef } from "../../components/map/MapBottomSheet";
-import type { HandleInfoSheetRef } from "../../components/map/MapCommonInfoSheet";
+import type { HandleInfoSheetRef } from "../../components/map/NearbyPlaceSheet.tsx";
+import type { HandleSheetRef } from "../../components/map/PlaceSummarySheet";
 import type { PlaceListBase } from "../../models/PlaceModel";
 
 interface UseMapEventProps {
@@ -57,6 +57,7 @@ export const useMapEvent = ({
       setIsRecommendOpen(true);
 
       setTimeout(() => {
+        // 추천 시트가 렌더링된 후 ref가 연결되면 펼침
         infoSheetRef.current?.expand();
       }, 0);
     };
@@ -69,6 +70,8 @@ export const useMapEvent = ({
       if (selectedPlaceRef.current) {
         sheetRef.current?.collapse();
         setIsRecommendOpen(false);
+      } else {
+        infoSheetRef.current?.minimize();
       }
     };
 

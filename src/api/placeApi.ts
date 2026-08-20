@@ -43,3 +43,22 @@ export const favoritePlace = async (placeId: number) => {
   const response = await apiClient.post(`/favorites/${placeId}`);
   return response.data;
 };
+
+/**
+ * 위치 기반 현재 날씨 정보 조회
+ * @param latitude
+ * @param longitude
+ * @returns
+ */
+export const getCurrentWeather = async (
+  latitude: number,
+  longitude: number,
+) => {
+  const response = await apiClient.get(`/weather`, {
+    params: {
+      latitude: latitude,
+      longitude: longitude,
+    },
+  });
+  return response.data.data;
+};

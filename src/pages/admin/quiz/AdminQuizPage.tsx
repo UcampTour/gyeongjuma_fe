@@ -1,10 +1,24 @@
-import { useState, useMemo } from "react";
-import { 
-  Box, Typography, TextField, MenuItem, Select, FormControl, InputLabel, Button, 
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination 
-} from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
+import SearchIcon from "@mui/icons-material/Search";
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { useMemo, useState } from "react";
 
 const initialQuizzes = [
   {
@@ -52,8 +66,8 @@ const AdminQuizPage = () => {
 
   const filteredQuizzes = useMemo(() => {
     return quizzes.filter((quiz) => {
-      const matchesSearch = 
-        quiz.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      const matchesSearch =
+        quiz.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         quiz.place_name.toLowerCase().includes(searchTerm.toLowerCase());
 
       let matchesUsage = true;
@@ -61,7 +75,8 @@ const AdminQuizPage = () => {
       if (usageStatus === "inactive") matchesUsage = quiz.is_active === false;
 
       let matchesDifficulty = true;
-      if (difficulty !== "all") matchesDifficulty = quiz.difficulty === difficulty;
+      if (difficulty !== "all")
+        matchesDifficulty = quiz.difficulty === difficulty;
 
       return matchesSearch && matchesUsage && matchesDifficulty;
     });
@@ -72,26 +87,26 @@ const AdminQuizPage = () => {
     return filteredQuizzes.slice(startIndex, startIndex + rowsPerPage);
   }, [filteredQuizzes, page, rowsPerPage]);
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (event: any, newPage: any) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  const handleSearchChange = (e) => {
+  const handleSearchChange = (e: any) => {
     setSearchTerm(e.target.value);
     setPage(0);
   };
 
-  const handleUsageChange = (e) => {
+  const handleUsageChange = (e: any) => {
     setUsageStatus(e.target.value);
     setPage(0);
   };
 
-  const handleDifficultyChange = (e) => {
+  const handleDifficultyChange = (e: any) => {
     setDifficulty(e.target.value);
     setPage(0);
   };
@@ -99,14 +114,29 @@ const AdminQuizPage = () => {
   return (
     <Box sx={{ p: 2 }}>
       {/* 타이틀 영역 (등록 버튼 제거됨) */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
+        }}
+      >
         <Typography variant="h5" sx={{ fontWeight: 800 }}>
           퀴즈 관리
         </Typography>
       </Box>
 
       {/* 필터 및 검색 영역 */}
-      <Box sx={{ p: 2, bgcolor: "#FFFFFF", borderRadius: "12px", border: "1px solid #E0E0E0", mb: 3 }}>
+      <Box
+        sx={{
+          p: 2,
+          bgcolor: "#FFFFFF",
+          borderRadius: "12px",
+          border: "1px solid #E0E0E0",
+          mb: 3,
+        }}
+      >
         <Box sx={{ display: "flex", gap: 1.5, alignItems: "center" }}>
           <TextField
             size="small"
@@ -115,7 +145,9 @@ const AdminQuizPage = () => {
             onChange={handleSearchChange}
             slotProps={{
               input: {
-                startAdornment: <SearchIcon sx={{ color: "gray", mr: 1, fontSize: 18 }} />,
+                startAdornment: (
+                  <SearchIcon sx={{ color: "gray", mr: 1, fontSize: 18 }} />
+                ),
               },
             }}
             sx={{ width: "260px" }}
@@ -123,10 +155,10 @@ const AdminQuizPage = () => {
 
           <FormControl size="small" sx={{ width: "130px" }}>
             <InputLabel id="usage-status-label">사용 여부</InputLabel>
-            <Select 
-              labelId="usage-status-label" 
-              value={usageStatus} 
-              label="사용 여부" 
+            <Select
+              labelId="usage-status-label"
+              value={usageStatus}
+              label="사용 여부"
               onChange={handleUsageChange}
             >
               <MenuItem value="all">전체</MenuItem>
@@ -137,10 +169,10 @@ const AdminQuizPage = () => {
 
           <FormControl size="small" sx={{ width: "130px" }}>
             <InputLabel id="difficulty-label">난이도</InputLabel>
-            <Select 
-              labelId="difficulty-label" 
-              value={difficulty} 
-              label="난이도" 
+            <Select
+              labelId="difficulty-label"
+              value={difficulty}
+              label="난이도"
               onChange={handleDifficultyChange}
             >
               <MenuItem value="all">전체</MenuItem>
@@ -153,39 +185,94 @@ const AdminQuizPage = () => {
       </Box>
 
       {/* 퀴즈 목록 테이블 영역 */}
-      <TableContainer component={Paper} sx={{ borderRadius: "12px", border: "1px solid #E0E0E0", boxShadow: "none" }}>
+      <TableContainer
+        component={Paper}
+        sx={{
+          borderRadius: "12px",
+          border: "1px solid #E0E0E0",
+          boxShadow: "none",
+        }}
+      >
         <Table sx={{ minWidth: 650 }} aria-label="quiz table">
           <TableHead sx={{ bgcolor: "#FAFAFA" }}>
             <TableRow>
-              <TableCell align="center" sx={{ fontWeight: 700, width: "60px" }}>No.</TableCell>
-              <TableCell align="center" sx={{ fontWeight: 700, width: "90px" }}>퀴즈ID</TableCell>
-              <TableCell align="center" sx={{ fontWeight: 700, width: "90px" }}>관광지ID</TableCell>
-              <TableCell align="center" sx={{ fontWeight: 700, width: "130px" }}>관광지명</TableCell>
-              <TableCell align="center" sx={{ fontWeight: 700, width: "300px"}}>퀴즈제목</TableCell>
-              <TableCell align="center" sx={{ fontWeight: 700, width: "90px" }}>난이도</TableCell>
-              <TableCell align="center" sx={{ fontWeight: 700, width: "100px" }}>사용여부</TableCell>
-              <TableCell align="center" sx={{ fontWeight: 700, width: "90px" }}>수정</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 700, width: "60px" }}>
+                No.
+              </TableCell>
+              <TableCell align="center" sx={{ fontWeight: 700, width: "90px" }}>
+                퀴즈ID
+              </TableCell>
+              <TableCell align="center" sx={{ fontWeight: 700, width: "90px" }}>
+                관광지ID
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ fontWeight: 700, width: "130px" }}
+              >
+                관광지명
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ fontWeight: 700, width: "300px" }}
+              >
+                퀴즈제목
+              </TableCell>
+              <TableCell align="center" sx={{ fontWeight: 700, width: "90px" }}>
+                난이도
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ fontWeight: 700, width: "100px" }}
+              >
+                사용여부
+              </TableCell>
+              <TableCell align="center" sx={{ fontWeight: 700, width: "90px" }}>
+                수정
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {paginatedQuizzes.length > 0 ? (
               paginatedQuizzes.map((quiz, index) => (
-                <TableRow key={quiz.place_quiz_info_id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                <TableRow
+                  key={quiz.place_quiz_info_id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
                   <TableCell align="center" sx={{ color: "text.secondary" }}>
                     {page * rowsPerPage + index + 1}
                   </TableCell>
-                  <TableCell align="center">{quiz.place_quiz_info_id}</TableCell>
-                  <TableCell align="center">{quiz.place_id}</TableCell>
-                  <TableCell align="center" sx={{ fontWeight: 700, color: "#2C2A29" }}>{quiz.place_name}</TableCell>
-                  <TableCell align="center" sx={{ fontWeight: 700, color: "#2C2A29" }}>{quiz.title}</TableCell>
                   <TableCell align="center">
-                    {quiz.difficulty === "HIGH" ? "상" : quiz.difficulty === "MEDIUM" ? "중" : "하"}
+                    {quiz.place_quiz_info_id}
+                  </TableCell>
+                  <TableCell align="center">{quiz.place_id}</TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: 700, color: "#2C2A29" }}
+                  >
+                    {quiz.place_name}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: 700, color: "#2C2A29" }}
+                  >
+                    {quiz.title}
+                  </TableCell>
+                  <TableCell align="center">
+                    {quiz.difficulty === "HIGH"
+                      ? "상"
+                      : quiz.difficulty === "MEDIUM"
+                        ? "중"
+                        : "하"}
                   </TableCell>
                   <TableCell align="center" sx={{ fontWeight: 600 }}>
                     {quiz.is_active ? "Y" : "N"}
                   </TableCell>
                   <TableCell align="center">
-                    <Button size="small" variant="outlined" sx={{ color: "#2C2A29", borderColor: "#D1D5DB" }}>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      sx={{ color: "#2C2A29", borderColor: "#D1D5DB" }}
+                    >
                       수정
                     </Button>
                   </TableCell>
@@ -193,7 +280,11 @@ const AdminQuizPage = () => {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={8} align="center" sx={{ py: 4, color: "text.secondary" }}>
+                <TableCell
+                  colSpan={8}
+                  align="center"
+                  sx={{ py: 4, color: "text.secondary" }}
+                >
                   검색 결과가 없습니다.
                 </TableCell>
               </TableRow>
@@ -225,9 +316,9 @@ const AdminQuizPage = () => {
       </TableContainer>
 
       <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-        <Button 
-          variant="contained" 
-          startIcon={<AddIcon />} 
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
           sx={{ bgcolor: "#AC8E61", "&:hover": { bgcolor: "#8f734a" } }}
         >
           퀴즈 등록
