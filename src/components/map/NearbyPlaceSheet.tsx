@@ -1,56 +1,33 @@
 import PersonPinCircleIcon from "@mui/icons-material/PersonPinCircle";
 import { Box, Stack, Typography } from "@mui/material";
-import {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import { Sheet, type SheetRef } from "react-modal-sheet";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import defaultPlaceImage from "../../assets/default_place_img.png";
 import { CongestionLevel, OperationStatus } from "../../models/commonModel";
 import type { PlaceListBase } from "../../models/PlaceModel";
+import type { Weather } from "../../pages/map/MapMainPage";
 interface SheetProps {
   open: boolean;
   onClose: () => void;
-  initialSnap: SheetState;
   placeList?: PlaceListBase[]; // 관광지 목록 데이터
   currentAddress: string | null;
+  weather?: Weather;
 }
 
 export interface HandleInfoSheetRef {
-  summary: () => void;
+  minimize: () => void;
   expand: () => void; // BottomSheet를 기본 높이로 열기 위한 메서드
   close: () => void; // BottomSheet를 닫기 위한 메서드
 }
 export enum SheetState {
-  CLOSED,
-  MINI,
-  DEFAULT,
-  EXPANDED,
-  FULL,
+  CLOSED = 0,
+  MINI = 1,
+  EXPANDED = 2,
 }
-export const SHEET_SNAP_POINTS = {
-  CLOSED: 0,
-  MINI: 0.1,
-  DEFAULT: 0.3,
-  EXPANDED: 0.7,
-  FULL: 1,
-} as const;
-export const snapPoints = Object.values(SHEET_SNAP_POINTS);
 
-/**
- * BottomSheet Snap Points
- *
- * CLOSED   : 0%
- * MINI     : 10%
- * DEFAULT  : 30%
- * EXPANDED : 60%
- * FULL     : 100%
- */
+export const snapPoints = [0, 0.2, 1];
 
 const STATUS_LABEL = {
   [OperationStatus.OPEN]: "운영 중",
@@ -66,17 +43,11 @@ const CONGESTION_LABEL = {
   [CongestionLevel.NONE]: "현재 혼잡도 정보 알 수 없음",
 } as const;
 
-const MapCommonInfoSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
-  (
-    {
-      open,
-      onClose,
-      initialSnap = SheetState.DEFAULT,
-      placeList,
-      currentAddress,
-    },
-    ref,
-  ) => {
+/**
+ * 관광지 상세 정보 BottomSheet
+ */
+const NearbyPlaceSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
+  ({ open, onClose, placeList, currentAddress, weather }, ref) => {
     const navigate = useNavigate();
     // const mountPoint = document.getElementById("sheet-root"); //  BottomSheet를 지도의 하단에 렌더링하기 위해 mountPoint를 지정
     // const [mountPoint, setMountPoint] = useState<HTMLElement | null>(null);
@@ -86,52 +57,51 @@ const MapCommonInfoSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
     const sheetRef = useRef<SheetRef>(null);
 
     // 현재 BottomSheet의 스냅 위치(index)
-    const [snapIndex, setSnapIndex] = useState(initialSnap); // 기본 스냅 위치는 2 (45%)로 설정
-
-    // useEffect(() => {
-    //   setMountPoint(document.getElementById("sheet-root"));
-    // }, []);
-
-    useEffect(() => {
-      if (open) {
-        sheetRef.current?.snapTo(initialSnap);
-        setSnapIndex(initialSnap);
-      }
-    }, [open, initialSnap]);
-
-    // 전체화면 상태 여부
+    const [snapIndex, setSnapIndex] = useState(SheetState.EXPANDED);
 
     useImperativeHandle(ref, () => ({
-      summary() {
+      close() {
+        sheetRef.current?.snapTo(SheetState.CLOSED);
+      },
+
+      minimize() {
         sheetRef.current?.snapTo(SheetState.MINI);
       },
 
       expand() {
         sheetRef.current?.snapTo(SheetState.EXPANDED);
       },
-
-      close() {
-        sheetRef.current?.snapTo(SheetState.CLOSED);
-      },
     }));
 
+    /**
+     * 관광지 상세 화면으로 이동
+     * @param placeId
+     */
     const handleGoToPlace = (placeId: number) => {
       navigate(`/explore/${placeId}`);
+    };
+
+    /**
+     * 시트 클릭 시 관광지 목록 화면으로 이동
+     */
+    const handleGoToPlaceList = () => {
+      if (snapIndex === SheetState.EXPANDED) {
+        navigate("/places");
+      }
     };
 
     return (
       <Sheet
         ref={sheetRef}
         isOpen={open}
-        // onClose={() => sheetRef.current?.snapTo(SheetState.CLOSED)}
         onClose={onClose}
         mountPoint={mountPoint ?? undefined}
-        // snapPoints={[0, 0.45, 1]}
         snapPoints={snapPoints}
-        initialSnap={initialSnap}
+        initialSnap={SheetState.EXPANDED}
         detent="content"
         onSnap={setSnapIndex}
         style={{
+          paddingBottom: "27px",
           bottom: 80,
         }}
       >
@@ -164,26 +134,82 @@ const MapCommonInfoSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
           </Sheet.Header>
 
           <Sheet.Content>
-            <Box sx={{ p: 2 }}>
+            <Box sx={{ p: 2 }} onClick={handleGoToPlaceList}>
+              {/*  상단 : 현재위치, 날씨 */}
               <Stack
                 direction="row"
-                spacing={0.5}
-                sx={{ alignItems: "center", mb: 2 }}
+                sx={{
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  mb: 2,
+                  bgColor: "#ffffff",
+                }}
               >
-                <PersonPinCircleIcon
+                {/* 현재 위치 */}
+                <Stack
+                  direction="row"
+                  spacing={0.5}
                   sx={{
-                    color: "text.secondary",
-                    fontSize: 20,
+                    alignItems: "center",
+                    minWidth: 0,
                   }}
-                />
-
-                <Typography
-                  variant="subtitle2"
-                  sx={{ fontWeight: 500, fontSize: "0.785rem" }}
-                  color="text.secondary"
                 >
-                  {currentAddress ?? "현재 위치를 확인 중..."}
-                </Typography>
+                  <PersonPinCircleIcon
+                    sx={{
+                      color: "text.secondary",
+                      fontSize: 20,
+                      flexShrink: 0,
+                    }}
+                  />
+
+                  <Typography
+                    variant="subtitle2"
+                    sx={{
+                      fontWeight: 500,
+                      fontSize: "0.785rem",
+                      color: "text.secondary",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {currentAddress ?? "현재 위치를 확인 중..."}
+                  </Typography>
+                </Stack>
+
+                {/* 날씨 */}
+                {weather && (
+                  <Stack
+                    direction="row"
+                    spacing={0.5}
+                    sx={{
+                      alignItems: "center",
+                      flexShrink: 0,
+                      bgColor: "#ffffff",
+                    }}
+                  >
+                    <Box
+                      component="img"
+                      src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
+                      alt={weather.description}
+                      sx={{
+                        width: 40,
+                        height: 40,
+                      }}
+                    />
+
+                    <Typography
+                      variant="subtitle2"
+                      sx={{
+                        fontWeight: 600,
+                        fontSize: "0.85rem",
+                        color: "text.primary",
+                      }}
+                    >
+                      {Math.round(weather.temperature)}°C
+                    </Typography>
+                  </Stack>
+                )}
               </Stack>
               <Stack
                 direction="row"
@@ -274,4 +300,4 @@ const MapCommonInfoSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
   },
 );
 
-export default MapCommonInfoSheet;
+export default NearbyPlaceSheet;

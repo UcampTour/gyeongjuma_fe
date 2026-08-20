@@ -1,9 +1,22 @@
-import { createBrowserRouter, Navigate, type RouteObject } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  type RouteObject,
+} from "react-router-dom";
 import App from "../App";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 import PublicRoute from "../components/auth/PublicRoute";
 import RegistrationRoute from "../components/auth/RegistrationRoute";
+import AdminLayout from "../layouts/AdminLayout";
 import MainLayout from "../layouts/MainLayout";
+import AdminCoursePage from "../pages/admin/AdminCoursePage";
+import AdminPlacePage from "../pages/admin/AdminPlacePage";
+import AdminUserPage from "../pages/admin/AdminUserPage";
+import AdminQuizFormPage from "../pages/admin/quiz/AdminQuizFormPage";
+import AdminQuizPage from "../pages/admin/quiz/AdminQuizPage";
+import CommonErrorPage from "../pages/common/CommonErrorPage";
+import CourseDetailPage from "../pages/course/CourseDetailPage";
+import CoursePage from "../pages/course/CourseListPage";
 import HomePage from "../pages/home/HomePage";
 import LoginPage from "../pages/login/LoginPage";
 import RegisterPage from "../pages/login/RegisterPage";
@@ -12,24 +25,19 @@ import MapSearchPage from "../pages/map/MapSearchPage";
 import AudioDetailPage from "../pages/places/AudioDetailPage";
 import PlaceDetailPage from "../pages/places/PlaceDetailPage";
 import PlaceListPage from "../pages/places/PlaceListPage";
-import ProfilePage from "../pages/profile/ProfilePage";
-import QuizListPage from "../pages/quiz/QuizListPage";
-import QuizPlayPage from "../pages/quiz/QuizPlayPage";
-import TimelinePage from "../pages/profile/TimeLinePage";
+import BookmarkPage from "../pages/profile/BookmarkPage";
 import ProfileEdit from "../pages/profile/ProfileEditPage";
 import ProfileMorePage from "../pages/profile/ProfileMorePage";
-import BookmarkPage from "../pages/profile/BookmarkPage";
-import AdminLayout from "../layouts/AdminLayout";
-import AdminUserPage from "../pages/admin/AdminUserPage";
-import AdminQuizPage from "../pages/admin/quiz/AdminQuizPage";
-import AdminCoursePage from "../pages/admin/AdminCoursePage";
-import AdminPlacePage from "../pages/admin/AdminPlacePage";
-import AdminQuizFormPage from "../pages/admin/quiz/AdminQuizFormPage";
+import ProfilePage from "../pages/profile/ProfilePage";
+import TimelinePage from "../pages/profile/TimeLinePage";
+import QuizListPage from "../pages/quiz/QuizListPage";
+import QuizPlayPage from "../pages/quiz/QuizPlayPage";
 
 const routes: RouteObject[] = [
   {
     path: "/",
     element: <App />,
+    errorElement: <CommonErrorPage />,
     children: [
       // 1. 로그인한 사용자만 접근 가능
       {
@@ -72,6 +80,19 @@ const routes: RouteObject[] = [
                 element: <PlaceListPage />,
               },
               {
+                path: "course",
+                children: [
+                  {
+                    index: true,
+                    element: <CoursePage />,
+                  },
+                  {
+                    path: ":courseId",
+                    element: <CourseDetailPage />,
+                  },
+                ],
+              },
+              {
                 path: "profile",
                 children: [
                   {
@@ -80,7 +101,7 @@ const routes: RouteObject[] = [
                   },
                   {
                     path: "timeline",
-                    element: <TimelinePage />, 
+                    element: <TimelinePage />,
                   },
                   {
                     path: "bookmark",
@@ -133,7 +154,7 @@ const routes: RouteObject[] = [
           },
         ],
       },
-      
+
       // 4. Admin 임시
       {
         path: "admin",
@@ -152,13 +173,13 @@ const routes: RouteObject[] = [
             children: [
               {
                 index: true,
-                element: <AdminQuizPage />
+                element: <AdminQuizPage />,
               },
               {
                 path: "form",
-                element: <AdminQuizFormPage />
-              }
-            ]
+                element: <AdminQuizFormPage />,
+              },
+            ],
           },
           {
             path: "courses",
@@ -169,7 +190,7 @@ const routes: RouteObject[] = [
             element: <AdminPlacePage />,
           },
         ],
-      }
+      },
     ],
   },
 ];

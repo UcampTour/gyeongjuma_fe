@@ -1,7 +1,7 @@
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, Button, LinearProgress, Typography } from "@mui/material";
-import type { QuizPlayState } from "../../../hooks/useQuizPlay";
+import type { QuizPlayState } from "../../../hooks/quiz/useQuizPlay";
 import type { QuizItem } from "../../../models/QuizModel";
 
 interface QuizPlayViewProps {
