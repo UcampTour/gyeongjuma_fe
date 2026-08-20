@@ -198,9 +198,10 @@ const HomePage = () => {
           mb: 2,
         }}
       >
-        {quickMenuList.map((menu) => (
+        {quickMenuList.map((menu, idx) => (
           <Card
             elevation={0}
+            key={`home-quick-menu-${idx}`}
             onClick={() => navigate(menu.path)}
             sx={{
               display: "flex",
@@ -247,7 +248,6 @@ const HomePage = () => {
         ))}
       </Box>
       {/* 인기 관광지 목록*/}
-      {/* 인기 관광지 */}
       <Box sx={{ mb: 3 }}>
         {/* 섹션 헤더 */}
         <Box
@@ -303,7 +303,7 @@ const HomePage = () => {
             <SwiperSlide key={place.placeId}>
               <Card
                 elevation={0}
-                onClick={() => navigate(`/explore/place/${place.placeId}`)}
+                onClick={() => navigate(`/explore/${place.placeId}`)}
                 sx={{
                   bgcolor: "#FFFFFF",
                   borderRadius: "16px",

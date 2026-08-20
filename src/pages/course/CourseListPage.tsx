@@ -58,7 +58,7 @@ export interface CourseFilter {
   label: string;
   emoji: string;
 }
-const courseFilters: CourseFilter[] = [
+export const courseFilters: CourseFilter[] = [
   {
     type: "ALL",
     label: "전체",

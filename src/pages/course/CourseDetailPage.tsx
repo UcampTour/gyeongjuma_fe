@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Sheet, type SheetRef } from "react-modal-sheet";
 import { useNavigate, useParams } from "react-router-dom";
 import { useKakaoMap } from "../../hooks/map/useKakaoMap";
+import { courseFilters, type CourseFilter } from "./CourseListPage";
 
 interface CoursePlace {
   courseSeqNo: number;
@@ -17,9 +18,6 @@ interface CoursePlace {
   // 이전 관광지 → 현재 관광지
   travelDistance: number;
   travelMinutes: number;
-
-  // 해당 관광지 평균 체류 시간
-  stayMinutes: number;
 }
 
 interface CourseDetail {
@@ -50,7 +48,6 @@ const courseDetailDummy: CourseDetail = {
       mapY: 35.8397,
       travelDistance: 0,
       travelMinutes: 0,
-      stayMinutes: 40,
       image:
         "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=800&q=80",
     },
@@ -62,7 +59,6 @@ const courseDetailDummy: CourseDetail = {
       mapY: 35.8347,
       travelDistance: 700,
       travelMinutes: 10,
-      stayMinutes: 30,
       image:
         "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=800&q=80",
     },
@@ -74,7 +70,6 @@ const courseDetailDummy: CourseDetail = {
       mapY: 35.8283,
       travelDistance: 900,
       travelMinutes: 12,
-      stayMinutes: 50,
       image:
         "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=800&q=80",
     },
@@ -86,7 +81,6 @@ const courseDetailDummy: CourseDetail = {
       mapY: 35.8298,
       travelDistance: 1000,
       travelMinutes: 15,
-      stayMinutes: 40,
       image:
         "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=800&q=80",
     },
@@ -101,14 +95,14 @@ enum CourseSheetState {
 }
 
 const COURSE_SNAP_POINTS = [
-  0, // CLOSED
+  0, // 사용 안 함
   0.1, // MINI
   0.6, // SUMMARY
   1, // FULL
 ];
 
 const CourseDetailPage = () => {
-  const { courseId } = useParams<{ courseId: string }>();
+  const { courseId } = useParams<{ courseId: string }>(); // 코스 아이디
   const navigate = useNavigate();
 
   const mapRef = useRef<HTMLDivElement | null>(null);
@@ -127,11 +121,13 @@ const CourseDetailPage = () => {
 
   const { map } = useKakaoMap(mapRef);
 
+  const [courseData, setCourseData] = useState<CourseDetail>(courseDetailDummy);
+
   /**
    * 코스 순서대로 정렬
    */
   const courseList = useMemo(() => {
-    return [...courseDetailDummy.courseList].sort(
+    return [...courseData.courseList].sort(
       (a, b) => a.courseSeqNo - b.courseSeqNo,
     );
   }, []);
@@ -144,6 +140,86 @@ const CourseDetailPage = () => {
   /**
    * 지도에 코스 마커 + Polyline 표시
    */
+  // useEffect(() => {
+  //   if (!map || courseList.length === 0) return;
+
+  //   const kakao = window.kakao;
+
+  //   // 관광지 좌표
+  //   const positions = courseList.map(
+  //     (place) => new kakao.maps.LatLng(place.mapY, place.mapX),
+  //   );
+
+  //   // 코스 Polyline
+  //   const polyline = new kakao.maps.Polyline({
+  //     path: positions,
+  //     strokeWeight: 5,
+  //     strokeColor: "#BC9A5D",
+  //     strokeOpacity: 0.9,
+  //     strokeStyle: "solid",
+  //   });
+
+  //   polyline.setMap(map);
+
+  //   // 번호 마커
+  //   const overlays = courseList.map((place, index) => {
+  //     const position = positions[index];
+
+  //     const content = document.createElement("div");
+
+  //     content.innerHTML = `
+  //       <div
+  //         style="
+  //           width: 32px;
+  //           height: 32px;
+  //           border-radius: 50%;
+  //           background: #BC9A5D;
+  //           border: 3px solid white;
+  //           box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  //           display: flex;
+  //           align-items: center;
+  //           justify-content: center;
+  //           color: white;
+  //           font-size: 14px;
+  //           font-weight: 700;
+  //         "
+  //       >
+  //         ${place.courseSeqNo}
+  //       </div>
+  //     `;
+
+  //     const overlay = new kakao.maps.CustomOverlay({
+  //       position,
+  //       content,
+  //       yAnchor: 0.5,
+  //       xAnchor: 0.5,
+  //       zIndex: 10,
+  //     });
+
+  //     overlay.setMap(map);
+
+  //     return overlay;
+  //   });
+
+  //   // 모든 관광지가 보이도록 지도 영역 조정
+  //   const bounds = new kakao.maps.LatLngBounds();
+
+  //   positions.forEach((position) => {
+  //     bounds.extend(position);
+  //   });
+
+  //   map.setBounds(bounds, 50, 50, 570, 50);
+
+  //   // 정리
+  //   return () => {
+  //     polyline.setMap(null);
+
+  //     overlays.forEach((overlay) => {
+  //       overlay.setMap(null);
+  //     });
+  //   };
+  // }, [map, courseList]);
+
   useEffect(() => {
     if (!map || courseList.length === 0) return;
 
@@ -165,45 +241,115 @@ const CourseDetailPage = () => {
 
     polyline.setMap(map);
 
-    // 번호 마커
-    const overlays = courseList.map((place, index) => {
+    // Overlay 관리
+    const markerOverlays: any[] = [];
+    const infoOverlays: any[] = [];
+
+    // 마커 생성
+    courseList.forEach((place, index) => {
       const position = positions[index];
 
-      const content = document.createElement("div");
+      // 번호 마커
+      const markerContent = document.createElement("div");
 
-      content.innerHTML = `
-        <div
-          style="
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #BC9A5D;
-            border: 3px solid white;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 14px;
-            font-weight: 700;
-          "
-        >
-          ${place.courseSeqNo}
-        </div>
-      `;
+      markerContent.innerHTML = `
+      <div
+        style="
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: #BC9A5D;
+          border: 3px solid white;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 14px;
+          font-weight: 700;
+          cursor: pointer;
+        "
+      >
+        ${place.courseSeqNo}
+      </div>
+    `;
 
-      const overlay = new kakao.maps.CustomOverlay({
+      const markerOverlay = new kakao.maps.CustomOverlay({
         position,
-        content,
+        content: markerContent,
         yAnchor: 0.5,
         xAnchor: 0.5,
         zIndex: 10,
       });
 
-      overlay.setMap(map);
+      markerOverlay.setMap(map);
+      markerOverlays.push(markerOverlay);
 
-      return overlay;
+      // 관광지 정보 말풍선
+      const infoContent = document.createElement("div");
+
+      infoContent.innerHTML = `
+      <div
+        style="
+          min-width: 140px;
+          padding: 10px 12px;
+          background: white;
+          border-radius: 10px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+        "
+      >
+        <div
+          style="
+            font-size: 13px;
+            font-weight: 700;
+            color: #333;
+          "
+        >
+          ${place.courseSeqNo}. ${place.placeName}
+        </div>
+      </div>
+    `;
+
+      const infoOverlay = new kakao.maps.CustomOverlay({
+        position,
+        content: infoContent,
+        yAnchor: 1.4,
+        xAnchor: 0.5,
+        zIndex: 20,
+      });
+
+      // 처음에는 숨김
+      infoOverlay.setMap(null);
+
+      infoOverlays.push(infoOverlay);
+
+      // 마커 클릭
+      markerContent.addEventListener("click", () => {
+        // 모든 정보 말풍선 닫기
+        infoOverlays.forEach((overlay) => {
+          overlay.setMap(null);
+        });
+
+        // 현재 관광지 말풍선 열기
+        infoOverlay.setMap(map);
+      });
     });
+
+    // 지도 빈 공간 클릭 시 관광지 정보 닫기
+    const handleMapClick = () => {
+      infoOverlays.forEach((overlay) => {
+        overlay.setMap(null);
+      });
+    };
+
+    // 지도 드래그 시작 시 관광지 정보 닫기
+    const handleMapDragStart = () => {
+      infoOverlays.forEach((overlay) => {
+        overlay.setMap(null);
+      });
+    };
+    kakao.maps.event.addListener(map, "click", handleMapClick);
+    kakao.maps.event.addListener(map, "dragstart", handleMapDragStart);
 
     // 모든 관광지가 보이도록 지도 영역 조정
     const bounds = new kakao.maps.LatLngBounds();
@@ -214,16 +360,59 @@ const CourseDetailPage = () => {
 
     map.setBounds(bounds, 50, 50, 570, 50);
 
-    // 정리
+    /**
+     * 클린업
+     */
     return () => {
       polyline.setMap(null);
 
-      overlays.forEach((overlay) => {
+      markerOverlays.forEach((overlay) => {
         overlay.setMap(null);
       });
+
+      infoOverlays.forEach((overlay) => {
+        overlay.setMap(null);
+      });
+
+      kakao.maps.event.removeListener(map, "click", handleMapClick);
+      kakao.maps.event.removeListener(map, "dragstart", handleMapDragStart);
     };
   }, [map, courseList]);
+  /**
+   * 코스 상세 시트 접기 > CLOSE 제거, 최소 사이즈는 MINI
+   */
+  const handleSheetClose = () => {
+    sheetRef.current?.snapTo(CourseSheetState.MINI);
+  };
 
+  /**
+   * 코스 총 시간 계산 함수
+   * @param minutes
+   * @returns #시간#분
+   */
+  const formatDuration = (minutes: number) => {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+
+    if (hours === 0) {
+      return `${remainingMinutes}분`;
+    }
+
+    if (remainingMinutes === 0) {
+      return `${hours}시간`;
+    }
+
+    return `${hours}시간 ${remainingMinutes}분`;
+  };
+
+  /**
+   * 코스 타입
+   */
+  const getCourseType = (type: CourseFilter["type"]) => {
+    const courseType = courseFilters.find((item) => item.type === type);
+
+    return courseType ? `${courseType.emoji} ${courseType.label}` : "";
+  };
   return (
     <Box
       sx={{
@@ -234,9 +423,6 @@ const CourseDetailPage = () => {
         bgcolor: "#F7F5EE",
       }}
     >
-      {/* =========================
-          지도
-      ========================= */}
       <Box
         ref={mapRef}
         sx={{
@@ -247,9 +433,6 @@ const CourseDetailPage = () => {
         }}
       />
 
-      {/* =========================
-          뒤로가기 버튼
-      ========================= */}
       <IconButton
         onClick={() => navigate(-1)}
         sx={{
@@ -278,14 +461,12 @@ const CourseDetailPage = () => {
         />
       </IconButton>
 
-      {/* =========================
-          코스 상세 Bottom Sheet
-      ========================= */}
+      {/* 코스 상세 시트 */}
       <Sheet
         ref={sheetRef}
         isOpen={true}
         mountPoint={mountPoint}
-        onClose={() => navigate(-1)}
+        onClose={handleSheetClose}
         snapPoints={COURSE_SNAP_POINTS}
         initialSnap={CourseSheetState.SUMMARY}
         detent="full"
@@ -300,9 +481,6 @@ const CourseDetailPage = () => {
             boxShadow: "0 -4px 20px rgba(0, 0, 0, 0.12)",
           }}
         >
-          {/* =========================
-              Sheet Header
-          ========================= */}
           <Sheet.Header>
             {isFull ? (
               <Stack
@@ -348,9 +526,6 @@ const CourseDetailPage = () => {
             )}
           </Sheet.Header>
 
-          {/* =========================
-              Sheet Content
-          ========================= */}
           <Sheet.Content>
             <Box
               sx={{
@@ -366,7 +541,7 @@ const CourseDetailPage = () => {
                   mb: 0.8,
                 }}
               >
-                {courseDetailDummy.title}
+                {courseData?.title}
               </Typography>
 
               <Typography
@@ -376,12 +551,9 @@ const CourseDetailPage = () => {
                   mb: 2,
                 }}
               >
-                {courseDetailDummy.description}
+                {courseData?.description}
               </Typography>
 
-              {/* =========================
-                  코스 요약 정보
-              ========================= */}
               <Stack
                 direction="row"
                 spacing={1}
@@ -405,7 +577,7 @@ const CourseDetailPage = () => {
                     fontWeight: 600,
                   }}
                 >
-                  🚶 도보
+                  {getCourseType(courseData?.type)}
                 </Box>
 
                 <Box
@@ -420,7 +592,7 @@ const CourseDetailPage = () => {
                     fontWeight: 600,
                   }}
                 >
-                  ⏱ 약 {courseDetailDummy.duration}분
+                  ⏱ 약 {formatDuration(courseData?.duration)}
                 </Box>
 
                 <Box
@@ -435,13 +607,11 @@ const CourseDetailPage = () => {
                     fontWeight: 600,
                   }}
                 >
-                  📍 {courseList.length}곳
+                  📍 {courseData?.courseList?.length}곳
                 </Box>
               </Stack>
 
-              {/* =========================
-                  관광지 Stepper
-              ========================= */}
+              {/* 관광지 Stepper */}
               <Stack spacing={0}>
                 {courseList.map((place, index) => {
                   const isLast = index === courseList.length - 1;
@@ -499,7 +669,6 @@ const CourseDetailPage = () => {
                       </Box>
 
                       {/* 관광지 정보 */}
-                      {/* 관광지 정보 */}
                       <Box
                         sx={{
                           flex: 1,
@@ -540,17 +709,6 @@ const CourseDetailPage = () => {
                               {place.travelMinutes}분
                             </Typography>
                           )}
-
-                          {/* 체류 시간 */}
-                          <Typography
-                            sx={{
-                              mt: 0.3,
-                              fontSize: 11,
-                              color: "#AAA",
-                            }}
-                          >
-                            평균 체류 {place.stayMinutes}분
-                          </Typography>
                         </Box>
 
                         {/* 관광지 이미지 */}
@@ -587,8 +745,6 @@ const CourseDetailPage = () => {
             </Box>
           </Sheet.Content>
         </Sheet.Container>
-
-        {/* Backdrop 사용 안 함 */}
       </Sheet>
     </Box>
   );
