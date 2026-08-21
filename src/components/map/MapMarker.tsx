@@ -6,6 +6,7 @@ import type { MapLocation } from "../../models/MapModel";
 
 interface MapMarkerProps {
   map: any;
+  clusterer?: any;
   lat: number;
   lng: number;
   onClick?: (marker: MapLocation) => void;
@@ -23,6 +24,7 @@ interface MapMarkerProps {
  */
 const MapMarker = ({
   map,
+  clusterer,
   lat,
   lng,
   onClick,
@@ -54,7 +56,11 @@ const MapMarker = ({
       title: title ?? "",
     });
 
-    marker.setMap(map);
+    if (clusterer) {
+      clusterer.addMarker(marker);
+    } else {
+      marker.setMap(map);
+    }
 
     // ===== 라벨(CustomOverlay) 생성 =====
     let overlay: any = null;
@@ -67,22 +73,16 @@ const MapMarker = ({
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
-
         padding: "5px 10px",
-
         background: "rgba(255,255,255,0.95)",
         border: "1px solid #E5E7EB",
         borderRadius: "999px",
-
         color: "#222",
         fontSize: "12px",
         fontWeight: "600",
         lineHeight: "1",
-
         whiteSpace: "nowrap",
-
         boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
-
         pointerEvents: "none",
         userSelect: "none",
       } satisfies Partial<CSSStyleDeclaration>);
@@ -90,11 +90,7 @@ const MapMarker = ({
       overlay = new window.kakao.maps.CustomOverlay({
         position,
         content: label,
-
-        // 가운데 정렬
         xAnchor: 0.5,
-
-        // 마커 아래에 표시
         yAnchor: -0.15,
       });
 
@@ -111,11 +107,17 @@ const MapMarker = ({
     return () => {
       window.kakao.maps.event.removeListener(marker, "click", clickListener);
 
-      marker.setMap(null);
+      if (clusterer) {
+        clusterer.removeMarker(marker);
+      } else {
+        marker.setMap(null);
+      }
+
       overlay?.setMap(null);
     };
   }, [
     map,
+    clusterer,
     lat,
     lng,
     image,

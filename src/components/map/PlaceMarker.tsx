@@ -13,6 +13,7 @@ import MapMarker from "./MapMarker";
  */
 export interface PlaceMarkerProps {
   map: any; // useKakaoMap 훅이 반환한 카카오맵 객체
+  clusterer?: any;
   place: PlaceListBase; // 관광지 정보
   onClick?: (place: PlaceListBase) => void; // 클릭 이벤트 핸들러
   filter: PlaceFilterType;
@@ -21,6 +22,7 @@ export interface PlaceMarkerProps {
 const PlaceMarker = ({
   filter = PlaceFilterType.NONE,
   map,
+  clusterer,
   place,
   onClick,
 }: PlaceMarkerProps) => {
@@ -56,6 +58,7 @@ const PlaceMarker = ({
   return (
     <MapMarker
       map={map}
+      clusterer={clusterer}
       lat={place.lat}
       lng={place.lng}
       title={place.placeName}

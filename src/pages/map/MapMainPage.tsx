@@ -11,15 +11,14 @@ import CommonLoading from "../../components/common/CommonLoading";
 import CommonSearchBar from "../../components/common/CommonSearchBar";
 import IconCircleButton from "../../components/common/IconCircleButton";
 import CurrentLocationMarker from "../../components/map/CurrentLocationMarker";
-import MapBottomSheet, {
-  type HandleSheetRef,
-} from "../../components/map/MapBottomSheet";
-import MapCommonInfoSheet, {
-  SheetState,
-  type HandleInfoSheetRef,
-} from "../../components/map/MapCommonInfoSheet";
 import MapLegend from "../../components/map/MapLegend";
+import NearbyPlaceSheet, {
+  type HandleInfoSheetRef,
+} from "../../components/map/NearbyPlaceSheet.tsx";
 import PlaceMarker from "../../components/map/PlaceMarker";
+import PlaceSummarySheet, {
+  type HandleSheetRef,
+} from "../../components/map/PlaceSummarySheet";
 import { useCommonLoading } from "../../hooks/common/useCommonLoading";
 import { useMapEvent } from "../../hooks/map/useMapEvent";
 import { useMapFilter } from "../../hooks/map/useMapFilter";
@@ -29,10 +28,20 @@ import { PlaceFilterType } from "../../models/MapModel";
 import type { PlaceListBase } from "../../models/PlaceModel";
 import { useNearbyPlaceListQuery } from "../../queries/useNearbyPlaceListQuery";
 import { usePlaceListQuery } from "../../queries/usePlaceListQuery";
+import { useWeatherQuery } from "../../queries/useWeatherQuery.ts";
 
 /**
  * 지도 메인 페이지
  */
+export interface Weather {
+  temperature: number;
+  feelsLike: number;
+  humidity: number;
+  weather: string;
+  description: string;
+  icon: string;
+  windSpeed: number;
+}
 
 export interface CommonSearchForm {
   keyword: string;
@@ -43,16 +52,21 @@ const MapMainPage = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const sheetRef = useRef<HandleSheetRef>(null);
   const infoSheetRef = useRef<HandleInfoSheetRef>(null);
-  const map = useKakaoMap(mapRef);
+  const { map, clusterer } = useKakaoMap(mapRef);
   /* 현재 위치 상태 */
-  const { loading, currentLocation, updateCurrentLocation, getCurrentAddress } =
-    useCurrentLocation();
+  const {
+    loading,
+    currentLocation,
+    updateCurrentLocation,
+    getCurrentAddress,
+    startWatchingLocation,
+    stopWatchingLocation,
+  } = useCurrentLocation();
 
   /* 관광지 목록 데이터 */
-  // const { allPlaceList } = usePlaceList();
-  const { data: placeData = [], isLoading } = usePlaceListQuery({
-    latitude: currentLocation?.lat ?? 0,
-    longitude: currentLocation?.lng ?? 0,
+  const { data: placeData = [], isFetching } = usePlaceListQuery({
+    latitude: 0,
+    longitude: 0,
   });
 
   const { data: nearbyPlaceData = [] } = useNearbyPlaceListQuery({
@@ -60,8 +74,6 @@ const MapMainPage = () => {
     longitude: currentLocation?.lng ?? 0,
     sort: "distance",
   });
-
-  const [markerLoading, setMarkerLoading] = useState(false);
 
   /* 지도 네비게이션 */
   const { moveToGyeongjuCenter, moveToCurrentLocation, locationLoading } =
@@ -80,7 +92,7 @@ const MapMainPage = () => {
     null,
   );
   const [isRecommendOpen, setIsRecommendOpen] = useState(true);
-  const recommendInitialSnap = SheetState.DEFAULT;
+
   useMapEvent({
     map,
     selectedPlace,
@@ -94,22 +106,39 @@ const MapMainPage = () => {
   useEffect(() => {
     if (!map) return; // 지도 생성 완료 후에만 실행
 
+    /**
+     * 최초 위치
+     */
     const initLocation = async () => {
       const location = await updateCurrentLocation();
-      if (!location) return;
 
-      const address = await getCurrentAddress(location.lat, location.lng);
-      setCurrentAddress(address);
+      if (location) {
+        const address = await getCurrentAddress(location.lat, location.lng);
+
+        setCurrentAddress(address);
+      }
+
+      // 최초 위치 조회가 끝난 후 실시간 추적 시작
+      startWatchingLocation();
     };
 
     initLocation();
-  }, [map]);
 
-  useEffect(() => {
-    if (!selectedFilter) return;
-    sheetRef?.current?.close();
-    infoSheetRef?.current?.close();
-  }, [selectedFilter]);
+    return () => {
+      stopWatchingLocation();
+    };
+  }, [
+    map,
+    updateCurrentLocation,
+    getCurrentAddress,
+    startWatchingLocation,
+    stopWatchingLocation,
+  ]);
+
+  const { data: weather } = useWeatherQuery({
+    latitude: currentLocation?.lat,
+    longitude: currentLocation?.lng,
+  });
 
   /**
    * 마커 클릭 이벤트 핸들러
@@ -134,7 +163,6 @@ const MapMainPage = () => {
    */
   const handleGoToCurrentLocation = async () => {
     sheetRef.current?.close();
-    // infoSheetRef.current?.close();
     if (!map) return;
 
     const location = await updateCurrentLocation();
@@ -144,18 +172,10 @@ const MapMainPage = () => {
   };
 
   const commonLoading = useCommonLoading(locationLoading, filterLoading);
-  const loadingState =
-    commonLoading ??
-    (markerLoading
-      ? {
-          isLoading: true,
-          loadingMsg: "지도를 불러오는 중...",
-        }
-      : undefined);
 
   // 1. 컴포넌트 내부 상단에 마커 리스트 메모이제이션 추가
   const renderedMarkers = useMemo(() => {
-    if (loading || !map || !placeData) return null;
+    if (isFetching || !map || !placeData) return null;
 
     return placeData.map((place) => (
       <PlaceMarker
@@ -163,10 +183,18 @@ const MapMainPage = () => {
         key={place.placeId}
         place={place}
         map={map}
+        clusterer={clusterer}
         onClick={handleMarkerClick}
       />
     ));
-  }, [placeData, map, selectedFilter, loading]); // 의존성 배열 관리
+  }, [
+    placeData,
+    map,
+    clusterer,
+    selectedFilter,
+    isFetching,
+    handleMarkerClick,
+  ]); // 의존성 배열 관리
 
   return (
     <>
@@ -208,11 +236,15 @@ const MapMainPage = () => {
                 key={item.value}
                 label={item.label}
                 selected={selectedFilter === item.value}
-                onClick={() =>
+                onClick={() => {
                   setSelectedFilter((prev) =>
                     prev === item.value ? PlaceFilterType.NONE : item.value,
-                  )
-                }
+                  );
+                  if (!selectedFilter) {
+                    sheetRef?.current?.close();
+                    infoSheetRef?.current?.close();
+                  }
+                }}
               />
             ))}
           </Stack>
@@ -262,7 +294,7 @@ const MapMainPage = () => {
         {/* 하단 관광지 정보 드로어 */}
         {selectedPlace && (
           // 특정 관광지 정보 시트
-          <MapBottomSheet
+          <PlaceSummarySheet
             ref={sheetRef}
             open={!!selectedPlace}
             place={selectedPlace}
@@ -271,31 +303,19 @@ const MapMainPage = () => {
         )}
         {/* 하단 관광지 정보 드로어 */}
         {isRecommendOpen && selectedFilter === PlaceFilterType.NONE && (
-          <MapCommonInfoSheet
+          <NearbyPlaceSheet
             ref={infoSheetRef}
             open={isRecommendOpen}
-            initialSnap={recommendInitialSnap}
             onClose={() => setIsRecommendOpen(false)}
             placeList={nearbyPlaceData}
             currentAddress={currentAddress}
+            weather={weather}
           />
         )}
       </Box>
 
       {/* 관광지 마커 렌더링 */}
       {renderedMarkers}
-      {/* {!loading &&
-        map &&
-        placeData &&
-        placeData.map((place) => (
-          <PlaceMarker
-            filter={selectedFilter}
-            key={place.placeId}
-            place={place}
-            map={map}
-            onClick={handleMarkerClick}
-          />
-        ))} */}
 
       {/* 현재 위치 마커 렌더링 */}
       {currentLocation && (

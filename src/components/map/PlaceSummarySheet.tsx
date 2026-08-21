@@ -39,7 +39,7 @@ export const SNAP_POINTS = [
   1, // FULL
 ];
 
-const MapBottomSheet = forwardRef<HandleSheetRef, SheetProps>(
+const PlaceSummarySheet = forwardRef<HandleSheetRef, SheetProps>(
   ({ open, place, onClose }, ref) => {
     const mountPoint = useMemo(
       () => document.getElementById("sheet-root") ?? undefined,
@@ -148,10 +148,6 @@ const MapBottomSheet = forwardRef<HandleSheetRef, SheetProps>(
                     <PlaceSummaryPage placeId={place.placeId} />
                   </Box>
                 )}
-
-                {/* {snapIndex === SheetState.FULL && (
-                  <PlaceDetailPage placeId={place.placeId} />
-                )} */}
               </>
             )}
           </Sheet.Content>
@@ -163,4 +159,4 @@ const MapBottomSheet = forwardRef<HandleSheetRef, SheetProps>(
   },
 );
 
-export default MapBottomSheet;
+export default PlaceSummarySheet;
