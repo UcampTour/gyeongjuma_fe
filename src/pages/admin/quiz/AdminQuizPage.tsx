@@ -3,6 +3,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useAdminQuiz } from "../../../hooks/admin/useAminQuiz";
 import AdminQuizFilter from "../../../components/admin/quiz/AdminQuizFilter";
 import AdminQuizTable from "../../../components/admin/quiz/AdminQuizTable";
+import { useNavigate } from "react-router-dom";
 
 
 const AdminQuizPage = () => {
@@ -21,6 +22,8 @@ const AdminQuizPage = () => {
     handleChangePage,
     handleChangeRowsPerPage,
   } = useAdminQuiz();
+
+  const navigate = useNavigate();
 
   return (
     <Box sx={{ p: 2 }}>
@@ -54,6 +57,7 @@ const AdminQuizPage = () => {
 
       <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
         <Button 
+          onClick={() => navigate("/admin/quizzes/form")}
           variant="contained" 
           startIcon={<AddIcon />} 
           sx={{ bgcolor: "#AC8E61", "&:hover": { bgcolor: "#8f734a" } }}

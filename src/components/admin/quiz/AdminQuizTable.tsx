@@ -4,6 +4,7 @@ import {
 } from "@mui/material";
 import type { QuizItem } from "../../../hooks/admin/useAminQuiz";
 import type { ChangeEvent } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface AdminQuizTableProps {
   paginatedQuizzes: QuizItem[];
@@ -22,6 +23,9 @@ const AdminQuizTable = ({
   onPageChange,
   onRowsPerPageChange,
 }: AdminQuizTableProps) => {
+
+  const navigate = useNavigate();
+
   return (
     <TableContainer component={Paper} sx={{ borderRadius: "12px", border: "1px solid #E0E0E0", boxShadow: "none" }}>
       <Table sx={{ minWidth: 650 }} aria-label="quiz table">
@@ -40,22 +44,22 @@ const AdminQuizTable = ({
         <TableBody>
           {paginatedQuizzes.length > 0 ? (
             paginatedQuizzes.map((quiz, index) => (
-              <TableRow key={quiz.place_quiz_info_id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+              <TableRow key={quiz.quizId} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                 <TableCell align="center" sx={{ color: "text.secondary" }}>
                   {page * rowsPerPage + index + 1}
                 </TableCell>
-                <TableCell align="center">{quiz.place_quiz_info_id}</TableCell>
-                <TableCell align="center">{quiz.place_id}</TableCell>
-                <TableCell align="center" sx={{ fontWeight: 700, color: "#2C2A29" }}>{quiz.place_name}</TableCell>
+                <TableCell align="center">{quiz.quizId}</TableCell>
+                <TableCell align="center">{quiz.placeId}</TableCell>
+                <TableCell align="center" sx={{ fontWeight: 700, color: "#2C2A29" }}>{quiz.placeName}</TableCell>
                 <TableCell align="center" sx={{ fontWeight: 700, color: "#2C2A29" }}>{quiz.title}</TableCell>
                 <TableCell align="center">
                   {quiz.difficulty === "HIGH" ? "상" : quiz.difficulty === "MEDIUM" ? "중" : "하"}
                 </TableCell>
                 <TableCell align="center" sx={{ fontWeight: 600 }}>
-                  {quiz.is_active ? "Y" : "N"}
+                  {quiz.isActive ? "Y" : "N"}
                 </TableCell>
                 <TableCell align="center">
-                  <Button size="small" variant="outlined" sx={{ color: "#2C2A29", borderColor: "#D1D5DB" }}>
+                  <Button onClick={() => navigate(`/admin/quizzes/form/${quiz.quizId}`)} size="small" variant="outlined" sx={{ color: "#2C2A29", borderColor: "#D1D5DB" }}>
                     수정
                   </Button>
                 </TableCell>

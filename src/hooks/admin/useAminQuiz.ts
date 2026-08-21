@@ -2,46 +2,46 @@ import type { SelectChangeEvent } from "@mui/material";
 import { useMemo, useState, type ChangeEvent } from "react";
 
 export interface QuizItem {
-  place_quiz_info_id: number;
-  place_id: number;
-  place_name: string;
+  quizId: number;
+  placeId: number;
+  placeName: string;
   title: string;
   difficulty: string;
-  is_active: boolean;
+  isActive: boolean;
 }
 
 const dummyQuizData: QuizItem[] = [
   {
-    place_quiz_info_id: 1,
-    place_id: 101,
-    place_name: "불국사",
+    quizId: 1,
+    placeId: 101,
+    placeName: "불국사",
     title: "불국사 다보탑의 비밀",
     difficulty: "HIGH",
-    is_active: true,
+    isActive: true,
   },
   {
-    place_quiz_info_id: 2,
-    place_id: 102,
-    place_name: "석굴암",
+    quizId: 2,
+    placeId: 102,
+    placeName: "석굴암",
     title: "석굴암 본존불의 방향",
     difficulty: "MEDIUM",
-    is_active: true,
+    isActive: true,
   },
   {
-    place_quiz_info_id: 3,
-    place_id: 103,
-    place_name: "첨성대",
+    quizId: 3,
+    placeId: 103,
+    placeName: "첨성대",
     title: "첨성대 구조 개수",
     difficulty: "LOW",
-    is_active: false,
+    isActive: false,
   },
   {
-    place_quiz_info_id: 4,
-    place_id: 104,
-    place_name: "동궁과 월지",
+    quizId: 4,
+    placeId: 104,
+    placeName: "동궁과 월지",
     title: "동궁과 월지의 옛 이름",
     difficulty: "MEDIUM",
-    is_active: true,
+    isActive: true,
   },
 ]
 
@@ -66,13 +66,13 @@ export const useAdminQuiz = () => {
       const matchesSearch =
         !targetKeyword ||
         quiz.title.toLowerCase().includes(targetKeyword) ||
-        quiz.place_name.toLowerCase().includes(targetKeyword);
+        quiz.placeName.toLowerCase().includes(targetKeyword);
       
       // 2. 사용 상태 필터
       const matchesUsage = 
         useFlag === "all" ||
-        (useFlag === "active" && quiz.is_active === true) ||
-        (useFlag === "inactive" && quiz.is_active === false);
+        (useFlag === "active" && quiz.isActive === true) ||
+        (useFlag === "inactive" && quiz.isActive === false);
 
       // 3. 난이도 필터
       const matchesDifficulty = 

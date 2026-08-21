@@ -6,25 +6,31 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useNavigate, useParams } from "react-router-dom";
 
 const AdminQuizFormPage = () => {
+
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const isEditMode = Boolean(id);
+
   // 1. 퀴즈 기본 정보 상태
   const [quizInfo, setQuizInfo] = useState({
-    place_id: "",
-    place_name: "",
+    placeId: "",
+    placeName: "",
     title: "",
     description: "",
     difficulty: "MEDIUM",
-    points: 10,
-    is_active: true,
+    points: 100,
+    isActive: true,
   });
 
-  // 2. 퀴즈 문제 목록 상태 (동적으로 추가/삭제)
+  // 2. 퀴즈 문제 목록 상태
   const [questions, setQuestions] = useState([
     {
-      question_title: "",
+      questionTitle: "",
       options: ["", "", "", ""],
-      answer_index: 0,
+      answerIdx: 0,
     },
   ]);
 
@@ -37,49 +43,53 @@ const AdminQuizFormPage = () => {
   const handleAddQuestion = () => {
     setQuestions((prev) => [
       ...prev,
-      {
-        question_title: "",
-        options: ["", "", "", ""],
-        answer_index: 0,
-      },
+      { questionTitle: "", options: ["", "", "", ""], answerIdx: 0 },
     ]);
   };
 
   // 문제 삭제하기 버튼 클릭
-  const handleRemoveQuestion = (index) => {
-    setQuestions((prev) => prev.filter((_, i) => i !== index));
+  const handleRemoveQuestion = (idx) => {
+    setQuestions((prev) => prev.filter((_, i) => i !== idx));
   };
 
   // 문제 제목 변경
   const handleQuestionTitleChange = (index, value) => {
-    const updated = [...questions];
-    updated[index].question_title = value;
-    setQuestions(updated);
+    setQuestions((prev) =>
+      prev.map((q, i) => (i === index ? { ...q, question_title: value } : q))
+    );
   };
 
   // 보기 내용 변경
   const handleOptionChange = (qIndex, oIndex, value) => {
-    const updated = [...questions];
-    updated[qIndex].options[oIndex] = value;
-    setQuestions(updated);
+    setQuestions((prev) =>
+      prev.map((q, qi) => {
+        if (qi !== qIndex) return q;
+        const newOptions = [...q.options];
+        newOptions[oIndex] = value;
+        return { ...q, options: newOptions };
+      })
+    );
   };
 
   // 정답 보기 선택 변경
   const handleAnswerChange = (qIndex, oIndex) => {
-    const updated = [...questions];
-    updated[qIndex].answer_index = oIndex;
-    setQuestions(updated);
+    setQuestions((prev) =>
+      prev.map((q, qi) => (qi === qIndex ? { ...q, answer_index: oIndex } : q))
+    );
   };
 
   // 최종 등록 제출
   const handleSubmit = (e) => {
     e.preventDefault();
-    const finalData = {
-      ...quizInfo,
-      questions,
-    };
-    console.log("최종 등록 데이터:", finalData);
-    alert("퀴즈가 성공적으로 등록되었습니다! (콘솔창 확인)");
+    const finalData = { ...quizInfo, questions };
+
+    if (isEditMode) {
+      alert("퀴즈가 성공적으로 수정되었습니다!");
+    } else {
+      alert("퀴즈가 성공적으로 등록되었습니다!");
+    }
+
+    navigate("/admin/quizzes");
   };
 
   return (
@@ -113,7 +123,7 @@ const AdminQuizFormPage = () => {
               size="small"
               fullWidth
               placeholder="예: 101"
-              value={quizInfo.place_id}
+              value={quizInfo.placeId}
               onChange={(e) => handleQuizInfoChange("place_id", e.target.value)}
             />
             <TextField
@@ -121,7 +131,7 @@ const AdminQuizFormPage = () => {
               size="small"
               fullWidth
               placeholder="예: 불국사"
-              value={quizInfo.place_name}
+              value={quizInfo.placeName}
               onChange={(e) => handleQuizInfoChange("place_name", e.target.value)}
             />
           </Box>
@@ -173,12 +183,12 @@ const AdminQuizFormPage = () => {
           <FormControlLabel
             control={
               <Switch
-                checked={quizInfo.is_active}
+                checked={quizInfo.isActive}
                 onChange={(e) => handleQuizInfoChange("is_active", e.target.checked)}
                 color="success"
               />
             }
-            label={`사용 여부: ${quizInfo.is_active ? "사용중 (Y)" : "미사용 (N)"}`}
+            label={`사용 여부: ${quizInfo.isActive ? "사용중 (Y)" : "미사용 (N)"}`}
           />
         </Paper>
 
@@ -223,7 +233,7 @@ const AdminQuizFormPage = () => {
               size="small"
               fullWidth
               placeholder="문제를 입력하세요 (예: 다보탑의 층수는 몇 층인가요?)"
-              value={q.question_title}
+              value={q.questionTitle}
               onChange={(e) => handleQuestionTitleChange(qIndex, e.target.value)}
             />
 
@@ -236,17 +246,17 @@ const AdminQuizFormPage = () => {
               {q.options.map((option, oIndex) => (
                 <Box key={oIndex} sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
                   <Button
-                    variant={q.answer_index === oIndex ? "contained" : "outlined"}
+                    variant={q.answerIdx === oIndex ? "contained" : "outlined"}
                     size="small"
                     onClick={() => handleAnswerChange(qIndex, oIndex)}
                     sx={{
                       minWidth: "80px",
-                      bgcolor: q.answer_index === oIndex ? "#2E7D32 !important" : "transparent",
-                      color: q.answer_index === oIndex ? "#fff" : "text.secondary",
-                      borderColor: q.answer_index === oIndex ? "#2E7D32" : "#D1D5DB",
+                      bgcolor: q.answerIdx === oIndex ? "#2E7D32 !important" : "transparent",
+                      color: q.answerIdx === oIndex ? "#fff" : "text.secondary",
+                      borderColor: q.answerIdx === oIndex ? "#2E7D32" : "#D1D5DB",
                     }}
                   >
-                    {q.answer_index === oIndex ? "정답 ✓" : `보기 ${oIndex + 1}`}
+                    {q.answerIdx === oIndex ? "정답 ✓" : `보기 ${oIndex + 1}`}
                   </Button>
 
                   <TextField

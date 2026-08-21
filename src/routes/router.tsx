@@ -157,7 +157,11 @@ const routes: RouteObject[] = [
               {
                 path: "form",
                 element: <AdminQuizFormPage />
-              }
+              },
+              {
+                path: "form/:id",
+                element: <AdminQuizFormPage />
+              },
             ]
           },
           {
