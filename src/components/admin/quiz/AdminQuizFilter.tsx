@@ -36,20 +36,6 @@ const AdminQuizFilter = ({
           />
 
           <FormControl size="small" sx={{ width: "130px" }}>
-            <InputLabel id="usage-status-label">사용 여부</InputLabel>
-            <Select 
-              labelId="usage-status-label" 
-              value={useFlag} 
-              label="사용 여부" 
-              onChange={onUsageChange}
-            >
-              <MenuItem value="all">전체</MenuItem>
-              <MenuItem value="active">사용중 (Y)</MenuItem>
-              <MenuItem value="inactive">미사용 (N)</MenuItem>
-            </Select>
-          </FormControl>
-
-          <FormControl size="small" sx={{ width: "130px" }}>
             <InputLabel id="difficulty-label">난이도</InputLabel>
             <Select 
               labelId="difficulty-label" 
@@ -63,6 +49,21 @@ const AdminQuizFilter = ({
               <MenuItem value="LOW">하</MenuItem>
             </Select>
           </FormControl>
+
+          <FormControl size="small" sx={{ width: "130px" }}>
+            <InputLabel id="usage-status-label">사용 여부</InputLabel>
+            <Select 
+              labelId="usage-status-label" 
+              value={useFlag} 
+              label="사용 여부" 
+              onChange={onUsageChange}
+            >
+              <MenuItem value="all">전체</MenuItem>
+              <MenuItem value="active">사용중 (Y)</MenuItem>
+              <MenuItem value="inactive">미사용 (N)</MenuItem>
+            </Select>
+          </FormControl>
+          
         </Box>
       </Box>
   );

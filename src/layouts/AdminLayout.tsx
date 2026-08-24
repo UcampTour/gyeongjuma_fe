@@ -57,7 +57,7 @@ const AdminLayout = () => {
         {/* 하단 로그아웃 버튼 */}
         <Button
           startIcon={<LogoutIcon />}
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/admin")}
           sx={{
             justifyContent: "flex-start",
             color: "#A8A29E",

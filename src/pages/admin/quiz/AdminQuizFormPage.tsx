@@ -1,296 +1,134 @@
 import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import DeleteIcon from "@mui/icons-material/Delete";
-import {
-  Box,
-  Button,
-  IconButton,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Box, Button, IconButton, Tab, Tabs, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import QuizBasicInfoForm from "../../../components/admin/quiz/QuizBasicInfoForm";
-
-export interface QuizInfo {
-  placeId: string,
-  placeName: string,
-  title: string,
-  description: string,
-  difficulty: string,
-  points: number,
-  isActive: boolean
-}
-
-export interface QuizQuestion {
-  questionTitle: string;
-  options: string[];
-  answerIdx: number;
-}
+import QuestionFormCard from "../../../components/admin/quiz/QuestionFormCard";
+import { useAdminQuizForm, SUPPORTED_LANGUAGES } from "../../../hooks/admin/useAdminQuizForm";
 
 const AdminQuizFormPage = () => {
-  const { id } = useParams();
   const navigate = useNavigate();
-  const isEditMode = Boolean(id);
+  const {
+    quizInfo,
+    questions,
+    isEditMode,
+    currentLanguage,
+    setCurrentLanguage,
+    handleQuizInfoChange,
+    handleAddQuestion,
+    handleRemoveQuestion,
+    handleQuestionTitleChange,
+    handleOptionChange,
+    handleAnswerChange,
+    handleSubmit,
+    handleDelete,
+  } = useAdminQuizForm();
 
-  // 1. 퀴즈 기본 정보 상태
-  const [quizInfo, setQuizInfo] = useState<QuizInfo>({
-    placeId: "",
-    placeName: "",
-    title: "",
-    description: "",
-    difficulty: "MEDIUM",
-    points: 100,
-    isActive: true,
-  });
-
-  // 2. 퀴즈 문제 목록 상태
-  const [questions, setQuestions] = useState<QuizQuestion[]>([
-    {
-      questionTitle: "",
-      options: ["", "", "", ""],
-      answerIdx: 0,
-    },
-  ]);
-
-  // 기본 정보 입력 핸들러
-  const handleQuizInfoChange = (field: string, value: any) => {
-    setQuizInfo((prev) => ({ ...prev, [field]: value }));
-  };
- 
-  const handleAddQuestion = () => {
-    setQuestions((prev) => [
-      ...prev,
-      { questionTitle: "", options: ["", "", "", ""], answerIdx: 0 },
-    ]);
-  };
-
-  const handleRemoveQuestion = (idx: number) => {
-    setQuestions((prev) => prev.filter((_, i) => i !== idx));
-  };
-
-  const handleQuestionTitleChange = (index: number, value: string) => {
-    setQuestions((prev) =>
-      prev.map((q, i) => (i === index ? { ...q, questionTitle: value } : q))
-    );
-  };
-
-  const handleOptionChange = (qIndex: number, oIndex: number, value: string) => {
-    setQuestions((prev) =>
-      prev.map((q, qi) => {
-        if (qi !== qIndex) return q;
-        const newOptions = [...q.options];
-        newOptions[oIndex] = value;
-        return { ...q, options: newOptions };
-      })
-    );
-  };
-
-  const handleAnswerChange = (qIndex: number, oIndex: number) => {
-    setQuestions((prev) =>
-      prev.map((q, qi) => (qi === qIndex ? { ...q, answerIdx: oIndex } : q))
-    );
-  };
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    const finalData = { ...quizInfo, questions };
-    console.log("제출될 데이터:", finalData);
-    alert(isEditMode ? "퀴즈가 성공적으로 수정되었습니다!" : "퀴즈가 성공적으로 등록되었습니다!");
-    navigate("/admin/quizzes");
+  const commonButtonStyle = {
+    px: 3,
+    py: 1,
+    minWidth: "90px",
+    borderRadius: "8px",
+    fontWeight: 600,
   };
 
   return (
     <Box sx={{ p: 4, width: "100%" }}>
-      
       {/* 상단 타이틀 및 뒤로가기 */}
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          mb: 3,
-          gap: 1,
-          maxWidth: "1050px",
-          mx: "auto",
-        }}
-      >
-        <IconButton
-          size="small"
-          onClick={() => navigate(-1)}
-          sx={{ bgcolor: "#F3F4F6", borderRadius: "8px" }}
-        >
+      <Box sx={{ display: "flex", alignItems: "center", mb: 3, gap: 1, maxWidth: "1050px", mx: "auto" }}>
+        <IconButton size="small" onClick={() => navigate(-1)} sx={{ bgcolor: "#F3F4F6", borderRadius: "8px" }}>
           <ArrowBackIcon fontSize="small" />
         </IconButton>
         <Typography variant="h5" sx={{ fontWeight: 800 }}>
-          퀴즈 등록
+          퀴즈 {isEditMode ? "수정" : "등록"}
         </Typography>
       </Box>
 
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 3,
-          maxWidth: "1050px",
-          mx: "auto",
-        }}
-      >
-
-        {/* 퀴즈 기본 정보 섹션*/}
-        <QuizBasicInfoForm 
-          quizInfo={quizInfo}
-          handleQuizInfoChange={handleQuizInfoChange}
-        />
-
-        {/* 세션 2: 퀴즈 문제 목록 및 동적 추가 박스 */}
-        <Box
+      {/* 🌐 다국어 탭 바 */}
+      <Box sx={{ maxWidth: "1050px", mx: "auto", mb: 2, borderBottom: 1, borderColor: "divider" }}>
+        <Tabs
+          value={currentLanguage}
+          onChange={(_, newVal) => setCurrentLanguage(newVal)}
           sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mt: 1,
+            "& .MuiTab-root": { fontWeight: 700, fontSize: "0.95rem" },
+            "& .Mui-selected": { color: "#AC8E61 !important" },
+            "& .MuiTabs-indicator": { backgroundColor: "#AC8E61" },
           }}
         >
-          <Typography
-            variant="h6"
-            sx={{ fontWeight: 700, fontSize: "1.05rem", color: "#111827" }}
-          >
-            퀴즈 문제 구성 ({questions.length}문항)
+          {SUPPORTED_LANGUAGES.map((lang) => (
+            <Tab key={lang.code} label={lang.label} value={lang.code} />
+          ))}
+        </Tabs>
+      </Box>
+
+      <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 3, maxWidth: "1050px", mx: "auto" }}>
+        {/* 퀴즈 기본 정보 섹션 */}
+        <QuizBasicInfoForm 
+          quizInfo={quizInfo}
+          currentLanguage={currentLanguage}
+          handleQuizInfoChange={handleQuizInfoChange}
+          isEditMode={isEditMode}
+        />
+
+        {/* 세션 제목 */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 1 }}>
+          <Typography variant="h6" sx={{ fontWeight: 700, fontSize: "1.05rem", color: "#111827" }}>
+            퀴즈 문제 구성 ({questions.length}문항) - [{currentLanguage.toUpperCase()} 모드]
           </Typography>
+        </Box>
+
+        {/* 퀴즈 문제 목록 카드 */}
+        {questions.map((question, qIndex) => (
+          <QuestionFormCard 
+            key={qIndex}
+            question={question}
+            qIndex={qIndex}
+            currentLanguage={currentLanguage}
+            totalQuestions={questions.length}
+            isEditMode={isEditMode}
+            handleAnswerChange={handleAnswerChange}
+            handleOptionChange={handleOptionChange}
+            handleRemove={handleRemoveQuestion}
+            handleTitleChange={handleQuestionTitleChange}
+          />
+        ))}
+
+        {/* 문제 추가하기 버튼 */}
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 1 }}>
           <Button
-            variant="contained"
+            variant="outlined"
             startIcon={<AddIcon />}
             onClick={handleAddQuestion}
-            sx={{ bgcolor: "#AC8E61", "&:hover": { bgcolor: "#8f734a" } }}
+            fullWidth
+            sx={{ 
+              py: 1.5, 
+              borderColor: "#AC8E61", 
+              color: "#AC8E61",
+              bgcolor: "#FAFAFA",
+              "&:hover": { bgcolor: "#FAF7F2", borderColor: "#8f734a" } 
+            }}
           >
-            문제 추가하기
+            문제 추가
           </Button>
         </Box>
 
-        {questions.map((q, qIndex) => (
-          <Paper
-            key={qIndex}
-            sx={{
-              p: 3,
-              borderRadius: "12px",
-              border: "1px solid #E0E0E0",
-              boxShadow: "none",
-              position: "relative",
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-              bgcolor: "#FAFAFA",
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
+        {/* 하단 최종 버튼 그룹 */}
+        <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 1.5, mt: 2, mb: 4 }}>
+          {isEditMode && (
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={handleDelete}
+              sx={{ ...commonButtonStyle, borderColor: "#EF4444", color: "#EF4444", "&:hover": { bgcolor: "#FEF2F2" } }}
             >
-              <Typography
-                variant="subtitle1"
-                sx={{ fontWeight: 700, color: "#AC8E61" }}
-              >
-                문제 {qIndex + 1}
-              </Typography>
-              {questions.length > 1 && (
-                <IconButton
-                  color="error"
-                  size="small"
-                  onClick={() => handleRemoveQuestion(qIndex)}
-                >
-                  <DeleteIcon fontSize="small" />
-                </IconButton>
-              )}
-            </Box>
-
-            <TextField
-              label="문제 제목"
-              size="small"
-              fullWidth
-              placeholder="문제를 입력하세요 (예: 다보탑의 층수는 몇 층인가요?)"
-              value={q.questionTitle}
-              onChange={(e) =>
-                handleQuestionTitleChange(qIndex, e.target.value)
-              }
-            />
-
-            <Typography
-              variant="body2"
-              sx={{ fontWeight: 600, color: "text.secondary", mt: 0.5 }}
-            >
-              보기 입력 및 정답 체크 (버튼을 눌러 정답을 지정하세요)
-            </Typography>
-
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-              {q.options.map((option, oIndex) => (
-                <Box
-                  key={oIndex}
-                  sx={{ display: "flex", alignItems: "center", gap: 1.5 }}
-                >
-                  <Button
-                    variant={q.answerIdx === oIndex ? "contained" : "outlined"}
-                    size="small"
-                    onClick={() => handleAnswerChange(qIndex, oIndex)}
-                    sx={{
-                      minWidth: "80px",
-                      bgcolor:
-                        q.answerIdx === oIndex ? "#2E7D32 !important" : "transparent",
-                      color: q.answerIdx === oIndex ? "#fff" : "text.secondary",
-                      borderColor:
-                        q.answerIdx === oIndex ? "#2E7D32" : "#D1D5DB",
-                    }}
-                  >
-                    {q.answerIdx === oIndex ? "정답 ✓" : `보기 ${oIndex + 1}`}
-                  </Button>
-
-                  <TextField
-                    size="small"
-                    fullWidth
-                    placeholder={`보기 ${oIndex + 1} 내용을 입력하세요`}
-                    value={option}
-                    onChange={(e) =>
-                      handleOptionChange(qIndex, oIndex, e.target.value)
-                    }
-                  />
-                </Box>
-              ))}
-            </Box>
-          </Paper>
-        ))}
-
-        {/* 하단 최종 제출 버튼 */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            gap: 2,
-            mt: 2,
-            mb: 4,
-          }}
-        >
-          <Button
-            variant="outlined"
-            onClick={() => navigate(-1)}
-            sx={{ color: "#374151", borderColor: "#D1D5DB" }}
-          >
-            취소
+              삭제하기
+            </Button>
+          )}
+          <Button type="submit" variant="contained" sx={{ ...commonButtonStyle, bgcolor: "#AC8E61", color: "#FFFFFF", "&:hover": { bgcolor: "#8f734a" } }}>
+            {isEditMode ? "수정" : "저장"}하기
           </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{
-              bgcolor: "#AC8E61",
-              "&:hover": { bgcolor: "#8f734a" },
-              px: 4,
-            }}
-          >
-            저장하기
+          <Button variant="outlined" onClick={() => navigate(-1)} sx={{ ...commonButtonStyle, color: "#374151", borderColor: "#D1D5DB" }}>
+            취소
           </Button>
         </Box>
       </Box>

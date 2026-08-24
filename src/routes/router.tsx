@@ -32,6 +32,7 @@ import ProfilePage from "../pages/profile/ProfilePage";
 import TimelinePage from "../pages/profile/TimeLinePage";
 import QuizListPage from "../pages/quiz/QuizListPage";
 import QuizPlayPage from "../pages/quiz/QuizPlayPage";
+import AdminLoginPage from "../pages/admin/AdminLoginPage";
 
 const routes: RouteObject[] = [
   {
@@ -105,7 +106,7 @@ const routes: RouteObject[] = [
                   },
                   {
                     path: "bookmark",
-                    element: <BookmarkPage />, // 즐겨찾기 상세 페이지 컴포넌트
+                    element: <BookmarkPage />,
                   },
                   {
                     path: "edit",
@@ -155,43 +156,49 @@ const routes: RouteObject[] = [
         ],
       },
 
-      // 4. Admin 임시
+      // 4. Admin 관련 라우트 분리
       {
         path: "admin",
-        element: <AdminLayout />,
         children: [
+          // 4-1. 레이아웃이 없는 로그인 페이지 (/admin)
           {
             index: true,
-            element: <Navigate to="users" replace />,
+            element: <AdminLoginPage />,
           },
+          // 4-2. 관리자 레이아웃이 적용되는 내부 페이지들
           {
-            path: "users",
-            element: <AdminUserPage />,
-          },
-          {
-            path: "quizzes",
+            element: <AdminLayout />,
             children: [
               {
-                index: true,
-                element: <AdminQuizPage />,
+                path: "users",
+                element: <AdminUserPage />,
               },
               {
-                path: "form",
-                element: <AdminQuizFormPage />
+                path: "quizzes",
+                children: [
+                  {
+                    index: true,
+                    element: <AdminQuizPage />,
+                  },
+                  {
+                    path: "form",
+                    element: <AdminQuizFormPage />,
+                  },
+                  {
+                    path: "form/:id",
+                    element: <AdminQuizFormPage />,
+                  },
+                ],
               },
               {
-                path: "form/:id",
-                element: <AdminQuizFormPage />
+                path: "courses",
+                element: <AdminCoursePage />,
               },
-            ]
-          },
-          {
-            path: "courses",
-            element: <AdminCoursePage />,
-          },
-          {
-            path: "places",
-            element: <AdminPlacePage />,
+              {
+                path: "places",
+                element: <AdminPlacePage />,
+              },
+            ],
           },
         ],
       },
