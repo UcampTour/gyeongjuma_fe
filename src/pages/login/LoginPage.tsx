@@ -13,13 +13,16 @@ const LoginPage = () => {
   const { login } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
 
-  // 구글 로그인(카카오, 네이버는 추후 구현)
+  // 구글 로그인 성공 핸들러
   const onSuccess = async (credentialResponse: any) => {
     if (isLoading) return;
     setIsLoading(true);
 
     const idToken = credentialResponse.credential;
-    if (!idToken) return;
+    if (!idToken) {
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const response = await googleLogin({
@@ -27,12 +30,16 @@ const LoginPage = () => {
         idToken,
         accessToken: null,
       });
+
+      // 백엔드 응답에서 Access Token 추출 후 스토어에 전달
+      const accessToken = response.accessToken;
+
       login(
-        response.accessToken,
-        response.refreshToken,
         { memberId: response.memberId, nickname: response.nickname ?? "" },
         response.isNewMember,
+        accessToken,
       );
+
       navigate(response.isNewMember ? "/register" : "/");
     } catch (error) {
       console.error("로그인 실패:", error);
@@ -69,7 +76,7 @@ const LoginPage = () => {
         />
       </Box>
 
-      {/* 로그인 버튼 영역*/}
+      {/* 로그인 버튼 영역 */}
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5, pb: 4 }}>
         <Box sx={{ display: "flex", alignItems: "center", mb: 1, px: 2 }}>
           <Box sx={{ flex: 1, height: "1px", bgcolor: "rgba(0,0,0,0.1)" }} />
@@ -91,7 +98,6 @@ const LoginPage = () => {
           <GoogleLogin
             onSuccess={onSuccess}
             onError={() => console.log("구글 로그인 실패")}
-            useOneTap
             containerProps={{
               style: {
                 position: "absolute",
@@ -145,7 +151,7 @@ const LoginPage = () => {
           </Button>
         </Box>
 
-        {/* 카카오 로그인*/}
+        {/* 카카오 로그인 */}
         <Button
           fullWidth
           sx={{
@@ -167,7 +173,7 @@ const LoginPage = () => {
           카카오 로그인
         </Button>
 
-        {/* 네이버 로그인*/}
+        {/* 네이버 로그인 */}
         <Button
           fullWidth
           sx={{

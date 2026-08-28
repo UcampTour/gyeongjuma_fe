@@ -9,18 +9,16 @@ interface AuthMember {
 interface AuthState {
   isLoggedIn: boolean;
   isPendingRegistration: boolean;
-  accessToken: string | null;
-  refreshToken: string | null;
   member: AuthMember | null;
+  accessToken: string | null; // 💡 액세스 토큰 저장 필드 추가
 
   login: (
-    accessToken: string,
-    refreshToken: string,
     member: AuthMember,
     isNewMember: boolean,
+    accessToken: string, // 💡 로그인 시 토큰도 함께 받아서 저장
   ) => void;
-  updateToken: (accessToken: string, refreshToken: string) => void;
-  completeRegistration: (memner: AuthMember) => void;
+  setAccessToken: (accessToken: string) => void; // 💡 토큰만 갱신할 때 사용
+  completeRegistration: (member: AuthMember) => void;
   logout: () => void;
   updateNickname: (nickname: string) => void;
 }
@@ -30,25 +28,20 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       isLoggedIn: false,
       isPendingRegistration: false,
-      accessToken: null,
-      refreshToken: null,
       member: null,
+      accessToken: null,
 
-      login: (accessToken, refreshToken, member, isNewMember) => {
+      login: (member, isNewMember, accessToken) => {
         set({
           isLoggedIn: !isNewMember,
           isPendingRegistration: isNewMember,
-          accessToken,
-          refreshToken,
           member,
+          accessToken, // 💡 로그인 성공 시 토큰 저장
         });
       },
 
-      updateToken: (accessToken, refreshToken) => {
-        set({
-          accessToken,
-          refreshToken,
-        });
+      setAccessToken: (accessToken) => {
+        set({ accessToken });
       },
 
       completeRegistration: (member) => {
@@ -58,10 +51,9 @@ export const useAuthStore = create<AuthState>()(
       logout: () => {
         set({
           isLoggedIn: false,
-          accessToken: null,
-          refreshToken: null,
           member: null,
           isPendingRegistration: false,
+          accessToken: null, // 💡 로그아웃 시 토큰도 초기화
         });
       },
 

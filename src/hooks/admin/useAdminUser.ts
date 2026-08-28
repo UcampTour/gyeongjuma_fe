@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { SelectChangeEvent } from "@mui/material";
 import type { ChangeEvent } from "react";
+import { useAdminUserListQuery } from "../../queries/admin/useAdminUserQuery";
 
 export interface UserItem {
   memberId: number;
@@ -43,6 +44,10 @@ const initialUsers: UserItem[] = [
 ];
 
 export const useAdminUser = () => {
+
+  const { data, isLoading } = useAdminUserListQuery();
+  console.log(data);
+
   const [users] = useState<UserItem[]>(initialUsers);
   const [keyword, setKeyword] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");

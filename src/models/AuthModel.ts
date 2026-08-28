@@ -38,3 +38,16 @@ export interface RefreshTokenResponse {
   accessToken: string;
   refreshToken: string;
 }
+
+export interface AdminLoginRequest {
+  username: string;
+  password: string;
+}
+
+export interface AdminLoginResponse {
+  memberId: number;
+  userName: string;
+  nickname: string;
+  role: string;
+  accessToken: string;
+}
