@@ -1,10 +1,59 @@
 {
+  "title": "경주의 유적지 퀴즈",
+  "category": {
+    "all": "전체",
+    "available": "도전가능",
+    "progress": "진행중",
+    "completed": "완료",
+    "locked": "잠김"
+  },
+  "quizprogress": "퀴즈 진척도",
+  "totalQuestions": "총 {{count}}문항",
+  "button": {
+    "retry": "다시 풀기",
+    "resume": "이어 풀기",
+    "challenge": "도전하기"
+  },
   "intro": {
     "message": {
       "available": "퀴즈를 풀고 포인트를 획득해 보세요. 🎉",
       "locked": "스탬프를 클릭해서 방문 인증을 완료해 주세요! 🔒",
       "completed": "이미 퀴즈를 완료했습니다. 👏",
       "progress": "진행 중인 퀴즈가 있습니다. ✍️"
-    }
-  }
+    },
+    "button": {
+      "locked": "방문 인증 후 이용 가능",
+      "retry": "다시 도전하기",
+      "progress": "이어 도전하기",
+      "start": "도전 시작하기"
+    },
+    "stats": {
+      "questions": "문항",
+      "difficulty": "난이도",
+      "difficultyValue": "일반",
+      "points": "포인트"
+    },
+    "empty": {
+      "title": "아직 준비된 퀴즈가 없어요",
+      "desc": "추후 업데이트될 예정이니 기대해 주세요! 😊"
+    },
+    "completedNotice": "* 이미 완료한 퀴즈는 포인트가 지급되지 않습니다."
+  },
+  "header": {
+    "resultTitle": "퀴즈 완료 및 결과"
+  },
+  "play": {
+    "remainingQuestions": "남은 문항",
+    "correctQuestions": "맞은 문항",
+    "currentPoints": "현재 포인트",
+    "unitQuestion": "문항"
+  },
+ "result": {
+    "scoreSummary": "총 {{total}}문제 중 {{correct}}문제를 맞혔습니다.",
+    "pointEarned": "+{{points}} Point",
+    "reviewHeader": "내 정답 확인하기",
+    "accuracyRate": "정답률 {{rate}}%",
+    "buttonRetry": "다시 도전하기",
+    "buttonBack": "돌아가기"
+}
 }

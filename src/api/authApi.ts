@@ -1,4 +1,4 @@
-import type { AdminLoginRequest, AdminLoginResponse, CheckNicknameRequest, CheckNicknameResponse, ExtraInfoRequest, ExtraInfoResponse, RefreshTokenResponse, SignupRequest, SingupResponse } from "../models/AuthModel";
+import type { AdminLoginRequest, AdminLoginResponse, CheckNicknameRequest, CheckNicknameResponse, ExtraInfoRequest, ExtraInfoResponse, MyInfoData, RefreshTokenResponse, SignupRequest, SingupResponse } from "../models/AuthModel";
 import { apiClient, type ApiResponse } from "./apiClient";
 import { authClient } from "./authClient";
 
@@ -14,11 +14,16 @@ export const checkNickname = async (request: CheckNicknameRequest): Promise<Chec
   return response.data.data;
 }
 
-// 3. 추가 정보 등록
+// 3-1. 추가 정보 등록
 export const registerExtraInfo = async (request: ExtraInfoRequest): Promise<ExtraInfoResponse> => {
   const response = await apiClient.patch("/members/extra-info", request);
   return response.data.data;
 }
+
+// 3-2. 회원 정보 수정
+export const updateMyInfo = async (request: ExtraInfoRequest): Promise<void> => {
+  await apiClient.patch("/members/me", request);
+};
 
 // 4. 토큰 재발급 (💡 재발급 후 새 액세스 토큰 문자열을 반환하도록 수정)
 export const reissue = async (): Promise<string> => {
@@ -42,3 +47,11 @@ export const adminLogin = async (request: AdminLoginRequest): Promise<AdminLogin
 
   return response.data.data;
 }
+
+// 8. 내 정보
+export const myInfo = async (): Promise<MyInfoData> => {
+  const response = await apiClient.get("members/me");
+
+  return response.data.data;
+}
+

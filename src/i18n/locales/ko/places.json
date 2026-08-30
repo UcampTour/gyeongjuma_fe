@@ -1,13 +1,31 @@
 {
-  "category": {
+  "title": "경주의 관광지 둘러보기",
+
+  "placehorder": "관광지를 검색해보세요",
+
+  "visitcomplete": "방문완료",
+
+  "status": {
     "all": "전체",
-    "tourist": "관광지",
-    "historic": "유적지",
-    "other": "기타"
+    "open": "영업중",
+    "breakTime": "준비중",
+    "closed": "종료",
+    "none": "정보없음"
   },
-   "sortType": {
+
+  "sortType": {
     "default": "기본순",
     "likes": "좋아요순",
     "distance": "거리순"
+  },
+
+  "badge": {
+    "high": "혼잡",
+    "medium": "보통",
+    "low": "여유",
+    "none": "정보없음",
+    "closed": "종료",
+    "breakTime": "준비중",
+    "open": "영업중"
   }
 }

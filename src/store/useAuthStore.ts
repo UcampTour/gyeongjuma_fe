@@ -4,23 +4,26 @@ import { persist } from "zustand/middleware";
 interface AuthMember {
   memberId: number;
   nickname: string;
+  difficulty?: string; // 💡 난이도 추가
+  locale?: string;     // 💡 언어(로케일) 추가
 }
 
 interface AuthState {
   isLoggedIn: boolean;
   isPendingRegistration: boolean;
   member: AuthMember | null;
-  accessToken: string | null; // 💡 액세스 토큰 저장 필드 추가
+  accessToken: string | null;
 
   login: (
     member: AuthMember,
     isNewMember: boolean,
-    accessToken: string, // 💡 로그인 시 토큰도 함께 받아서 저장
+    accessToken: string,
   ) => void;
-  setAccessToken: (accessToken: string) => void; // 💡 토큰만 갱신할 때 사용
+  setAccessToken: (accessToken: string) => void;
   completeRegistration: (member: AuthMember) => void;
   logout: () => void;
   updateNickname: (nickname: string) => void;
+  setMemberInfo: (member: Partial<AuthMember>) => void; // 💡 회원 정보 일부/전체 갱신 함수 추가
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -36,7 +39,7 @@ export const useAuthStore = create<AuthState>()(
           isLoggedIn: !isNewMember,
           isPendingRegistration: isNewMember,
           member,
-          accessToken, // 💡 로그인 성공 시 토큰 저장
+          accessToken,
         });
       },
 
@@ -53,13 +56,19 @@ export const useAuthStore = create<AuthState>()(
           isLoggedIn: false,
           member: null,
           isPendingRegistration: false,
-          accessToken: null, // 💡 로그아웃 시 토큰도 초기화
+          accessToken: null,
         });
       },
 
       updateNickname: (nickname) =>
         set((state) => ({
           member: state.member ? { ...state.member, nickname } : null,
+        })),
+
+      // 💡 프로필 수정이나 추가 정보 등록 시 반영용
+      setMemberInfo: (updatedInfo) =>
+        set((state) => ({
+          member: state.member ? { ...state.member, ...updatedInfo } : null,
         })),
     }),
     {

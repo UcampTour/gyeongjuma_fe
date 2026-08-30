@@ -1,43 +1,90 @@
 import { Box, Card, Typography, Button } from "@mui/material";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import PageHeader from "../../components/common/PageHeader";
 import CommonDialog from "../../components/common/CommonDialog";
-import { useState } from "react";
+import { logout as logoutApi, withdraw as withdrawApi } from "../../api/authApi";
+import { useAuthStore } from "../../store/useAuthStore";
 
 const ProfileMorePage = () => {
+  const { t } = useTranslation("profile"); // 필요한 키들이 포함된 네임스페이스 지정
+  const navigate = useNavigate();
+  const { logout: clearAuthStore } = useAuthStore(); // authStore의 로그아웃(상태 초기화) 함수
+
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState<"alert" | "confirm">("alert");
   const [modalConfig, setModalConfig] = useState({
-    title: "서비스 준비 중",
-    message: "업데이트 예정입니다.",
+    title: t("modalServiceTitle"),
+    message: t("modalServiceMessage"),
   });
+  
+  // 현재 어떤 모달(작업)이 열려있는지 구분하기 위한 상태
+  const [currentAction, setCurrentAction] = useState<"service" | "logout" | "withdraw">("service");
 
   const handleOpenModal = (type: "service" | "logout" | "withdraw") => {
+    setCurrentAction(type);
     if (type === "logout") {
       setModalType("confirm"); 
       setModalConfig({
-        title: "로그아웃",
-        message: "정말 로그아웃 하시겠습니까?",
+        title: t("modalLogoutTitle"),
+        message: t("modalLogoutMessage"),
       });
     } else if (type === "withdraw") {
       setModalType("confirm"); 
       setModalConfig({
-        title: "회원 탈퇴",
-        message: "정말 회원탈퇴를 진행하시겠습니까? 데이터는 복구할 수 없습니다.",
+        title: t("modalWithdrawTitle"),
+        message: t("modalWithdrawMessage"),
       });
     } else {
       setModalType("alert"); 
       setModalConfig({
-        title: "서비스 준비 중",
-        message: "업데이트 예정입니다.",
+        title: t("modalServiceTitle"),
+        message: t("modalServiceMessage"),
       });
     }
     setModalOpen(true);
   };
 
+  // 💡 모달 확인 버튼 클릭 시 실행될 실제 로직
+  const handleConfirm = async () => {
+    setModalOpen(false);
+
+    if (currentAction === "logout") {
+      try {
+        await logoutApi(); // 서버 로그아웃 API 호출
+      } catch (error) {
+        console.error("로그아웃 API 호출 실패:", error);
+      } finally {
+        clearAuthStore(); // 스토어 상태 초기화 및 토큰 삭제
+        alert(t("alertLogoutSuccess"));
+        navigate("/login", { replace: true });
+      }
+    } else if (currentAction === "withdraw") {
+      try {
+        await withdrawApi(); // 회원 탈퇴 API 호출
+        clearAuthStore(); // 스토어 상태 초기화 및 토큰 삭제
+        alert(t("alertWithdrawSuccess"));
+        navigate("/login", { replace: true });
+      } catch (error) {
+        console.error("회원 탈퇴 실패:", error);
+        alert(t("alertWithdrawFail"));
+      }
+    }
+  };
+
+  // 서비스 안내 목록 데이터 (컴포넌트 외부 또는 내부 상수화)
+  const serviceItems = [
+    { title: t("noticeTitle"), icon: "📌", desc: t("noticeDesc") },
+    { title: t("faqTitle"), icon: "💬", desc: t("faqDesc") },
+    { title: t("termsTitle"), icon: "📜", desc: t("termsDesc") },
+    { title: t("versionTitle"), icon: "🚀", desc: t("versionDesc") },
+  ];
+
   return (
     <>
       <Box sx={{ bgcolor: "#F7F5EE", minHeight: "100vh", pb: 16 }}>
-        <PageHeader title="더보기" />
+        <PageHeader title={t("pageTitleMore")} />
 
         <Box sx={{ px: 2, pt: 1, display: "flex", flexDirection: "column", gap: 2 }}>
           
@@ -53,16 +100,11 @@ const ProfileMorePage = () => {
             }}
           >
             <Typography sx={{ fontWeight: 800, fontSize: "15px", color: "#111111", mb: 2 }}>
-              📢 서비스 안내
+              {t("serviceSectionTitle")}
             </Typography>
 
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1.2 }}>
-              {[
-                { title: "공지사항", icon: "📌", desc: "서비스 최신 소식을 확인하세요" },
-                { title: "자주 묻는 질문", icon: "💬", desc: "궁금하신 점을 빠르게 찾아보세요" },
-                { title: "서비스 이용약관", icon: "📜", desc: "이용약관 및 정책 안내" },
-                { title: "버전 정보", icon: "🚀", desc: "현재 v1.0.4 최신 버전을 사용 중입니다" },
-              ].map((item, index) => (
+              {serviceItems.map((item, index) => (
                 <Box
                   key={index}
                   onClick={() => handleOpenModal("service")}
@@ -128,7 +170,7 @@ const ProfileMorePage = () => {
             }}
           >
             <Typography sx={{ fontWeight: 800, fontSize: "15px", color: "#111111", mb: 2 }}>
-              ⚙️ 계정 관리
+              {t("accountSectionTitle")}
             </Typography>
 
             <Box sx={{ display: "flex", gap: 1.5 }}>
@@ -150,7 +192,7 @@ const ProfileMorePage = () => {
                   }
                 }}
               >
-                로그아웃
+                {t("btnLogout")}
               </Button>
               
               <Button
@@ -171,7 +213,7 @@ const ProfileMorePage = () => {
                   }
                 }}
               >
-                회원탈퇴
+                {t("btnWithdraw")}
               </Button>
             </Box>
           </Card>
@@ -184,11 +226,9 @@ const ProfileMorePage = () => {
         type={modalType}
         title={modalConfig.title}
         message={modalConfig.message}
-        confirmText="확인"
-        cancelText="취소"
-        onConfirm={() => {
-          setModalOpen(false);
-        }}
+        confirmText={t("dialogConfirm")}
+        cancelText={t("dialogCancel")}
+        onConfirm={handleConfirm}
         onCancel={() => setModalOpen(false)}
       />
     </>

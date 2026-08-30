@@ -8,3 +8,15 @@ export const fetchAdminUserList = async (): Promise<AdminUserListResponse> => {
 
   return response.data.data;
 }
+
+// 2. 유저 비활성화 
+export const forceWithdraw = async (memberId: number): Promise<void> => {
+
+  await apiClient.delete(`admin/members/${memberId}`);
+}
+
+// 3. 유저 포인트 변경
+export const adjustPoint = async (memberId: number, amount: number): Promise<void> => {
+  
+  await apiClient.patch(`admin/members/${memberId}/point`, { amount })
+}

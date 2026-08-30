@@ -1,53 +1,110 @@
 import { Box, Card, TextField, Typography, Button, RadioGroup, FormControlLabel, Radio } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import PageHeader from "../../components/common/PageHeader";
+import { checkNickname, updateMyInfo } from "../../api/authApi";
+import { useAuthStore } from "../../store/useAuthStore";
 
 const ProfileEditPage = () => {
-  const [nickname, setNickname] = useState("");
-  const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
-  const [errorMessage, setErrorMessage] = useState("특수문자 제외 2~10자로 입력해주세요.");
+  const { t } = useTranslation("profile");
+  const navigate = useNavigate();
+  const { member, setMemberInfo } = useAuthStore();
 
-  const handleCheckDuplicate = () => {
+  const [nickname, setNickname] = useState("");
+  const [difficulty, setDifficulty] = useState("EASY");
+  const [locale, setLocale] = useState("ko");
+
+  const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
+  const [errorMessage, setErrorMessage] = useState(t("defaultNicknameRule"));
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // store에 저장된 member 정보를 초기값으로 설정
+  useEffect(() => {
+    if (member) {
+      setNickname(member.nickname || "");
+      if (member.difficulty) setDifficulty(member.difficulty);
+      if (member.locale) setLocale(member.locale); 
+    }
+  }, [member]);
+
+  // 닉네임 중복 확인 API 연동
+  const handleCheckDuplicate = async () => {
     const trimmed = nickname.trim();
     if (!trimmed) return;
 
-    // 특수문자 포함 여부 확인 정규식 (한글, 영문, 숫자만 허용)
     const specialCharRegex = /[^a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]/;
 
     if (specialCharRegex.test(trimmed)) {
       setIsAvailable(false);
-      setErrorMessage("닉네임에는 특수문자를 사용할 수 없습니다.");
+      setErrorMessage(t("errorSpecialChar"));
       return;
     }
 
     if (trimmed.length < 2) {
       setIsAvailable(false);
-      setErrorMessage("2자 이상으로 입력해주세요.");
+      setErrorMessage(t("errorMinLength"));
       return;
     }
 
-    // 임시 중복 확인 로직 (예: "admin"이면 사용 불가, 나머지 가능)
-    if (trimmed === "admin") {
-      setIsAvailable(false);
-      setErrorMessage("이미 사용 중인 닉네임입니다.");
-    } else {
-      setIsAvailable(true);
-      setErrorMessage("사용 가능한 닉네임입니다.");
+    try {
+      const response = await checkNickname({ nickname: trimmed });
+      if (response.available) {
+        setIsAvailable(true);
+        setErrorMessage(t("successAvailable"));
+      } else {
+        setIsAvailable(false);
+        setErrorMessage(t("errorDuplicated"));
+      }
+    } catch (error) {
+      console.error("닉네임 중복 확인 실패:", error);
+      setErrorMessage(t("errorApiFail"));
+    }
+  };
+
+  // 회원 정보 수정 API 연동
+  const handleSubmit = async () => {
+    if (isSubmitting) return;
+
+    if (nickname !== member?.nickname && isAvailable !== true) {
+      alert(t("alertCheckNickname"));
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      await updateMyInfo({
+        nickname,
+        difficulty,
+        locale,
+      });
+
+      setMemberInfo({ nickname, difficulty, locale });
+
+      alert(t("alertUpdateSuccess"));
+      navigate("/profile");
+    } catch (error) {
+      console.error("회원 정보 수정 실패:", error);
+      alert(t("alertUpdateFail"));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const languages = [
-    "한국어", "English", "日本語", "中文 (간체)", "中文 (번체)",
-    "Deutsch", "Français", "Español", "Русский"
-  ];
+    { code: "ko", label: "한국어" },
+    { code: "en", label: "English" },
+    { code: "ja", label: "日本語" },
+    { code: "zh", label: "中文" },
+];
 
   return (
     <Box sx={{ bgcolor: "#F7F5EE", minHeight: "100vh", pb: 16 }}>
-      <PageHeader title="내 정보 수정" />
+      <PageHeader title={t("pageTitle")} />
 
       <Box sx={{ px: 2, pt: 1, display: "flex", flexDirection: "column", gap: 2 }}>
         
-        {/* 1. 닉네임 변경 카드 (중복확인 및 상태 메시지 추가) */}
+        {/* 1. 닉네임 변경 카드 */}
         <Card
           elevation={0}
           sx={{
@@ -59,7 +116,7 @@ const ProfileEditPage = () => {
           }}
         >
           <Typography sx={{ fontWeight: 800, fontSize: "15px", color: "#111111", mb: 1.5 }}>
-            ✏️ 닉네임 변경
+            {t("nicknameSectionTitle")}
           </Typography>
           
           <Box sx={{ display: "flex", gap: 1, mb: 1 }}>
@@ -68,14 +125,13 @@ const ProfileEditPage = () => {
               value={nickname}
               onChange={(e) => {
                 const value = e.target.value;
-                // 10자까지만 입력되도록 제한
                 if (value.length <= 10) {
                   setNickname(value);
-                  setIsAvailable(null); // 입력 변경 시 검증 초기화
-                  setErrorMessage("특수문자 제외 2~10자로 입력해주세요.");
+                  setIsAvailable(null);
+                  setErrorMessage(t("defaultNicknameRule"));
                 }
               }}
-              placeholder="사용하실 닉네임을 입력해주세요"
+              placeholder={t("nicknamePlaceholder")}
               size="small"
               slotProps={{
                 htmlInput: {
@@ -113,7 +169,7 @@ const ProfileEditPage = () => {
                 }
               }}
             >
-              중복확인
+              {t("btnCheckDuplicate")}
             </Button>
           </Box>
 
@@ -128,7 +184,7 @@ const ProfileEditPage = () => {
               {errorMessage}
             </Typography>
             <Typography sx={{ fontSize: "11px", color: "#958D80", fontWeight: 600 }}>
-              {nickname.length}/10자
+              {nickname.length}/10{t("charUnit")}
             </Typography>
           </Box>
         </Card>
@@ -145,17 +201,18 @@ const ProfileEditPage = () => {
           }}
         >
           <Typography sx={{ fontWeight: 800, fontSize: "15px", color: "#111111", mb: 1.5 }}>
-            🧭 탐험 난이도
+            {t("difficultySectionTitle")}
           </Typography>
           <RadioGroup
-            defaultValue="Easy"
+            value={difficulty}
+            onChange={(e) => setDifficulty(e.target.value)}
             sx={{ display: "flex", flexDirection: "column", gap: 1 }}
           >
             {[
-              { level: "Easy", desc: "초보 탐험가 코스" },
-              { level: "Normal", desc: "일반 탐험가 코스" },
-              { level: "Hard", desc: "심화 코스 및 퀴즈" },
-            ].map(({ level, desc }) => (
+              { level: "EASY", label: t("diffEasyLabel"), desc: t("diffEasyDesc") },
+              { level: "NORMAL", label: t("diffNormalLabel"), desc: t("diffNormalDesc") },
+              { level: "HARD", label: t("diffHardLabel"), desc: t("diffHardDesc") },
+            ].map(({ level, label, desc }) => (
               <FormControlLabel
                 key={level}
                 value={level}
@@ -170,7 +227,7 @@ const ProfileEditPage = () => {
                 label={
                   <Box>
                     <Typography sx={{ fontSize: "14px", fontWeight: 700, color: "#111111" }}>
-                      {level}
+                      {label}
                     </Typography>
                     <Typography sx={{ fontSize: "11px", color: "#958D80", fontWeight: 500 }}>
                       {desc}
@@ -205,20 +262,21 @@ const ProfileEditPage = () => {
           }}
         >
           <Typography sx={{ fontWeight: 800, fontSize: "15px", color: "#111111", mb: 1.5 }}>
-            🌐 서비스 언어 (Language)
+            {t("localeSectionTitle")}
           </Typography>
           <RadioGroup
-            defaultValue="한국어"
+            value={locale}
+            onChange={(e) => setLocale(e.target.value)}
             sx={{
               display: "grid",
               gridTemplateColumns: { xs: "repeat(2, 1fr)", sm: "repeat(3, 1fr)" },
               gap: 1,
             }}
           >
-            {languages.map((lang) => (
+            {languages.map(({ code, label }) => (
               <FormControlLabel
-                key={lang}
-                value={lang}
+                key={code}
+                value={code}
                 control={
                   <Radio 
                     sx={{
@@ -232,7 +290,7 @@ const ProfileEditPage = () => {
                     noWrap 
                     sx={{ fontSize: "13px", fontWeight: 700, color: "#111111" }}
                   >
-                    {lang}
+                    {label}
                   </Typography>
                 }
                 sx={{
@@ -254,6 +312,8 @@ const ProfileEditPage = () => {
         <Box sx={{ pt: 2 }}>
           <Button
             fullWidth
+            onClick={handleSubmit}
+            disabled={isSubmitting}
             sx={{
               bgcolor: "#AC8E61",
               color: "#FFFFFF",
@@ -264,10 +324,14 @@ const ProfileEditPage = () => {
               boxShadow: "0 4px 12px rgba(172,142,97,0.3)",
               "&:hover": {
                 bgcolor: "#9A7D52",
+              },
+              "&:disabled": {
+                bgcolor: "#D3C5B4",
+                color: "#FFFFFF"
               }
             }}
           >
-            변경사항 저장하기
+            {isSubmitting ? t("btnSubmitting") : t("btnSubmit")}
           </Button>
         </Box>
 

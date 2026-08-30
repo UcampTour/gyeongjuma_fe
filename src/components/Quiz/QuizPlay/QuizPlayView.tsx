@@ -1,6 +1,7 @@
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, Button, LinearProgress, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import type { QuizPlayState } from "../../../hooks/quiz/useQuizPlay";
 import type { QuizItem } from "../../../models/QuizModel";
 
@@ -19,15 +20,22 @@ const QuizPlayView = ({
   handleAnswer,
   quizData,
 }: QuizPlayViewProps) => {
-  const totalQuestions = quizData?.questions ? quizData.questions.length : 0;
+  const { t } = useTranslation("quiz");
+  const unitQuestion = t("play.unitQuestion");
 
   const statusItems = [
     {
-      label: "남은 문항",
-      val: `${quizData.totalQuestions - quizState.solvedCount}문항`,
+      label: t("play.remainingQuestions"),
+      val: `${quizData.totalQuestions - quizState.solvedCount}${unitQuestion}`,
     },
-    { label: "맞은 문항", val: `${quizState.correctCnt}문항` },
-    { label: "현재 포인트", val: `${animatedPoint}p` },
+    {
+      label: t("play.correctQuestions"),
+      val: `${quizState.correctCnt}${unitQuestion}`,
+    },
+    {
+      label: t("play.currentPoints"),
+      val: `${animatedPoint}p`,
+    },
   ];
 
   return (

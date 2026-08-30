@@ -42,9 +42,9 @@ const PlaceList = ({ placeList }: PlaceListProps) => {
         display: "flex",
         flexDirection: "column",
         gap: 2,
-        flex: 1, // 남은 공간 채우기
-        overflowY: "auto", // 이 영역에만 세로 스크롤 생성
-        pr: 1, // 스크롤바와 카드 간격 확보용 (선택사항)
+        flex: 1, 
+        overflowY: "auto", 
+        pr: 1, 
       }}
     >
       {displayData.map((place) => (

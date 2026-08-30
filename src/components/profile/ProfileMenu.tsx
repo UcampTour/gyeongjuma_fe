@@ -6,10 +6,12 @@ import MapIcon from "@mui/icons-material/Map";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Box, Card, Typography } from "@mui/material";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import CommonDialog from "../common/CommonDialog";
 
 const ProfileMenu = () => {
+  const { t } = useTranslation("profile");
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -56,10 +58,10 @@ const ProfileMenu = () => {
               <Typography
                 sx={{ fontWeight: 800, fontSize: "15px", color: "#111111" }}
               >
-                내 발자취 모음
+                {t("timelineMenuTitle")}
               </Typography>
               <Typography sx={{ fontSize: "12px", color: "#958D80" }}>
-                나의 탐험 기록 보기
+                {t("timelineMenuDesc")}
               </Typography>
             </Box>
           </Box>
@@ -106,10 +108,10 @@ const ProfileMenu = () => {
               <Typography
                 sx={{ fontWeight: 800, fontSize: "15px", color: "#111111" }}
               >
-                즐겨찾기 장소
+                {t("bookmarkMenuTitle")}
               </Typography>
               <Typography sx={{ fontSize: "12px", color: "#958D80" }}>
-                내가 찜한 관광지 리스트 확인
+                {t("bookmarkMenuDesc")}
               </Typography>
             </Box>
           </Box>
@@ -156,10 +158,10 @@ const ProfileMenu = () => {
               <Typography
                 sx={{ fontWeight: 800, fontSize: "15px", color: "#111111" }}
               >
-                포인트 교환소
+                {t("exchangeMenuTitle")}
               </Typography>
               <Typography sx={{ fontSize: "12px", color: "#958D80" }}>
-                모은 포인트로 상품 및 쿠폰 교환
+                {t("exchangeMenuDesc")}
               </Typography>
             </Box>
           </Box>
@@ -206,10 +208,10 @@ const ProfileMenu = () => {
               <Typography
                 sx={{ fontWeight: 800, fontSize: "15px", color: "#111111" }}
               >
-                내 정보 수정
+                {t("editMenuTitle")}
               </Typography>
               <Typography sx={{ fontSize: "12px", color: "#958D80" }}>
-                닉네임 및 기타 정보 변경
+                {t("editMenuDesc")}
               </Typography>
             </Box>
           </Box>
@@ -256,10 +258,10 @@ const ProfileMenu = () => {
               <Typography
                 sx={{ fontWeight: 800, fontSize: "15px", color: "#111111" }}
               >
-                더보기
+                {t("moreMenuTitle")}
               </Typography>
               <Typography sx={{ fontSize: "12px", color: "#958D80" }}>
-                계정 및 서비스 안내
+                {t("moreMenuDesc")}
               </Typography>
             </Box>
           </Box>
@@ -271,9 +273,9 @@ const ProfileMenu = () => {
       <CommonDialog
         open={modalOpen}
         type="alert"
-        title="서비스 준비 중"
-        message="업데이트 예정입니다."
-        confirmText="확인"
+        title={t("dialogTitle")}
+        message={t("dialogMessage")}
+        confirmText={t("dialogConfirm")}
         onConfirm={() => setModalOpen(false)}
         onCancel={() => setModalOpen(false)}
       />
