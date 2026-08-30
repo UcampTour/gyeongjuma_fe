@@ -2,16 +2,16 @@ import type { ChangeEvent } from "react";
 import { 
   Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination 
 } from "@mui/material";
-import type { UserItem } from "../../../pages/admin/AdminUserPage";
+import type { AdminUserData } from "../../../models/admin/AdminUserModel";
 
 interface AdminUserTableProps {
-  users: UserItem[];
-  paginatedUsers: UserItem[];
+  users: AdminUserData[];
+  paginatedUsers: AdminUserData[];
   page: number;
   rowsPerPage: number;
   onPageChange: (_: unknown, newPage: number) => void;
   onRowsPerPageChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  onOpenEditDialog: (user: UserItem) => void;
+  onOpenEditDialog: (user: AdminUserData) => void;
 }
 
 export const AdminUserTable = ({
@@ -40,7 +40,7 @@ export const AdminUserTable = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {paginatedUsers.length > 0 ? (
+          {paginatedUsers?.length > 0 ? (
             paginatedUsers.map((user, index) => (
               <TableRow key={user.memberId} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                 <TableCell align="center" sx={{ color: "text.secondary" }}>
@@ -81,7 +81,7 @@ export const AdminUserTable = ({
 
       <TablePagination
         component="div"
-        count={users.length}
+        count={users?.length}
         page={page}
         onPageChange={onPageChange}
         rowsPerPage={rowsPerPage}

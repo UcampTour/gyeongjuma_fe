@@ -10,14 +10,17 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+import { useTranslation } from "react-i18next"; // 💡 i18n 훅 추가
 import { useNavigate } from "react-router-dom";
 import { checkNickname, registerExtraInfo } from "../../api/authApi";
 import logo from "../../assets/gyeongjuma_logo.png";
 import { useAuthStore } from "../../store/useAuthStore";
 
 const RegisterPage = () => {
+  const { t } = useTranslation(); // 💡 t 함수 선언
   const [nickname, setNickname] = useState("");
   const [difficulty, setDifficulty] = useState("NORMAL");
+  const [locale, setLocale] = useState("KO");
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
 
   const navigate = useNavigate();
@@ -31,25 +34,27 @@ const RegisterPage = () => {
       const response = await checkNickname({ nickname });
       setIsAvailable(response.available);
     } catch (error) {
-      console.error("중복 확인 실패", error);
+      console.error(t("register.errorCheckFail"), error);
       setIsAvailable(false);
     }
   };
 
   const handleRegister = async () => {
     if (isAvailable !== true) {
-      alert("닉네임 중복 확인을 먼저 해주세요.");
+      alert(t("register.alertCheckNickname"));
       return;
     }
     try {
-      const response = await registerExtraInfo({ nickname, difficulty });
+      const response = await registerExtraInfo({ nickname, difficulty, locale });
       completeRegistration({
         memberId: response.memberId,
         nickname: response.nickname,
+        difficulty: difficulty,
+        locale: locale,
       });
       navigate("/");
     } catch (error) {
-      alert("등록 실패");
+      alert(t("register.alertRegisterFail"));
     }
   };
 
@@ -102,7 +107,7 @@ const RegisterPage = () => {
             mb: 1,
           }}
         >
-          추가 정보 등록
+          {t("register.title")}
         </Typography>
 
         {/* 닉네임 입력 및 중복 확인 */}
@@ -110,7 +115,7 @@ const RegisterPage = () => {
           <Typography
             sx={{ fontSize: "0.9rem", fontWeight: 600, color: "#333" }}
           >
-            닉네임
+            {t("register.nickname")}
           </Typography>
           <Box sx={{ display: "flex", gap: 1 }}>
             <TextField
@@ -121,7 +126,7 @@ const RegisterPage = () => {
                 setNickname(e.target.value);
                 setIsAvailable(null);
               }}
-              placeholder="2~12자 입력"
+              placeholder={t("register.nicknamePlaceholder")}
               sx={{
                 "& .MuiOutlinedInput-root": { borderRadius: 3, height: "40px" },
               }}
@@ -139,7 +144,7 @@ const RegisterPage = () => {
                 "&.Mui-disabled": { bgcolor: "#e0e0e0" },
               }}
             >
-              확인
+              {t("register.nicknameCheck")}
             </Button>
           </Box>
           <Box
@@ -154,8 +159,8 @@ const RegisterPage = () => {
               }}
             >
               {isAvailable === false
-                ? "이미 사용 중인 닉네임입니다."
-                : "사용 가능한 닉네임입니다."}
+                ? t("register.nicknameHelperInUse")
+                : t("register.nicknameHelperAvailable")}
             </FormHelperText>
           </Box>
         </Box>
@@ -165,7 +170,7 @@ const RegisterPage = () => {
           <Typography
             sx={{ fontSize: "0.9rem", fontWeight: 600, color: "#333" }}
           >
-            난이도 선택
+            {t("register.difficulty")}
           </Typography>
           <FormControl fullWidth size="small">
             <Select
@@ -173,8 +178,30 @@ const RegisterPage = () => {
               onChange={(e) => setDifficulty(e.target.value)}
               sx={{ borderRadius: 3, height: "40px" }}
             >
-              <MenuItem value="NORMAL">NORMAL</MenuItem>
-              <MenuItem value="HARD">HARD</MenuItem>
+              <MenuItem value="EASY">{t("register.difficultyEasy")}</MenuItem>
+              <MenuItem value="NORMAL">{t("register.difficultyNormal")}</MenuItem>
+              <MenuItem value="HARD">{t("register.difficultyHard")}</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+
+        {/* 언어 선택 */}
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+          <Typography
+            sx={{ fontSize: "0.9rem", fontWeight: 600, color: "#333" }}
+          >
+            {t("register.locale")}
+          </Typography>
+          <FormControl fullWidth size="small">
+            <Select
+              value={locale}
+              onChange={(e) => setLocale(e.target.value)}
+              sx={{ borderRadius: 3, height: "40px" }}
+            >
+              <MenuItem value="ko">{t("register.localeKo")}</MenuItem>
+              <MenuItem value="en">{t("register.localeEn")}</MenuItem>
+              <MenuItem value="ja">{t("register.localeJa")}</MenuItem>
+              <MenuItem value="zh">{t("register.localeZh")}</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -194,7 +221,7 @@ const RegisterPage = () => {
             "&:hover": { bgcolor: "#9a8361" },
           }}
         >
-          회원가입 완료
+          {t("register.submit")}
         </Button>
       </Box>
     </Container>

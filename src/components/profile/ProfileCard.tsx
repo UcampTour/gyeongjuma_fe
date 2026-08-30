@@ -1,4 +1,5 @@
 import { Box, Card, Chip, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 interface ProfileCardProps {
   profileImgUrl: string | null;
@@ -8,6 +9,7 @@ interface ProfileCardProps {
   point: number;
   totalPoint: number;
 }
+
 const ProfileCard = ({
   profileImgUrl,
   difficulty,
@@ -16,6 +18,7 @@ const ProfileCard = ({
   point,
   totalPoint
 }: ProfileCardProps) => {
+  const { t } = useTranslation("profile"); // 💡 네임스페이스 지정
 
   return (
     <Card
@@ -48,12 +51,12 @@ const ProfileCard = ({
         <Box sx={{ flex: 1, minWidth: 0 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.8, mb: 0.8, flexWrap: "wrap" }}>
             <Chip 
-              label={`난이도: ${difficulty}`} 
+              label={`${t("difficultyLabel")}: ${difficulty}`} 
               size="small" 
               sx={{ height: 18, fontSize: "10px", fontWeight: 700, bgcolor: "#FAF8F5", color: "#AC8E61", border: "1px solid #E3DCCE" }} 
             />
             <Chip 
-              label={`언어: ${locale}`} 
+              label={`${t("localeLabel")}: ${locale}`} 
               size="small" 
               sx={{ height: 18, fontSize: "10px", fontWeight: 700, bgcolor: "#FAF8F5", color: "#958D80", border: "1px solid #E3DCCE" }} 
             />
@@ -74,12 +77,12 @@ const ProfileCard = ({
         }}
       >
         <Box sx={{ flex: 1, textAlign: "center" }}>
-          <Typography sx={{ fontSize: "12px", color: "#958D80", mb: 0.3 }}>보유 포인트</Typography>
+          <Typography sx={{ fontSize: "12px", color: "#958D80", mb: 0.3 }}>{t("currentPoint")}</Typography>
           <Typography sx={{ fontWeight: 800, fontSize: "16px", color: "#AC8E61" }}>{point.toLocaleString()}P</Typography>
         </Box>
         <Box sx={{ width: "1px", bgcolor: "#E3DCCE", my: 0.5 }} />
         <Box sx={{ flex: 1, textAlign: "center" }}>
-          <Typography sx={{ fontSize: "12px", color: "#958D80", mb: 0.3 }}>누적 포인트</Typography>
+          <Typography sx={{ fontSize: "12px", color: "#958D80", mb: 0.3 }}>{t("totalPoint")}</Typography>
           <Typography sx={{ fontWeight: 800, fontSize: "16px", color: "#111111" }}>{totalPoint.toLocaleString()}P</Typography>
         </Box>
       </Box>

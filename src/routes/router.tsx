@@ -33,6 +33,8 @@ import TimelinePage from "../pages/profile/TimeLinePage";
 import QuizListPage from "../pages/quiz/QuizListPage";
 import QuizPlayPage from "../pages/quiz/QuizPlayPage";
 import AdminLoginPage from "../pages/admin/AdminLoginPage";
+import KakaoCallbackPage from "../pages/login/KakaoCallbackPage";
+import NaverCallbackPage from "../pages/login/NaverCallbackPage";
 
 const routes: RouteObject[] = [
   {
@@ -135,13 +137,21 @@ const routes: RouteObject[] = [
           },
         ],
       },
-      // 2. 로그인 안 한 사용자만 접근 가능
+      // 2. 로그인 안 한 사용자만 접근 가능 (로그인 및 소셜 콜백 페이지 포함)
       {
         element: <PublicRoute />,
         children: [
           {
             path: "login",
             element: <LoginPage />,
+          },
+          {
+            path: "auth/kakao/callback",
+            element: <KakaoCallbackPage />,
+          },
+          {
+            path: "auth/naver/callback",
+            element: <NaverCallbackPage />,
           },
         ],
       },
@@ -160,12 +170,10 @@ const routes: RouteObject[] = [
       {
         path: "admin",
         children: [
-          // 4-1. 레이아웃이 없는 로그인 페이지 (/admin)
           {
             index: true,
             element: <AdminLoginPage />,
           },
-          // 4-2. 관리자 레이아웃이 적용되는 내부 페이지들
           {
             element: <AdminLayout />,
             children: [

@@ -17,7 +17,7 @@ interface QuizDetailContentProps {
 }
 
 const QuizIntro = ({ quiz, showImage = true }: QuizDetailContentProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("quiz");
   const navigate = useNavigate();
 
   const isLocked = quiz?.quizStatus === QuizStatus.LOCKED;
@@ -25,12 +25,12 @@ const QuizIntro = ({ quiz, showImage = true }: QuizDetailContentProps) => {
   const isProgress = quiz?.quizStatus === QuizStatus.PROGRESS;
 
   const label = isLocked
-    ? "방문 인증 후 이용 가능"
+    ? t("intro.button.locked")
     : isCompleted
-      ? "다시 도전하기"
+      ? t("intro.button.retry")
       : isProgress
-        ? "이어 도전하기"
-        : "도전 시작하기";
+        ? t("intro.button.progress")
+        : t("intro.button.start");
 
   const bgColor = isCompleted ? "#5F7464" : isProgress ? "#D4A373" : "#A08E73";
 
@@ -39,25 +39,25 @@ const QuizIntro = ({ quiz, showImage = true }: QuizDetailContentProps) => {
       case QuizStatus.AVAILABLE:
         return {
           severity: "success" as const,
-          message: t("quiz:intro.message.available"),
+          message: t("intro.message.available"),
         };
 
       case QuizStatus.LOCKED:
         return {
           severity: "warning" as const,
-          message: t("quiz:intro.message.locked"),
+          message: t("intro.message.locked"),
         };
 
       case QuizStatus.COMPLETED:
         return {
           severity: "success" as const,
-          message: t("quiz:intro.message.completed"),
+          message: t("intro.message.completed"),
         };
 
       case QuizStatus.PROGRESS:
         return {
           severity: "info" as const,
-          message: t("quiz:intro.message.progress"),
+          message: t("intro.message.progress"),
         };
 
       default:
@@ -96,7 +96,7 @@ const QuizIntro = ({ quiz, showImage = true }: QuizDetailContentProps) => {
               mb: 0.5,
             }}
           >
-            아직 준비된 퀴즈가 없어요
+            {t("intro.empty.title")}
           </Typography>
 
           <Typography
@@ -107,7 +107,7 @@ const QuizIntro = ({ quiz, showImage = true }: QuizDetailContentProps) => {
               lineHeight: 1.6,
             }}
           >
-            추후 업데이트될 예정이니 기대해 주세요! 😊
+            {t("intro.empty.desc")}
           </Typography>
         </Box>
       ) : (
@@ -192,17 +192,17 @@ const QuizIntro = ({ quiz, showImage = true }: QuizDetailContentProps) => {
               {[
                 {
                   icon: <QuizIcon fontSize="small" />,
-                  label: "문항",
-                  val: `${quiz?.totalQuestions}문항`,
+                  label: t("intro.stats.questions"),
+                  val: `${quiz?.totalQuestions}${t("intro.stats.questions")}`,
                 },
                 {
                   icon: <MilitaryTechIcon fontSize="small" />,
-                  label: "난이도",
-                  val: "일반",
+                  label: t("intro.stats.difficulty"),
+                  val: t("intro.stats.difficultyValue"),
                 },
                 {
                   icon: <EmojiEventsIcon fontSize="small" />,
-                  label: "포인트",
+                  label: t("intro.stats.points"),
                   val: "50p",
                 },
               ].map((item, i) => (
@@ -256,7 +256,7 @@ const QuizIntro = ({ quiz, showImage = true }: QuizDetailContentProps) => {
                     fontWeight: 500,
                   }}
                 >
-                  * 이미 완료한 퀴즈는 포인트가 지급되지 않습니다.
+                  {t("intro.completedNotice")}
                 </Typography>
               )}
             </Box>

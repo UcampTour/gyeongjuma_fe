@@ -6,6 +6,9 @@ import commonKo from "./locales/ko/common.json";
 import mapKo from "./locales/ko/map.json";
 import placesKo from "./locales/ko/places.json";
 import quizKo from "./locales/ko/quiz.json";
+import loginKo from "./locales/ko/login.json";
+import profileKo from "./locales/ko/profile.json";
+
 
 import commonEn from "./locales/en/common.json";
 import mapEn from "./locales/en/map.json";
@@ -26,6 +29,8 @@ i18n
         map: mapKo,
         places: placesKo,
         quiz: quizKo,
+        login: loginKo,
+        profile: profileKo,
       },
       en: {
         common: commonEn,
@@ -44,7 +49,7 @@ i18n
     defaultNS: "common",
 
     // 프로젝트에서 사용하는 namespace 목록
-    ns: ["common", "map", "places"], // *.json 확장
+    ns: ["common", "map", "places", "quiz", "login", "profile"], // *.json 확장
 
     interpolation: {
       escapeValue: false,

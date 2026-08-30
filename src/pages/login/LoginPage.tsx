@@ -2,7 +2,8 @@ import { Box, Button, Container, Typography } from "@mui/material";
 import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login as googleLogin } from "../../api/authApi";
+import { useTranslation } from "react-i18next";
+import { login as googleLogin, myInfo } from "../../api/authApi";
 import logo from "../../assets/gyeongjuma_logo.png";
 import kakaoIcon from "../../assets/login/kakaoLoginIcon.png";
 import naverIcon from "../../assets/login/naverLoginIcon.png";
@@ -10,16 +11,42 @@ import { useAuthStore } from "../../store/useAuthStore";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { login } = useAuthStore();
+  const { login, setAccessToken } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
+  
+  const { t } = useTranslation("login");
 
-  // 구글 로그인(카카오, 네이버는 추후 구현)
+  // 네이버 로그인 핸들러
+  const handleNaverLogin = () => {
+    const CLIENT_ID = import.meta.env.VITE_NAVER_CLIENT_ID;
+    const REDIRECT_URI = `${window.location.origin}/auth/naver/callback`;
+    const STATE = Math.random().toString(36).substring(3);
+    
+    const naverURL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&state=${STATE}`;
+    
+    window.location.href = naverURL;
+  };
+
+  // 카카오 로그인 핸들러
+  const handleKakaoLogin = () => {
+    const REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
+    const REDIRECT_URI = `${window.location.origin}/auth/kakao/callback`;
+    
+    const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+    
+    window.location.href = kakaoURL;
+  };
+
+  // 구글 로그인 성공 핸들러
   const onSuccess = async (credentialResponse: any) => {
     if (isLoading) return;
     setIsLoading(true);
 
     const idToken = credentialResponse.credential;
-    if (!idToken) return;
+    if (!idToken) {
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const response = await googleLogin({
@@ -27,13 +54,34 @@ const LoginPage = () => {
         idToken,
         accessToken: null,
       });
-      login(
-        response.accessToken,
-        response.refreshToken,
-        { memberId: response.memberId, nickname: response.nickname ?? "" },
-        response.isNewMember,
-      );
-      navigate(response.isNewMember ? "/register" : "/");
+
+      const accessToken = response.accessToken;
+
+      setAccessToken(accessToken);
+
+      if (response.isNewMember) {
+        login(
+          { memberId: response.memberId, nickname: response.nickname ?? "" },
+          true,
+          accessToken,
+        );
+        navigate("/register");
+      } else {
+        const userInfo = await myInfo();
+
+        login(
+          {
+            memberId: userInfo.memberId,
+            nickname: userInfo.nickname,
+            difficulty: userInfo.difficulty,
+            locale: userInfo.locale,
+          },
+          false,
+          accessToken,
+        );
+
+        navigate("/");
+      }
     } catch (error) {
       console.error("로그인 실패:", error);
     } finally {
@@ -69,7 +117,7 @@ const LoginPage = () => {
         />
       </Box>
 
-      {/* 로그인 버튼 영역*/}
+      {/* 로그인 버튼 영역 */}
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5, pb: 4 }}>
         <Box sx={{ display: "flex", alignItems: "center", mb: 1, px: 2 }}>
           <Box sx={{ flex: 1, height: "1px", bgcolor: "rgba(0,0,0,0.1)" }} />
@@ -81,7 +129,7 @@ const LoginPage = () => {
               fontWeight: 500,
             }}
           >
-            간편하게 시작하기
+            {t("startEasy")}
           </Typography>
           <Box sx={{ flex: 1, height: "1px", bgcolor: "rgba(0,0,0,0.1)" }} />
         </Box>
@@ -91,7 +139,6 @@ const LoginPage = () => {
           <GoogleLogin
             onSuccess={onSuccess}
             onError={() => console.log("구글 로그인 실패")}
-            useOneTap
             containerProps={{
               style: {
                 position: "absolute",
@@ -141,13 +188,14 @@ const LoginPage = () => {
                 d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
               />
             </Box>
-            Google 로그인
+            {t("googleLogin")}
           </Button>
         </Box>
 
-        {/* 카카오 로그인*/}
+        {/* 카카오 로그인 */}
         <Button
           fullWidth
+          onClick={handleKakaoLogin}
           sx={{
             height: "52px",
             borderRadius: 2,
@@ -164,12 +212,13 @@ const LoginPage = () => {
             src={kakaoIcon}
             sx={{ width: 24, height: 24, mr: 1 }}
           />
-          카카오 로그인
+          {t("kakaoLogin")}
         </Button>
 
-        {/* 네이버 로그인*/}
+        {/* 네이버 로그인 */}
         <Button
           fullWidth
+          onClick={handleNaverLogin}
           sx={{
             height: "52px",
             borderRadius: 2,
@@ -186,7 +235,7 @@ const LoginPage = () => {
             src={naverIcon}
             sx={{ width: 24, height: 24, mr: 1 }}
           />
-          네이버 로그인
+          {t("naverLogin")}
         </Button>
 
         {/* 이용약관 */}
@@ -199,7 +248,7 @@ const LoginPage = () => {
             px: 2,
           }}
         >
-          로그인시{" "}
+          {t("termsPrefix")}
           <Typography
             component="span"
             sx={{
@@ -208,20 +257,20 @@ const LoginPage = () => {
               cursor: "pointer",
             }}
           >
-            개인정보 처리방침
-          </Typography>{" "}
-          및{" "}
-          <Typography
-            component="span"
-            sx={{
-              textDecoration: "underline",
-              fontSize: "0.75rem",
-              cursor: "pointer",
-            }}
-          >
-            서비스 이용약관
+            {t("privacyPolicy")}
           </Typography>
-          에 동의합니다.
+          {t("termsAnd")}
+          <Typography
+            component="span"
+            sx={{
+              textDecoration: "underline",
+              fontSize: "0.75rem",
+              cursor: "pointer",
+            }}
+          >
+            {t("termsOfService")}
+          </Typography>
+          {t("termsSuffix")}
         </Typography>
       </Box>
     </Container>

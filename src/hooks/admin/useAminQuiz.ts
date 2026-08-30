@@ -1,5 +1,6 @@
 import type { SelectChangeEvent } from "@mui/material";
 import { useMemo, useState, type ChangeEvent } from "react";
+import { useAdminQuizListQuery } from "../../queries/admin/useAdminQuizQuery";
 
 export interface QuizItem {
   quizId: number;
@@ -47,6 +48,9 @@ const dummyQuizData: QuizItem[] = [
 
 export const useAdminQuiz = () => {
 
+  const  { data, isLoading } = useAdminQuizListQuery();
+  console.log(data);
+   
   const [quizzes, setQuizzes] = useState<QuizItem[]>(dummyQuizData);
   const [keyword, setKeyword] = useState("");
   const [useFlag, setUseFlag] = useState("all");

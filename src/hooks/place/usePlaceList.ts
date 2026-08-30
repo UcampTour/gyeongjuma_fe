@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { PlaceCategory, PlaceSortType } from "../../models/PlaceModel";
+import { PlaceSortType } from "../../models/PlaceModel";
 import { usePlaceListQuery } from "../../queries/usePlaceListQuery";
+import type { FilterOperationStatus } from "../../components/places/placelist/PlaceCategoryFilter";
 
 export const usePlaceList = () => {
   const [userLocation, setUserLocation] = useState<{
@@ -16,13 +17,11 @@ export const usePlaceList = () => {
     longitude: userLocation?.lng,
   });
 
-  const [selectedCategory, setSelectedCategory] = useState<PlaceCategory>(
-    PlaceCategory.ALL,
-  );
+  const [selectedStatus, setSelectedStatus] = useState<FilterOperationStatus>("ALL");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [sortBy, setSortBy] = useState<PlaceSortType>(PlaceSortType.DEFAULT);
 
-  // 1. 내 위치 정보 가져오기
+  // 내 위치 정보 가져오기
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -39,23 +38,12 @@ export const usePlaceList = () => {
     }
   }, []);
 
-  // 2. 내 위치와 장소 사이의 거리 계산
-  // const placesWithDistance = useMemo(() => {
-  //   return placeData.map((place) => {
-  //     const distance = userLocation
-  //       ? getDistance(userLocation.lat, userLocation.lng, place.lat, place.lng)
-  //       : null;
-  //     return { ...place, distance };
-  //   });
-  // }, [userLocation]);
-
-  // 3. 데이터 필터링
+  // 운영 상태(operationStatus) 기준 데이터 필터링
   const filteredPlaces = useMemo(() => {
     return placeData.filter((place) => {
-      // 카테고리 매칭 여부
-      const matchesCategory =
-        selectedCategory === PlaceCategory.ALL ||
-        place.category === selectedCategory;
+      const matchesStatus =
+        selectedStatus === "ALL" ||
+        place.operationStatus === selectedStatus;
 
       // 키워드 매칭 여부
       const cleanKeyword = searchKeyword.trim().toLocaleLowerCase();
@@ -63,11 +51,11 @@ export const usePlaceList = () => {
         .toLowerCase()
         .includes(cleanKeyword);
 
-      return matchesCategory && matchesKeyword;
+      return matchesStatus && matchesKeyword;
     });
-  }, [placeData, selectedCategory, searchKeyword]);
+  }, [placeData, selectedStatus, searchKeyword]);
 
-  // 4. 데이터 정렬
+  // 데이터 정렬
   const sortedPlaces = useMemo(() => {
     const result = [...filteredPlaces];
 
@@ -92,8 +80,8 @@ export const usePlaceList = () => {
   }, [filteredPlaces, sortBy]);
 
   return {
-    selectedCategory,
-    setSelectedCategory,
+    selectedStatus,
+    setSelectedStatus,
     placeList: sortedPlaces,
     searchKeyword,
     setSearchKeyword,

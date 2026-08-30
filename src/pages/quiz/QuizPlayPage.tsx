@@ -1,4 +1,5 @@
 import { Box, CircularProgress, Fade } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import PageHeader from "../../components/common/PageHeader";
 import QuizPlayView from "../../components/Quiz/QuizPlay/QuizPlayView";
@@ -6,6 +7,7 @@ import { QuizResultView } from "../../components/Quiz/QuizPlay/QuizResultView";
 import { useQuizPlay } from "../../hooks/quiz/useQuizPlay";
 
 const QuizPlayPage = () => {
+  const { t } = useTranslation("quiz");
   const navigate = useNavigate();
   const { quizId } = useParams();
 
@@ -44,7 +46,7 @@ const QuizPlayPage = () => {
       case "playing":
         return { title: quizData.title };
       case "result":
-        return { title: "퀴즈 완료 및 결과" };
+        return { title: t("header.resultTitle") };
       default:
         return { title: "" };
     }

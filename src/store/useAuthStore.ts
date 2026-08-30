@@ -4,25 +4,26 @@ import { persist } from "zustand/middleware";
 interface AuthMember {
   memberId: number;
   nickname: string;
+  difficulty?: string; // 💡 난이도 추가
+  locale?: string;     // 💡 언어(로케일) 추가
 }
 
 interface AuthState {
   isLoggedIn: boolean;
   isPendingRegistration: boolean;
-  accessToken: string | null;
-  refreshToken: string | null;
   member: AuthMember | null;
+  accessToken: string | null;
 
   login: (
-    accessToken: string,
-    refreshToken: string,
     member: AuthMember,
     isNewMember: boolean,
+    accessToken: string,
   ) => void;
-  updateToken: (accessToken: string, refreshToken: string) => void;
-  completeRegistration: (memner: AuthMember) => void;
+  setAccessToken: (accessToken: string) => void;
+  completeRegistration: (member: AuthMember) => void;
   logout: () => void;
   updateNickname: (nickname: string) => void;
+  setMemberInfo: (member: Partial<AuthMember>) => void; // 💡 회원 정보 일부/전체 갱신 함수 추가
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -30,25 +31,20 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       isLoggedIn: false,
       isPendingRegistration: false,
-      accessToken: null,
-      refreshToken: null,
       member: null,
+      accessToken: null,
 
-      login: (accessToken, refreshToken, member, isNewMember) => {
+      login: (member, isNewMember, accessToken) => {
         set({
           isLoggedIn: !isNewMember,
           isPendingRegistration: isNewMember,
-          accessToken,
-          refreshToken,
           member,
+          accessToken,
         });
       },
 
-      updateToken: (accessToken, refreshToken) => {
-        set({
-          accessToken,
-          refreshToken,
-        });
+      setAccessToken: (accessToken) => {
+        set({ accessToken });
       },
 
       completeRegistration: (member) => {
@@ -58,16 +54,21 @@ export const useAuthStore = create<AuthState>()(
       logout: () => {
         set({
           isLoggedIn: false,
-          accessToken: null,
-          refreshToken: null,
           member: null,
           isPendingRegistration: false,
+          accessToken: null,
         });
       },
 
       updateNickname: (nickname) =>
         set((state) => ({
           member: state.member ? { ...state.member, nickname } : null,
+        })),
+
+      // 💡 프로필 수정이나 추가 정보 등록 시 반영용
+      setMemberInfo: (updatedInfo) =>
+        set((state) => ({
+          member: state.member ? { ...state.member, ...updatedInfo } : null,
         })),
     }),
     {

@@ -1,58 +1,26 @@
 import { useState } from "react";
 import type { SelectChangeEvent } from "@mui/material";
 import type { ChangeEvent } from "react";
-
-export interface UserItem {
-  memberId: number;
-  provider: string;
-  nickname: string;
-  role: "USER" | "ADMIN";
-  point: number;
-  isActive: boolean;
-  createdAt: string;
-}
-
-const initialUsers: UserItem[] = [
-  {
-    memberId: 1,
-    provider: "kakao",
-    nickname: "여행러버",
-    role: "USER",
-    point: 1250,
-    isActive: true,
-    createdAt: "2026-06-01",
-  },
-  {
-    memberId: 2,
-    provider: "naver",
-    nickname: "관리자계정",
-    role: "ADMIN",
-    point: 5000,
-    isActive: true,
-    createdAt: "2026-01-15",
-  },
-  {
-    memberId: 3,
-    provider: "google",
-    nickname: "경주도둑",
-    role: "USER",
-    point: 320,
-    isActive: false,
-    createdAt: "2026-05-20",
-  },
-];
+import { useAdminUserListQuery } from "../../queries/admin/useAdminUserQuery";
+import type { AdminUserData } from "../../models/admin/AdminUserModel";
+import { adjustPoint, forceWithdraw } from "../../api/admin/AdminUserApi";
+import { updateMyInfo } from "../../api/authApi";
+import { queryClient } from "../../config/queryClient";
 
 export const useAdminUser = () => {
-  const [users] = useState<UserItem[]>(initialUsers);
+  const { data, isLoading } = useAdminUserListQuery();
+
+  const userList = data?.members ?? [];
+
   const [keyword, setKeyword] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
   const [useFlag, setUseFlag] = useState("all");
   
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const [openDialog, setOpenDialog] = useState(false);
-  const [editingUser, setEditingUser] = useState<UserItem | null>(null);
+  const [editingUser, setEditingUser] = useState<AdminUserData | null>(null);
   
   const [formState, setFormState] = useState({
     nickname: "",
@@ -60,8 +28,9 @@ export const useAdminUser = () => {
     isActive: true,
   });
 
-  const filteredUsers = users.filter((user) => {
-    const matchesKeyword = user.nickname.toLowerCase().includes(keyword.toLowerCase());
+  const filteredUsers = userList.filter((user) => {
+    const nickname = user.nickname ?? "";
+    const matchesKeyword = nickname.toLowerCase().includes(keyword.toLowerCase());
     const matchesRole = roleFilter === "all" || user.role === roleFilter;
     const matchesUsage =
       useFlag === "all" ||
@@ -100,10 +69,10 @@ export const useAdminUser = () => {
     setPage(0);
   };
 
-  const handleOpenEditDialog = (user: UserItem) => {
+  const handleOpenEditDialog = (user: AdminUserData) => {
     setEditingUser(user);
     setFormState({
-      nickname: user.nickname,
+      nickname: user.nickname ?? "",
       point: user.point,
       isActive: user.isActive,
     });
@@ -119,21 +88,31 @@ export const useAdminUser = () => {
     setFormState((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSaveUser = () => {
+  const handleSaveUser = async () => {
     if (!editingUser) return;
     if (!formState.nickname.trim()) {
       alert("닉네임을 입력해주세요.");
       return;
     }
 
-    console.log("회원 정보 수정 API Payload (ID:", editingUser.memberId, "):", {
-      nickname: formState.nickname,
-      point: Number(formState.point),
-      isActive: formState.isActive,
-    });
+    try {
+      const pointDiff = Number(formState.point) - editingUser.point;
+      if (pointDiff !== 0) {
+        await adjustPoint(editingUser.memberId, pointDiff);
+      }
 
-    alert("회원 정보 수정 API 호출 (구현 예정)");
+      if(formState.isActive !== editingUser.isActive) {
+        await forceWithdraw(editingUser.memberId);
+      }
+    } catch (error) {
+      console.error("회원 정보 수정 실패:", error);
+      alert("회원 정보 수정 중 오류가 발생했습니다.");
+    }
+
+    alert("회원 정보 수정 완료");
     handleCloseDialog();
+
+    queryClient.invalidateQueries({ queryKey: ["adminUsers"] });
   };
 
   return {
@@ -155,5 +134,6 @@ export const useAdminUser = () => {
     handleCloseDialog,
     handleFormChange,
     handleSaveUser,
+    isLoading,
   };
 };

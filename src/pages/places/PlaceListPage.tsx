@@ -1,32 +1,35 @@
 import { Box } from "@mui/material";
 import CommonSearchBar from "../../components/common/CommonSearchBar";
 import PageHeader from "../../components/common/PageHeader";
-import PlaceCategoryFilter from "../../components/places/placelist/PlaceCategoryFilter";
 import PlaceList from "../../components/places/placelist/PlaceList";
 import PlaceListSorter from "../../components/places/placelist/PlaceListSorter";
 import { usePlaceList } from "../../hooks/place/usePlaceList";
+import PlaceCongestionFilter from "../../components/places/placelist/PlaceCategoryFilter";
+import { useTranslation } from "react-i18next";
 
 const PlaceListPage = () => {
   const {
     placeList,
-    selectedCategory,
-    setSelectedCategory,
+    selectedStatus,
+    setSelectedStatus,
     searchKeyword,
     setSearchKeyword,
     sortBy,
     setSortBy,
   } = usePlaceList();
 
+  const { t } = useTranslation("places");
+
   return (
     <Box sx={{ bgcolor: "#F7F5EE", minHeight: "100vh", pb: 16 }}>
       {/* 페이지 헤더 영역 */}
-      <PageHeader title="경주의 관광지 둘러보기" />
+      <PageHeader title={t("title")} />
 
       <Box sx={{ px: 2 }}>
-        {/* 관광지 카테고리 영역 */}
-        <PlaceCategoryFilter
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
+        {/* 운영 상태 필터 영역 */}
+        <PlaceCongestionFilter
+          selectedStatus={selectedStatus}
+          setSelectedStatus={setSelectedStatus}
         />
 
         {/* 검색창 및 정렬 영역 */}
@@ -41,7 +44,7 @@ const PlaceListPage = () => {
         >
           <Box sx={{ flex: 1, height: "100%" }}>
             <CommonSearchBar
-              placeholder="관광지를 검색해보세요"
+              placeholder={t("placehorder")}
               keyword={searchKeyword}
               setKeyword={setSearchKeyword}
             />
