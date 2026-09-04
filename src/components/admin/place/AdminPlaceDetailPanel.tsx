@@ -1,16 +1,14 @@
 import type { ChangeEvent } from "react";
-import { Box, Typography, TextField, Button, Paper, Tabs, Tab, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import { Box, Typography, TextField, Button, Paper, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import type { PlaceItem } from "../../../hooks/admin/useAdminPlace";
 
 interface AdminPlaceDetailPanelProps {
   selectedPlace: PlaceItem | null;
   editIsActive: boolean;
   currentDifficulty: "EASY" | "NORMAL" | "HARD";
-  currentLanguage: string;
   currentDescription: string;
-  supportedLanguages: { code: string; label: string }[];
   onEditIsActiveChange: (isActive: boolean) => void;
-  onTabChange: (newDiff: "EASY" | "NORMAL" | "HARD", newLang: string) => void;
+  onDifficultyChange: (newDiff: "EASY" | "NORMAL" | "HARD") => void;
   onDescriptionChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onSaveAll: () => void;
 }
@@ -19,11 +17,9 @@ export const AdminPlaceDetailPanel = ({
   selectedPlace,
   editIsActive,
   currentDifficulty,
-  currentLanguage,
   currentDescription,
-  supportedLanguages,
   onEditIsActiveChange,
-  onTabChange,
+  onDifficultyChange,
   onDescriptionChange,
   onSaveAll,
 }: AdminPlaceDetailPanelProps) => {
@@ -44,7 +40,7 @@ export const AdminPlaceDetailPanel = ({
           {/* 패널 상단: 이름 및 사용 여부 */}
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3, pb: 2, borderBottom: "1px solid #E0E0E0" }}>
             <Typography variant="h6" sx={{ fontWeight: 700, color: "#2C2A29" }}>
-              {selectedPlace.placeName}
+              {selectedPlace.placeName} {selectedPlace.language ? `(${selectedPlace.language})` : ""}
             </Typography>
 
             <FormControl size="small" sx={{ width: "130px" }}>
@@ -61,7 +57,7 @@ export const AdminPlaceDetailPanel = ({
             </FormControl>
           </Box>
 
-          {/* 1. 난이도 선택 버튼 그룹 */}
+          {/* 난이도 선택 버튼 그룹 */}
           <Box sx={{ mb: 3 }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>난이도 선택</Typography>
             <Box sx={{ display: "flex", gap: 1 }}>
@@ -70,7 +66,7 @@ export const AdminPlaceDetailPanel = ({
                   key={diff}
                   variant={currentDifficulty === diff ? "contained" : "outlined"}
                   size="small"
-                  onClick={() => onTabChange(diff, currentLanguage)}
+                  onClick={() => onDifficultyChange(diff)}
                   sx={{ 
                     flex: 1,
                     bgcolor: currentDifficulty === diff ? "#AC8E61" : "transparent",
@@ -87,31 +83,15 @@ export const AdminPlaceDetailPanel = ({
             </Box>
           </Box>
 
-          {/* 2. 언어 선택 탭 */}
-          <Box sx={{ mb: 3 }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>언어 선택</Typography>
-            <Tabs 
-              value={currentLanguage} 
-              onChange={(_, newLang) => onTabChange(currentDifficulty, newLang)}
-              variant="scrollable"
-              scrollButtons="auto"
-              sx={{ borderBottom: 1, borderColor: "divider" }}
-            >
-              {supportedLanguages.map((lang) => (
-                <Tab key={lang.code} label={lang.label} value={lang.code} />
-              ))}
-            </Tabs>
-          </Box>
-
-          {/* 3. 설명 입력 에디터 */}
+          {/* 설명 입력 에디터 */}
           <TextField
             label="해설 내용 (Description)"
             multiline
-            rows={6}
+            rows={8}
             fullWidth
             value={currentDescription}
             onChange={onDescriptionChange}
-            placeholder="해당 난이도와 언어에 맞는 해설을 입력하세요."
+            placeholder="해당 난이도에 맞는 해설을 입력하세요."
             sx={{ mb: 3 }}
           />
 

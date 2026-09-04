@@ -1,109 +1,74 @@
 import { useState, useEffect } from "react";
 import type { ChangeEvent } from "react";
 import type { SelectChangeEvent } from "@mui/material";
+import { useAdminCourseListQuery } from "../../queries/admin/useAdminCourseQuery";
+import { updatePlaceContent } from "../../api/admin/AdminPlaceApi";
 
-// 타입 정의
 export interface PlaceContentItem {
   placeContentId?: number;
   difficulty: "EASY" | "NORMAL" | "HARD";
-  language: string; 
   description: string;
 }
 
 export interface PlaceItem {
   placeId: number;
   placeName: string;
-  category: string; 
+  language: string; 
   isActive: boolean;
   contents: PlaceContentItem[];
 }
 
-export const SUPPORTED_LANGUAGES = [
-  { code: "KO", label: "KO" },
-  { code: "EN", label: "EN" },
-  { code: "JA", label: "JA" },
-  { code: "ZH", label: "ZH" },
-];
-
-const initialPlaces: PlaceItem[] = [
-  { 
-    placeId: 1, 
-    placeName: "불국사", 
-    category: "TOURIST_SPOT", 
-    isActive: true,
-    contents: [
-      { placeContentId: 1, difficulty: "EASY", language: "KO", description: "불국사는 신라 시대의 대표적인 절입니다." },
-      { placeContentId: 2, difficulty: "EASY", language: "EN", description: "Bulguksa Temple is a representative temple of the Silla Dynasty." },
-    ]
-  },
-  { 
-    placeId: 2, 
-    placeName: "첨성대", 
-    category: "TOURIST_SPOT", 
-    isActive: true,
-    contents: [
-      { placeContentId: 3, difficulty: "EASY", language: "KO", description: "첨성대는 동양에서 가장 오래된 천문대입니다." }
-    ]
-  },
-  { 
-    placeId: 3, 
-    placeName: "국립경주박물관", 
-    category: "CULTURAL_FACILITY", 
-    isActive: false,
-    contents: []
-  },
-];
-
 export const useAdminPlace = () => {
-  const [places] = useState<PlaceItem[]>(initialPlaces);
-  
-  // 검색 및 필터 상태
+  const { data, refetch } = useAdminCourseListQuery();
+  const placeList = data?.places ?? [];
+  console.log(placeList);
+
+  // 검색 및 필터 상태 (category -> language)
   const [keyword, setKeyword] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [languageFilter, setLanguageFilter] = useState("all");
   const [useFlag, setUseFlag] = useState("all");
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   // 선택된 관광지 ID
-  const [selectedPlaceId, setSelectedPlaceId] = useState<number>(initialPlaces[0]?.placeId || 1);
-  const selectedPlace = places.find((p) => p.placeId === selectedPlaceId) || null;
+  const [selectedPlaceId, setSelectedPlaceId] = useState<number | null>(null);
 
-  // 우측 패널 내부 탭 상태
+  useEffect(() => {
+    if (placeList.length > 0 && selectedPlaceId === null) {
+      setSelectedPlaceId(placeList[0].placeId);
+    }
+  }, [placeList, selectedPlaceId]);
+
+  const selectedPlace = placeList.find((p) => p.placeId === selectedPlaceId) || null;
+
+  // 우측 패널 내부 탭 상태 (난이도만 존재)
   const [currentDifficulty, setCurrentDifficulty] = useState<"EASY" | "NORMAL" | "HARD">("EASY");
-  const [currentLanguage, setCurrentLanguage] = useState<string>("KO");
   
-  // 우측 패널에서 수정 중인 활성 상태
-  const [editIsActive, setEditIsActive] = useState<boolean>(selectedPlace?.isActive ?? true);
+  // 수정 중인 활성 상태
+  const [editIsActive, setEditIsActive] = useState<boolean>(true);
 
-  // 배열 형태의 임시 저장 상태
+  // 임시 저장 상태 (난이도별 해설 배열)
   const [draftContents, setDraftContents] = useState<PlaceContentItem[]>([]);
 
-  // 관광지가 바뀔 때 탭 상태 및 임시 입력값 초기화
   useEffect(() => {
     if (selectedPlace) {
       setEditIsActive(selectedPlace.isActive);
-      setDraftContents(JSON.parse(JSON.stringify(selectedPlace.contents)));
-
+      setDraftContents(JSON.parse(JSON.stringify(selectedPlace.contents ?? [])));
       setCurrentDifficulty("EASY");
-      setCurrentLanguage("KO");
     }
-  }, [selectedPlaceId]);
+  }, [selectedPlaceId, selectedPlace]);
 
-  // 현재 선택된 난이도와 언어에 해당하는 설명 찾기
-  const currentContentItem = draftContents.find(
-    (c) => c.difficulty === currentDifficulty && c.language === currentLanguage
-  );
+  // 현재 선택된 난이도에 해당하는 설명 찾기
+  const currentContentItem = draftContents.find((c) => c.difficulty === currentDifficulty);
   const currentDescription = currentContentItem ? currentContentItem.description : "";
 
-  // 텍스트 변경 시 배열 안의 해당 아이템을 수정하거나 추가
+  // 텍스트 변경 시 해당 난이도 아이템 수정 또는 추가
   const handleDescriptionChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = e.target.value;
 
     setDraftContents((prev) => {
-      const existsIndex = prev.findIndex(
-        (c) => c.difficulty === currentDifficulty && c.language === currentLanguage
-      );
+      const existsIndex = prev.findIndex((c) => c.difficulty === currentDifficulty);
 
       if (existsIndex > -1) {
         const updated = [...prev];
@@ -117,7 +82,6 @@ export const useAdminPlace = () => {
           ...prev,
           {
             difficulty: currentDifficulty,
-            language: currentLanguage,
             description: value,
           },
         ];
@@ -125,16 +89,13 @@ export const useAdminPlace = () => {
     });
   };
 
-  // 행 변경 시 체크할 Dirty 여부
+  // 변경 사항(Dirty) 체크
   const isPlaceDirty = () => {
     if (!selectedPlace) return false;
-    
-    if (draftContents.length !== selectedPlace.contents.length) return true;
+    if (draftContents.length !== (selectedPlace.contents?.length ?? 0)) return true;
 
     for (const draft of draftContents) {
-      const original = selectedPlace.contents.find(
-        (c) => c.difficulty === draft.difficulty && c.language === draft.language
-      );
+      const original = selectedPlace.contents?.find((c) => c.difficulty === draft.difficulty);
       if (!original || original.description !== draft.description) {
         return true;
       }
@@ -143,17 +104,17 @@ export const useAdminPlace = () => {
   };
 
   // 검색 및 필터링 로직
-  const filteredPlaces = places.filter((place) => {
+  const filteredPlaces = placeList.filter((place) => {
     const matchesKeyword = place.placeName.toLowerCase().includes(keyword.toLowerCase());
     const matchesUsage = 
       useFlag === "all" || 
       (useFlag === "active" && place.isActive) || 
       (useFlag === "inactive" && !place.isActive);
 
-    const matchesCategory = 
-      categoryFilter === "all" || place.category === categoryFilter;
+    const matchesLanguage = 
+      languageFilter === "all" || place.language === languageFilter;
 
-    return matchesKeyword && matchesUsage && matchesCategory;
+    return matchesKeyword && matchesUsage && matchesLanguage;
   });
 
   const paginatedPlaces = filteredPlaces.slice(
@@ -166,8 +127,8 @@ export const useAdminPlace = () => {
     setPage(0);
   };
 
-  const handleCategoryChange = (e: SelectChangeEvent) => {
-    setCategoryFilter(e.target.value);
+  const handleLanguageChange = (e: SelectChangeEvent) => {
+    setLanguageFilter(e.target.value);
     setPage(0);
   };
 
@@ -196,50 +157,54 @@ export const useAdminPlace = () => {
     setSelectedPlaceId(place.placeId);
   };
 
-  const handleTabChange = (newDiff: "EASY" | "NORMAL" | "HARD", newLang: string) => {
+  const handleDifficultyChange = (newDiff: "EASY" | "NORMAL" | "HARD") => {
     setCurrentDifficulty(newDiff);
-    setCurrentLanguage(newLang);
   };
 
-  // 통합 저장 로직
-  const handleSaveAll = () => {
-    if (!selectedPlace) return;
+  // 5번 API 연동 (해설 저장/수정)
+  const handleSaveAll = async () => {
+    if (!selectedPlace || selectedPlaceId === null) return;
 
-    const validContents = draftContents.filter((c) => c.description.trim() !== "");
+    try {
+      const validContents = draftContents.filter((c) => c.description.trim() !== "");
 
-    const payload = {
-      placeId: selectedPlaceId,
-      isActive: editIsActive,
-      contents: validContents,
-    };
+      for (const content of validContents) {
+        await updatePlaceContent(selectedPlaceId, {
+          language: selectedPlace.language,
+          difficulty: content.difficulty,
+          description: content.description,
+        });
+      }
 
-    console.log("서버로 전송할 페이로드:", payload);
-    alert("저장 버튼 클릭됨 (백엔드 스펙과 일치하는 배열 페이로드 전송)");
+      alert("관광지 해설을 성공적으로 저장했습니다.");
+      refetch(); // 데이터 최신화
+    } catch (error) {
+      console.error("해설 저장 실패:", error);
+      alert("저장 중 오류가 발생했습니다.");
+    }
   };
 
   return {
     keyword,
-    categoryFilter,
+    languageFilter,
     useFlag,
     page,
     rowsPerPage,
     selectedPlaceId,
     selectedPlace,
     currentDifficulty,
-    currentLanguage,
     editIsActive,
     currentDescription,
     paginatedPlaces,
     filteredPlacesCount: filteredPlaces.length,
-    supportedLanguages: SUPPORTED_LANGUAGES,
     setEditIsActive,
     handleSearchChange,
-    handleCategoryChange,
+    handleLanguageChange,
     handleUsageChange,
     handleChangePage,
     handleChangeRowsPerPage,
     handleSelectPlace,
-    handleTabChange,
+    handleDifficultyChange,
     handleDescriptionChange,
     handleSaveAll,
   };

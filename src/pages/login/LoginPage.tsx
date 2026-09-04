@@ -22,7 +22,8 @@ const LoginPage = () => {
     const REDIRECT_URI = `${window.location.origin}/auth/naver/callback`;
     const STATE = Math.random().toString(36).substring(3);
     
-    const naverURL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&state=${STATE}`;
+    // response_type을 code가 아닌 token으로 변경
+    const naverURL = `https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&state=${STATE}`;
     
     window.location.href = naverURL;
   };

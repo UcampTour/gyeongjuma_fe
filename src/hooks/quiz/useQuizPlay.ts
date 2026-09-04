@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { submitQuizAnswer } from "../../api/quizApi";
 import { useAnimatedNumber } from "../common/useAnimatedNumber";
 import { useQuizDetailQuery, useQuizResultQuery } from "../../queries/useQuizQuery";
@@ -13,7 +13,6 @@ export interface QuizPlayState {
 }
 
 export const useQuizPlay = (quizId: string | undefined) => {
-
   // 퀴즈 상세 정보 가져오기
   const { data: quizData = null, isLoading } = useQuizDetailQuery(quizId ?? "");
 
@@ -26,6 +25,27 @@ export const useQuizPlay = (quizId: string | undefined) => {
     correctAnswerId: null,
   });
 
+  // 💡 서버에서 받아온 퀴즈 데이터(이어하기 / 새로풀기)를 바탕으로 초기 상태 동기화
+  useEffect(() => {
+    if (!quizData) return;
+
+    // 이미 풀던 퀴즈이거나 완료된 퀴즈인 경우 데이터 반영
+    // 예: lastQuestionIndex가 있거나 quizStatus가 PROGRESS인 경우
+    const initialIdx = quizData.lastQuestionIndex ?? 0;
+    const initialCorrectCnt = quizData.correctQuestions ?? 0;
+    
+    // 만약 이미 완료된(COMPLETED) 퀴즈라면 결과 화면으로 바로 보낼 수도 있음
+    const initialStage = quizData.quizStatus === "COMPLETED" ? "result" : "playing";
+
+    setQuizState((prev) => ({
+      ...prev,
+      stage: initialStage,
+      currentIdx: initialIdx,
+      correctCnt: initialCorrectCnt,
+      solvedCount: initialIdx, // 지금까지 푼 개수 반영
+    }));
+  }, [quizData]);
+
   // 퀴즈 결과 정보 가져오기
   const { data: quizResultData = null, isLoading: resultLoading } = useQuizResultQuery(quizId ?? "", {
     enabled: quizState.stage === "result" && !!quizId
@@ -33,12 +53,10 @@ export const useQuizPlay = (quizId: string | undefined) => {
 
   const animatedPoint = useAnimatedNumber(quizState.correctCnt * 50, 400);
 
-
   // 정답 제출 핸들러
   const handleAnswer = async (selectedOptionId: number) => {
     if (quizState.selectedAnswerId !== null || !quizId || !quizData) return;
 
-    // 선택된 답안과 해결한 문제 수 우선 반영
     setQuizState((prev) => ({
       ...prev,
       selectedAnswerId: selectedOptionId,
@@ -75,7 +93,7 @@ export const useQuizPlay = (quizId: string | undefined) => {
     }
   };
 
-  // 4. 초기화 핸들러
+  // 초기화 핸들러
   const handleComplete = (callback: () => void) => {
     callback();
     setTimeout(() => {
