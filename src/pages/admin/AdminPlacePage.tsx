@@ -7,51 +7,47 @@ import { useAdminPlace } from "../../hooks/admin/useAdminPlace";
 const AdminPlacePage = () => {
   const {
     keyword,
-    categoryFilter,
+    languageFilter,
     useFlag,
     page,
     rowsPerPage,
     selectedPlaceId,
     selectedPlace,
     currentDifficulty,
-    currentLanguage,
     editIsActive,
     currentDescription,
     paginatedPlaces,
     filteredPlacesCount,
-    supportedLanguages,
     setEditIsActive,
     handleSearchChange,
-    handleCategoryChange,
+    handleLanguageChange,
     handleUsageChange,
     handleChangePage,
     handleChangeRowsPerPage,
     handleSelectPlace,
-    handleTabChange,
+    handleDifficultyChange,
     handleDescriptionChange,
     handleSaveAll,
   } = useAdminPlace();
 
   return (
     <Box sx={{ p: 2, maxWidth: "1500px" }}>
-      {/* 타이틀 영역 */}
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
         <Typography variant="h5" sx={{ fontWeight: 800 }}>
           관광지 및 해설 관리
         </Typography>
       </Box>
 
-      {/* 좌우 2분할 레이아웃 컨테이너 */}
       <Box sx={{ display: "flex", gap: 3, alignItems: "flex-start" }}>
         
         {/* [왼쪽 영역] 검색 필터 및 테이블 */}
         <Box sx={{ flex: 7, minWidth: 0 }}>
           <AdminPlaceSearchFilter
             keyword={keyword}
-            categoryFilter={categoryFilter}
+            languageFilter={languageFilter}
             useFlag={useFlag}
             onKeywordChange={handleSearchChange}
-            onCategoryChange={handleCategoryChange}
+            onLanguageChange={handleLanguageChange}
             onUsageChange={handleUsageChange}
           />
 
@@ -72,11 +68,9 @@ const AdminPlacePage = () => {
           selectedPlace={selectedPlace}
           editIsActive={editIsActive}
           currentDifficulty={currentDifficulty}
-          currentLanguage={currentLanguage}
           currentDescription={currentDescription}
-          supportedLanguages={supportedLanguages}
           onEditIsActiveChange={setEditIsActive}
-          onTabChange={handleTabChange}
+          onDifficultyChange={handleDifficultyChange}
           onDescriptionChange={handleDescriptionChange}
           onSaveAll={handleSaveAll}
         />

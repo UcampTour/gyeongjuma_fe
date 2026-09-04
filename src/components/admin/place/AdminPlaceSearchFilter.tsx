@@ -5,19 +5,19 @@ import type { SelectChangeEvent } from "@mui/material";
 
 interface AdminPlaceSearchFilterProps {
   keyword: string;
-  categoryFilter: string;
+  languageFilter: string;
   useFlag: string;
   onKeywordChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  onCategoryChange: (e: SelectChangeEvent) => void;
+  onLanguageChange: (e: SelectChangeEvent) => void;
   onUsageChange: (e: SelectChangeEvent) => void;
 }
 
 export const AdminPlaceSearchFilter = ({
   keyword,
-  categoryFilter,
+  languageFilter,
   useFlag,
   onKeywordChange,
-  onCategoryChange,
+  onLanguageChange,
   onUsageChange,
 }: AdminPlaceSearchFilterProps) => {
   return (
@@ -37,16 +37,18 @@ export const AdminPlaceSearchFilter = ({
         />
 
         <FormControl size="small" sx={{ width: "130px" }}>
-          <InputLabel id="category-filter-label">유형</InputLabel>
+          <InputLabel id="language-filter-label">언어</InputLabel>
           <Select 
-            labelId="category-filter-label" 
-            value={categoryFilter} 
-            label="유형" 
-            onChange={onCategoryChange}
+            labelId="language-filter-label" 
+            value={languageFilter} 
+            label="언어" 
+            onChange={onLanguageChange}
           >
             <MenuItem value="all">전체</MenuItem>
-            <MenuItem value="TOURIST_SPOT">관광지</MenuItem>
-            <MenuItem value="CULTURAL_FACILITY">문화시설</MenuItem>
+            <MenuItem value="ko">한국어</MenuItem>
+            <MenuItem value="en">영어</MenuItem>
+            <MenuItem value="ja">일본어</MenuItem>
+            <MenuItem value="zh">중국어</MenuItem>
           </Select>
         </FormControl>
 

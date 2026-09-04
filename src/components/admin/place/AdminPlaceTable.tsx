@@ -31,7 +31,7 @@ export const AdminPlaceTable = ({
             <TableCell align="center" sx={{ fontWeight: 700, width: "50px" }}>No.</TableCell>
             <TableCell align="center" sx={{ fontWeight: 700, width: "80px" }}>ID</TableCell>
             <TableCell align="center" sx={{ fontWeight: 700, width: "140px" }}>관광지 이름</TableCell>
-            <TableCell align="center" sx={{ fontWeight: 700, width: "110px" }}>유형</TableCell>
+            <TableCell align="center" sx={{ fontWeight: 700, width: "110px" }}>언어</TableCell>
             <TableCell align="center" sx={{ fontWeight: 700, width: "100px" }}>사용 여부</TableCell>
           </TableRow>
         </TableHead>
@@ -54,9 +54,7 @@ export const AdminPlaceTable = ({
                   </TableCell>
                   <TableCell align="center">{place.placeId}</TableCell>
                   <TableCell align="center" sx={{ fontWeight: 700 }}>{place.placeName}</TableCell>
-                  <TableCell align="center">
-                    {place.category === "TOURIST_SPOT" ? "관광지" : "문화시설"}
-                  </TableCell>
+                  <TableCell align="center">{place.language}</TableCell>
                   <TableCell align="center" sx={{ fontWeight: 600, color: place.isActive ? "success.main" : "error.main" }}>
                     {place.isActive ? "활성 (Y)" : "비활성 (N)"}
                   </TableCell>

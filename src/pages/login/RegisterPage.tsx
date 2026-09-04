@@ -17,7 +17,7 @@ import logo from "../../assets/gyeongjuma_logo.png";
 import { useAuthStore } from "../../store/useAuthStore";
 
 const RegisterPage = () => {
-  const { t } = useTranslation(); // 💡 t 함수 선언
+  const { t } = useTranslation("login"); // 💡 t 함수 선언
   const [nickname, setNickname] = useState("");
   const [difficulty, setDifficulty] = useState("NORMAL");
   const [locale, setLocale] = useState("KO");
