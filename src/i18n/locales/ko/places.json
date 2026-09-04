@@ -18,14 +18,86 @@
     "likes": "좋아요순",
     "distance": "거리순"
   },
-
-  "badge": {
-    "high": "혼잡",
-    "medium": "보통",
-    "low": "여유",
-    "none": "정보없음",
-    "closed": "종료",
-    "breakTime": "준비중",
-    "open": "영업중"
+  "detail": {
+    "tabs": {
+      "info": "정보",
+      "commentary": "해설",
+      "audio": "오디오",
+      "quiz": "퀴즈"
+    },
+    "info": {
+      "menu": {
+        "address": "주소",
+        "operationInfo": "영업시간",
+        "operationStatus": "운영상태",
+        "operationHour": "운영시간",
+        "distance": "거리",
+        "congestion": "예상혼잡도",
+        "favorite": "즐겨찾기",
+        "isVisited": "방문여부",
+        "parking": "주차",
+        "tel": "전화번호"
+      },
+      "value": {
+        "distance": "현재 위치로부터"
+      }
+    },
+    "description": {
+      "emptyState": "아직 준비된 해설이 없어요"
+    }
+  },
+  "congestion": {
+    "title": "예상혼잡도",
+    "status": {
+      "low": "여유",
+      "medium": "보통",
+      "high": "혼잡",
+      "none": "정보 없음"
+    },
+    "description": {
+      "low": "평소보다 한산한 시간대",
+      "medium": "평소와 비슷한 시간대",
+      "high": "평소보다 붐비는 시간대",
+      "none": "예상 혼잡도 정보 없음"
+    }
+  },
+  "operation": {
+    "title": "운영시간",
+    "status": {
+      "open": "영업 중",
+      "alwaysOpen": "상시개방",
+      "breakTime": "휴게 시간",
+      "closed": "영업 종료",
+      "none": "정보 없음"
+    }
+  },
+  "parking": {
+    "unavailable": "주차 불가능",
+    "available": "주차 가능",
+    "none": "주차 정보 없음"
+  },
+  "isVisited": {
+    "title": "스탬프 현황은? ",
+    "visited": "방문 인증 완료! 🎉",
+    "unvisited": "미방문 관광지 📍"
+  },
+  "audio": {
+    "emptyState": {
+      "title": "등록된 오디오가 없습니다.",
+      "message": "아직 제공되는 오디오 가이드가 없어요.",
+      "message2": "추후 업데이트될 예정이니 기대해 주세요! 😊"
+    },
+    "label": {
+      "story": "이야기",
+      "playAll": "전체듣기"
+    }
+  },
+  "message": {
+    "alreadyVisited": "이미 방문 완료된 관광지입니다.",
+    "confirmVisitTitle": "방문 인증 처리",
+    "confirmVisitMessage": "방문 인증 처리하시겠습니까?",
+    "loadingVisitTitle": "방문 인증 처리 중",
+    "loadingVisitMessgae": "관광지에 도착했는지 확인하고 있어요.\n 잠시만 기다려 주세요!",
+    "successVisit": "방문 인증 완료 🎉\n {{placeName}} 스탬프 획득 완료!\n 이제 퀴즈에 도전해 포인트를 획득해 보세요."
   }
 }

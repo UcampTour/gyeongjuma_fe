@@ -1,13 +1,102 @@
 {
   "category": {
-    "all": "all",
-    "tourist": "tourist",
-    "historic": "historic",
-    "other": "other"
+    "all": "All",
+    "tourist": "Tourist Attractions",
+    "historic": "Historic Sites",
+    "other": "Other"
   },
   "sortType": {
-    "default": "default",
-    "likes": "likes",
-    "distance": "distance"
+    "default": "Default",
+    "likes": "Most Liked",
+    "distance": "Distance"
+  },
+
+  "detail": {
+    "tabs": {
+      "info": "Info",
+      "commentary": "Guide",
+      "audio": "Audio",
+      "quiz": "Quiz"
+    },
+    "info": {
+      "menu": {
+        "address": "Address",
+        "operationInfo": "Business Hours",
+        "operationStatus": "Operating Status",
+        "operationHour": "Hours",
+        "distance": "Distance",
+        "congestion": "Expected Crowding",
+        "favorite": "Favorites",
+        "isVisited": "Visit Status",
+        "parking": "Parking",
+        "tel": "Tel"
+      },
+      "value": {
+        "distance": "from your current location"
+      }
+    },
+    "description": {
+      "emptyState": "The guide is not available yet."
+    }
+  },
+
+  "congestion": {
+    "title": "Expected Crowding",
+    "status": {
+      "low": "Low",
+      "medium": "Moderate",
+      "high": "Crowded",
+      "none": "No Information"
+    },
+    "description": {
+      "low": "Less crowded than usual",
+      "medium": "About as crowded as usual",
+      "high": "More crowded than usual",
+      "none": "No expected crowding information"
+    }
+  },
+
+  "operation": {
+    "title": "Operating Hours",
+    "status": {
+      "open": "Open",
+      "alwaysOpen": "Always Open",
+      "breakTime": "Break Time",
+      "closed": "Closed",
+      "none": "No Information"
+    }
+  },
+
+  "parking": {
+    "unavailable": "No Parking",
+    "available": "Parking Available",
+    "none": "No Parking Information"
+  },
+
+  "isVisited": {
+    "title": "Stamp Status",
+    "visited": "Visit Verified! 🎉",
+    "unvisited": "Not Yet Visited 📍"
+  },
+
+  "audio": {
+    "emptyState": {
+      "title": "No Audio Available",
+      "message": "There is no audio guide available yet.",
+      "message2": "Stay tuned for future updates! 😊"
+    },
+    "label": {
+      "story": "Story",
+      "playAll": "Play All"
+    }
+  },
+
+  "message": {
+    "alreadyVisited": "You have already visited this attraction.",
+    "confirmVisitTitle": "Verify Visit",
+    "confirmVisitMessage": "Would you like to verify your visit?",
+    "loadingVisitTitle": "Verifying Visit",
+    "loadingVisitMessgae": "We're checking if you've arrived at the attraction.\n Please wait a moment!",
+    "successVisit": "Visit verified! 🎉\n{{placeName}} stamp acquired!\nNow take the quiz and earn points."
   }
 }

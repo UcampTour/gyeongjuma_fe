@@ -1,86 +1,155 @@
-import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import GroupsIcon from "@mui/icons-material/Groups";
+import LocalParkingIcon from "@mui/icons-material/LocalParking";
+import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import ReviewsOutlinedIcon from "@mui/icons-material/ReviewsOutlined";
-import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
 import ScheduleIcon from "@mui/icons-material/Schedule";
-import StarIcon from "@mui/icons-material/Star";
-import TourIcon from "@mui/icons-material/Tour";
-import { Box, Chip, Stack } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
+import {
+  getCongestionConfig,
+  getOperationStatusConfig,
+} from "../../models/commonModel";
 import type { PlaceListBase } from "../../models/PlaceModel";
-import InfoRow from "../common/InfoRow";
+import InfoBox from "../common/InfoBox";
+
 interface PlaceInfoTabProps {
   place?: PlaceListBase;
 }
 
 const PlaceInfoTab = ({ place }: PlaceInfoTabProps) => {
+  const { t } = useTranslation();
+
+  // 1. 상태 및 혼잡도 설정 추출 (1회 호출)
+  const operationConfig = getOperationStatusConfig(place?.operationStatus);
+  const congestionConfig = getCongestionConfig(place?.congestion);
+
+  // 2. 주소 포맷팅 (null/undefined 대응)
+  const formattedAddress = [place?.add1, place?.add2].filter(Boolean).join(" ");
+
+  // 3. 거리 포맷팅 (km/m 자동 단위 전환 예시)
+  const formattedDistance = (() => {
+    if (place?.distance === undefined || place?.distance === null)
+      return t("common:emptyState.none", "정보 없음");
+    const distanceMeters = Math.round(place.distance);
+
+    const formattedValue =
+      distanceMeters >= 1000
+        ? `${(distanceMeters / 1000).toFixed(1)}km`
+        : `${distanceMeters.toLocaleString()}m`;
+
+    // return t("places:detail.info.value.distance", {
+    //   distance: formattedValue,
+    // });
+    return formattedValue;
+  })();
+
   return (
     <Box sx={{ py: 2 }}>
-      <Stack spacing={3}>
-        <InfoRow
+      <Stack spacing={1}>
+        <InfoBox
           icon={<LocationOnIcon />}
-          label="주소"
-          // value={`${place?.add1 ?? ""} ${place?.add2 ?? ""}`.trim()}
-          value={`${place?.add1}\n ${place?.add2}`}
-        />
-        <InfoRow
-          icon={<ScheduleIcon />}
-          label="운영 상태"
-          value={
-            <Chip
-              label={place?.operationStatus ?? "정보 없음"}
-              size="small"
-              color="default"
-            />
+          label={t("places:detail.info.menu.address")}
+          value={formattedAddress || t("common:emptyState.none")}
+          description={
+            <Stack direction={"row"} spacing={1} sx={{ ml: 4 }}>
+              <Typography
+                sx={{
+                  fontWeight: 400,
+                  fontSize: "0.795rem",
+                }}
+              >
+                {t("places:detail.info.value.distance")}{" "}
+              </Typography>
+              <Typography
+                sx={{
+                  fontWeight: 600,
+                  fontSize: "0.795rem",
+                }}
+              >
+                {formattedDistance}
+              </Typography>
+            </Stack>
           }
+          // color="#ffffff5e"
         />
-        <InfoRow
-          icon={<RouteOutlinedIcon />}
-          label="현재 위치"
-          value={`${Math.round(place?.distance ?? 0).toLocaleString()}m`}
+        <InfoBox
+          icon={<LocalPhoneRoundedIcon />}
+          label={t("places:detail.info.menu.tel")}
+          value={place?.tel || t("common:emptyState.none")}
         />
-        <InfoRow
-          icon={<CategoryOutlinedIcon />}
-          label="카테고리"
-          value={place?.category}
-        />
-        <InfoRow
-          icon={<GroupsIcon />}
-          label="예상 혼잡도"
+
+        {/* 운영시간 */}
+        <InfoBox
+          icon={<ScheduleIcon />}
+          label={t("places:detail.info.menu.operationInfo")}
+          bgColor={operationConfig.bgColor}
           value={
-            <Chip
-              label={place?.congestion ?? "정보 없음"}
-              size="small"
-              color="default"
-            />
+            <Stack direction={"row"} spacing={1}>
+              <Typography
+                color={operationConfig.color}
+                sx={{
+                  fontSize: "0.875rem",
+                  fontWeight: 600,
+                }}
+              >
+                {t(operationConfig.label)}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "0.875rem",
+                }}
+              >
+                {place?.operationHour === "상시개방"
+                  ? t("places:operation.status.alwaysOpen")
+                  : place?.operationHour || t("common:emptyState.none")}
+              </Typography>
+            </Stack>
           }
         />
 
-        <InfoRow
-          icon={<StarIcon />}
-          label="평점"
-          value={place?.rating ? `${place?.rating?.toFixed(1)} 점` : "0.0점"}
-        />
-        <InfoRow
-          icon={<ReviewsOutlinedIcon />}
-          label="리뷰"
-          value={`${place?.reviewCount ?? 0}개`}
-        />
-        <InfoRow
-          icon={<FavoriteBorderIcon />}
-          label="좋아요"
-          value={`${place?.likes ?? 0}개`}
-        />
-        <InfoRow
-          icon={<TourIcon />}
-          label="방문 여부"
+        {/* 예상 혼잡도 */}
+        <InfoBox
+          icon={<GroupsIcon />}
+          label={t("places:detail.info.menu.congestion")}
           value={
-            <Chip
-              label={place?.isVisited ? "방문 완료" : "미방문"}
-              size="small"
-              color={place?.isVisited ? "info" : "default"}
-            />
+            <Stack
+              direction={"row"}
+              spacing={1}
+              sx={{
+                alignContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "0.875rem",
+                  fontWeight: 700,
+                }}
+                color={congestionConfig.color}
+              >
+                {t(congestionConfig?.label)}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "0.875rem",
+                }}
+              >
+                {t(congestionConfig?.message)}
+              </Typography>
+            </Stack>
+          }
+        />
+
+        {/* 주차 여부 */}
+        <InfoBox
+          icon={<LocalParkingIcon />}
+          label={t("places:detail.info.menu.parking")}
+          value={
+            place?.parking === "NONE"
+              ? t("places:parking.none")
+              : place?.parking === "AVAILABLE"
+                ? t("places:parking.available")
+                : t("places:parking.unavailable")
           }
         />
       </Stack>

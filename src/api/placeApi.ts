@@ -1,3 +1,4 @@
+import type { CourseDetail, CourseListResponse } from "../models/CourseModel";
 import type {
   PlaceListBase,
   PlaceLocPrams,
@@ -60,5 +61,25 @@ export const getCurrentWeather = async (
       longitude: longitude,
     },
   });
+  return response.data.data;
+};
+
+/**
+ * 코스 목록 조회
+ */
+export const getCourseList: () => Promise<CourseListResponse> = async () => {
+  const response = await apiClient.get(`/courses`);
+  return response.data.data;
+};
+
+/**
+ * 코스 상세 조회
+ * @param courseId
+ * @returns
+ */
+export const getCourseDetail: (
+  courseId: number,
+) => Promise<CourseDetail> = async (courseId) => {
+  const response = await apiClient.get(`/courses/${courseId}`);
   return response.data.data;
 };

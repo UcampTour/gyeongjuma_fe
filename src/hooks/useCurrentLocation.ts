@@ -17,30 +17,38 @@ export const useCurrentLocation = () => {
   /**
    * 좌표를 행정동 주소로 변환
    */
-  const getCurrentAddress = (
-    lat: number,
-    lng: number,
-  ): Promise<string | null> => {
-    return new Promise((resolve) => {
-      const geocoder = new window.kakao.maps.services.Geocoder();
+  const getCurrentAddress = useCallback(
+    (lat: number, lng: number): Promise<string | null> => {
+      return new Promise((resolve) => {
+        const geocoder = new window.kakao.maps.services.Geocoder();
 
-      geocoder.coord2RegionCode(lng, lat, (result: any[], status: string) => {
-        if (status !== window.kakao.maps.services.Status.OK) {
-          resolve(null);
-          return;
-        }
+        geocoder.coord2RegionCode(lng, lat, (result: any[], status: string) => {
+          if (status !== window.kakao.maps.services.Status.OK) {
+            resolve(null);
+            return;
+          }
 
-        const region = result.find((item) => item.region_type === "H");
+          const region = result.find((item) => item.region_type === "H");
 
-        resolve(
-          region
-            ? `${region.region_1depth_name} ${region.region_2depth_name} ${region.region_3depth_name}`
-            : null,
-        );
+          resolve(
+            region
+              ? `${region.region_1depth_name} ${region.region_2depth_name} ${region.region_3depth_name}`
+              : null,
+          );
+        });
       });
-    });
-  };
+    },
+    [],
+  );
 
+  const isGyeongju = useCallback(
+    async (lat: number, lng: number): Promise<boolean> => {
+      const address = await getCurrentAddress(lat, lng);
+
+      return address?.includes("경주시") ?? false;
+    },
+    [getCurrentAddress],
+  );
   /**
    * 사용자의 현재 좌표 1회 조회
    */
@@ -143,6 +151,7 @@ export const useCurrentLocation = () => {
     currentLocation,
     updateCurrentLocation,
     getCurrentAddress,
+    isGyeongju,
     startWatchingLocation,
     stopWatchingLocation,
   };

@@ -10,7 +10,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
-import type { ApiErrorResponse } from "../../api/apiClient";
 import { certifyVisit } from "../../api/placeApi";
 import { fetchQuizDetail } from "../../api/quizApi";
 import defaultPlaceImage from "../../assets/default_place_img.png";
@@ -20,7 +19,6 @@ import type { LoadingProps } from "../../components/common/CommonLoading";
 import CommonLoading from "../../components/common/CommonLoading";
 import CommonStamp from "../../components/common/CommonStamp";
 import AudioList from "../../components/places/audio/AudioList";
-import PlaceCommentTab from "../../components/places/PlaceCommentTab";
 import PlaceInfoTab from "../../components/places/PlaceInfoTab";
 import QuizIntro from "../../components/Quiz/QuizList/QuizIntro";
 import { queryClient } from "../../config/queryClient";
@@ -28,12 +26,13 @@ import { audioPlayer } from "../../hooks/audio/AudioPlayer";
 import { useCommonDialog } from "../../hooks/common/useCommonDialog";
 import { useCommonLoading } from "../../hooks/common/useCommonLoading";
 import { useFavoriteMutation } from "../../hooks/place/useFavoriteMutaion";
+import { useQuizList } from "../../hooks/quiz/useQuizList";
 import { useCurrentLocation } from "../../hooks/useCurrentLocation";
 import { type QuizItem } from "../../models/QuizModel";
 import { useAudioQuery } from "../../queries/useAudioQuery";
 import { usePlaceListQuery } from "../../queries/usePlaceListQuery";
 import { useAudioStore } from "../../store/audioPlayerStore";
-import { useQuizList } from "../../hooks/quiz/useQuizList";
+import PlaceCommentTab from "../../components/places/PlaceCommentTab";
 
 const PlaceDetailPage = () => {
   const { t } = useTranslation();
@@ -92,19 +91,19 @@ const PlaceDetailPage = () => {
 
   const TABS: TabItem[] = [
     {
-      label: "정보",
+      label: t("places:detail.tabs.info"),
       value: "info",
     },
     {
-      label: "해설",
+      label: t("places:detail.tabs.commentary"),
       value: "commentary",
     },
     {
-      label: "오디오",
+      label: t("places:detail.tabs.audio"),
       value: "audio",
     },
     {
-      label: "퀴즈",
+      label: t("places:detail.tabs.quiz"),
       value: "quiz",
     },
   ];
@@ -126,13 +125,13 @@ const PlaceDetailPage = () => {
   const handleClickStamp = async () => {
     if (!place) return;
     if (place?.isVisited) {
-      await alert("이미 방문완료된 관광지입니다.");
+      await alert(t("places:message.alreadyVisited"));
       return;
     }
 
     const ok = await confirm({
-      title: "방문 인증 처리",
-      message: "방문인증 처리하시겠습니까?",
+      title: t("places:message.confirmVisitTitle"),
+      message: t("places:message.confirmVisitMessage"),
     });
 
     if (!ok) return;
@@ -146,9 +145,8 @@ const PlaceDetailPage = () => {
   const handleRegistPlace = async () => {
     setLoading({
       isLoading: true,
-      loadingMsg: "방문 인증 처리 중",
-      description:
-        "관광지에 도착했는지 확인하고 있어요.\n 잠시만 기다려 주세요!",
+      loadingMsg: t("places:message.loadingVisitTitle"),
+      description: t("places:message.loadingVisitMessgae"),
     });
     if (!place) return;
 
@@ -167,7 +165,8 @@ const PlaceDetailPage = () => {
       }
       if (response.status === "SUCCESS") {
         await alert(
-          `방문 인증 완료 🎉\n ${place?.placeName} 스탬프 획득 완료! \n이제 퀴즈에 도전해 포인트를 획득해 보세요.`,
+          t("places:message.successVisit", place?.placeName),
+          // `방문 인증 완료 🎉\n ${place?.placeName} 스탬프 획득 완료! \n이제 퀴즈에 도전해 포인트를 획득해 보세요.`,
         );
 
         queryClient.invalidateQueries({
@@ -181,8 +180,8 @@ const PlaceDetailPage = () => {
       setLoading({
         isLoading: false,
       });
-      const error = err as AxiosError<ApiErrorResponse>;
-      alert(error.response?.data.message ?? "시스템 에러 발생");
+      const error = err as AxiosError<any>;
+      alert(error.response?.data.message ?? "SYSTEM ERROR");
     }
   };
 
@@ -242,11 +241,11 @@ const PlaceDetailPage = () => {
           {/* 타이틀 영역 */}
           <Stack direction="column" sx={{ mb: 3, mt: 2, gap: 1 }}>
             <Typography sx={{ fontSize: "25px", fontWeight: 700 }}>
-              {place?.placeName ?? ""}
+              {place?.placeName}
             </Typography>
 
-            <Typography sx={{ fontSize: "15px", fontWeight: 700 }}>
-              {place?.placeName ?? "영어"}
+            <Typography sx={{ fontSize: "18px", fontWeight: 700 }}>
+              {place?.subPlaceName}
             </Typography>
           </Stack>
 

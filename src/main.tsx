@@ -1,4 +1,4 @@
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -22,7 +22,7 @@ createRoot(document.getElementById("root")!).render(
           <CssBaseline />
           <DialogProvider>
             <ErrorBoundary FallbackComponent={CommonErrorPage}>
-              <Suspense fallback={<span>로딩중...</span>}>
+              <Suspense fallback={<Box>loading...</Box>}>
                 <RouterProvider router={router} />
               </Suspense>
             </ErrorBoundary>

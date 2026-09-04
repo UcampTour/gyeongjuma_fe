@@ -9,5 +9,8 @@
   "label": {
     "unVisited": "미방문",
     "isVisited": "방문 완료"
+  },
+  "title": {
+    "nearbyPlace": "내 주변 인기 장소"
   }
 }
