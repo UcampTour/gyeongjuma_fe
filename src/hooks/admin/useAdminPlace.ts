@@ -3,6 +3,7 @@ import type { ChangeEvent } from "react";
 import type { SelectChangeEvent } from "@mui/material";
 import { useAdminCourseListQuery } from "../../queries/admin/useAdminCourseQuery";
 import { updatePlaceContent } from "../../api/admin/AdminPlaceApi";
+import { useAdminPlaceListQuery } from "../../queries/admin/useAdminPlaceQuery";
 
 export interface PlaceContentItem {
   placeContentId?: number;
@@ -19,7 +20,7 @@ export interface PlaceItem {
 }
 
 export const useAdminPlace = () => {
-  const { data, refetch } = useAdminCourseListQuery();
+  const { data, refetch } = useAdminPlaceListQuery();
   const placeList = data?.places ?? [];
   console.log(placeList);
 
@@ -40,7 +41,7 @@ export const useAdminPlace = () => {
     }
   }, [placeList, selectedPlaceId]);
 
-  const selectedPlace = placeList.find((p) => p.placeId === selectedPlaceId) || null;
+  const selectedPlace = placeList.find((p: PlaceItem) => p.placeId === selectedPlaceId) || null;
 
   // 우측 패널 내부 탭 상태 (난이도만 존재)
   const [currentDifficulty, setCurrentDifficulty] = useState<"EASY" | "NORMAL" | "HARD">("EASY");
@@ -95,7 +96,7 @@ export const useAdminPlace = () => {
     if (draftContents.length !== (selectedPlace.contents?.length ?? 0)) return true;
 
     for (const draft of draftContents) {
-      const original = selectedPlace.contents?.find((c) => c.difficulty === draft.difficulty);
+      const original = selectedPlace.contents?.find((c: any) => c.difficulty === draft.difficulty);
       if (!original || original.description !== draft.description) {
         return true;
       }
@@ -104,7 +105,7 @@ export const useAdminPlace = () => {
   };
 
   // 검색 및 필터링 로직
-  const filteredPlaces = placeList.filter((place) => {
+  const filteredPlaces = placeList.filter((place: PlaceItem) => {
     const matchesKeyword = place.placeName.toLowerCase().includes(keyword.toLowerCase());
     const matchesUsage = 
       useFlag === "all" || 

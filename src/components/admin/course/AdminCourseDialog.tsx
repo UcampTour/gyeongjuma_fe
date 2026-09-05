@@ -29,8 +29,8 @@ interface SelectedPlace {
 interface AdminCourseDialogProps {
   open: boolean;
   dialogMode: "CREATE" | "EDIT";
-  formType: "WALK" | "PUBLIC" | "DRIVE";
-  setFormType: (val: "WALK" | "PUBLIC" | "DRIVE") => void;
+  formType: "WALK" | "BIKE" | "DRIVE" | "TRANSIT";
+  setFormType: (val: "WALK" | "BIKE" | "DRIVE" | "TRANSIT") => void;
   formIsUse: boolean;
   setFormIsUse: (val: boolean) => void;
   formPlaces: SelectedPlace[];
@@ -84,8 +84,9 @@ export const AdminCourseDialog: React.FC<AdminCourseDialogProps> = ({
                 onChange={(e) => setFormType(e.target.value as any)}
               >
                 <MenuItem value="WALK">도보</MenuItem>
-                <MenuItem value="PUBLIC">대중교통</MenuItem>
+                <MenuItem value="TRANSIT">대중교통</MenuItem>
                 <MenuItem value="DRIVE">운전</MenuItem>
+                <MenuItem value="BIKE">자전거</MenuItem>
               </Select>
             </FormControl>
 

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { fetchAdminCourseList } from "../../api/admin/AdminPlaceApi"
+import { fetchAdminCourseList } from "../../api/admin/AdminCourseApi";
 
 export const useAdminCourseListQuery = () => {
   return useQuery({

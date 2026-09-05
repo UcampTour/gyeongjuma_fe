@@ -1,10 +1,10 @@
 import { apiClient } from "../apiClient";
 
-export const fetchAdminCourseList = async (): Promise<any> => {
+export const fetchAdminPlaceLIst = async (): Promise<any> => {
   const response = await apiClient.get("admin/places/contents", {
     params: {
       page: 0,
-      size: 1000,
+      size: 5000,
     },
   });
 

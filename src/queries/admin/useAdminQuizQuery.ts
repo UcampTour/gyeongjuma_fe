@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { fetchAdminQuizList } from "../../api/admin/AdminQuizApi"
+import { fetchAdiminQuizDetail, fetchAdminQuizList, fetchAdminQuizTranslations } from "../../api/admin/AdminQuizApi"
 
 export const useAdminQuizListQuery = () => {
   return useQuery({
@@ -7,3 +7,17 @@ export const useAdminQuizListQuery = () => {
     queryFn: fetchAdminQuizList,
   });
 };
+
+export const useAdminQuizDetailQuery = (placeQuizInfoId: number) => {
+  return useQuery({
+    queryKey: ["adminQuizzesDetail"],
+    queryFn: () => fetchAdiminQuizDetail(placeQuizInfoId),
+  })
+}
+
+export const useAdminQuizTransQuery = (placeQuizInfoId: number) => {
+  return useQuery({
+    queryKey: ["adminQuizzesTrans"],
+    queryFn: () => fetchAdminQuizTranslations(placeQuizInfoId),
+  })
+}

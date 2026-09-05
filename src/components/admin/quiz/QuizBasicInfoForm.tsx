@@ -80,7 +80,7 @@ const QuizBasicInfoForm = ({
               onChange={(e) => handleQuizInfoChange("difficulty", e.target.value)}
             >
               <MenuItem value="HIGH">상</MenuItem>
-              <MenuItem value="MEDIUM">중</MenuItem>
+              <MenuItem value="NORMAL">중</MenuItem>
               <MenuItem value="LOW">하</MenuItem>
             </Select>
           </FormControl>
