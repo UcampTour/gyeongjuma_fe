@@ -8,6 +8,7 @@ import { CongestionLevel, OperationStatus } from "../../../models/commonModel";
 import { type PlaceListBase } from "../../../models/PlaceModel";
 import CommonStamp from "../../common/CommonStamp";
 import StatusBadge from "../../common/StatusBadge";
+import { useAuthStore } from "../../../store/useAuthStore";
 
 interface PlaceCardProps {
   place: PlaceListBase;
@@ -16,6 +17,14 @@ interface PlaceCardProps {
 
 const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
   const { t } = useTranslation("places");
+
+  // 1. 유저 스토어에서 difficulty 가져오기 (없으면 기본값 "normal")
+  const difficulty = useAuthStore((state) => state.member?.difficulty) || "normal";
+  
+  // 2. 소문자로 변환 후, description 객체에서 알맞은 키값 매칭
+  // 예: difficulty가 "EASY"나 "Easy"여도 소문자로 변환하여 "easy"를 안전하게 가져옴
+  const lowerDifficulty = difficulty.toLowerCase() as keyof typeof place.description;
+  const currentDescription = place.description?.[lowerDifficulty] || place.description?.normal || "";
 
   // 배경색과 다국어 번역 키 매핑
   const badgeConfig: Record<
@@ -130,7 +139,7 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
               WebkitBoxOrient: "vertical",
             }}
           >
-            {place.description}
+            {currentDescription}
           </Typography>
         </Box>
 
@@ -206,7 +215,7 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
                 lineHeight: 1.2,
               }}
             >
-              {place.likes}
+              {place.parkinglikes}
             </Typography>
           </Box>
         </Box>

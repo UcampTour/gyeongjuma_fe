@@ -15,7 +15,7 @@ const PlaceSearchDialog = ({ open, onClose, handleSelectPlace }: PlaceSearchDial
   const [searchKeyword, setSearchKeyword] = useState("");
 
   // language가 "ko"이면서 검색 키워드가 포함된 장소만 필터링
-  const filteredPlaces = placeData.filter((place) => {
+  const filteredPlaces = placeData.filter((place: any) => {
     const isKorean = place?.language === "ko";
     const matchesKeyword = place?.placeName?.toLowerCase().includes((searchKeyword || "").toLowerCase());
     return isKorean && matchesKeyword;

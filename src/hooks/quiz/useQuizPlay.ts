@@ -137,7 +137,7 @@ export const useQuizPlay = (quizId: string | undefined) => {
 
   return {
     quizData,
-    loading,
+    isLoading: loading,
     quizResultData,
     resultLoading,
     animatedPoint,

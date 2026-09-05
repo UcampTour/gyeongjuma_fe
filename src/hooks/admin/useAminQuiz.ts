@@ -32,7 +32,7 @@ export const useAdminQuiz = () => {
 
     const targetKeyword = keyword.trim().toLowerCase();
 
-    return quizList.filter((quiz) => {
+    return quizList.filter((quiz: QuizItem) => {
 
       // 1. 검색어 필터
       const matchesSearch =
