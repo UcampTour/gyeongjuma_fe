@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import type { ChangeEvent } from "react";
+import { useAdminCourseListQuery } from "../../queries/admin/useAdminCourseQuery";
 
 export interface SelectedPlace {
   id: number;
@@ -52,6 +53,9 @@ const initialCourses: CourseItem[] = [
 ];
 
 export const useAdminCourse = () => {
+  const { data, isLoading } = useAdminCourseListQuery();
+  const courseData = data?.courses ?? [];
+  console.log(data); 
   const [courses] = useState<CourseItem[]>(initialCourses);
   
   // 검색 및 필터 상태
