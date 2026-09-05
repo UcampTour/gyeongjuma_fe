@@ -69,9 +69,9 @@ export const usePlaceList = () => {
 
       case PlaceSortType.LIKES:
         return result.sort((a, b) => {
-          if (a.likes === null) return 1;
-          if (b.likes === null) return -1;
-          return b.likes - a.likes;
+          if (a.parkinglikes === null) return 1;
+          if (b.parkinglikes === null) return -1;
+          return b.parkinglikes - a.parkinglikes;
         });
 
       default:
