@@ -1,13 +1,18 @@
 import PlayCircleFilledWhiteOutlinedIcon from "@mui/icons-material/PlayCircleFilledWhiteOutlined";
 import { Box, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import type { AudioItemRes } from "../../../models/PlaceModel";
 
 export interface AudioItemProps {
-  item: any;
+  item: AudioItemRes;
 }
 
 const AudioItem = ({ item }: AudioItemProps) => {
   const navigate = useNavigate();
+
+  /**
+   * 재생시간 포맷 변환
+   */
   const formatPlayTime = (seconds: string | number) => {
     const total = Number(seconds);
     const min = Math.floor(total / 60);
@@ -15,6 +20,7 @@ const AudioItem = ({ item }: AudioItemProps) => {
 
     return `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
   };
+
   return (
     <Box
       sx={{
@@ -30,7 +36,7 @@ const AudioItem = ({ item }: AudioItemProps) => {
           bgcolor: "action.hover",
         },
       }}
-      onClick={() => navigate(`/audio/${item.audioId}`)}
+      onClick={() => navigate(`/audio/${item.placeId}/${item.audioId}`)}
     >
       {/* 썸네일 */}
       <Box

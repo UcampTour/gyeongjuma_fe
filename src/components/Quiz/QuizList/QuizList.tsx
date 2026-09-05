@@ -14,7 +14,7 @@ const QuizList = ({ quizList, handleQuizClick }: QuizListProps) => {
         <QuizCard
           key={quiz.placeQuizInfoId}
           quiz={quiz}
-          onClick={() => handleQuizClick(quiz)} // 클릭 이벤트 연결
+          onClick={() => handleQuizClick(quiz)} 
         />
       ))}
     </Box>

@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { QuizCategory } from "../../../models/QuizModel";
 
 interface QuizCategoryFilterProps {
@@ -10,12 +11,14 @@ const QuizCategoryFilter = ({
   selectedCategory,
   setSelectedCategory,
 }: QuizCategoryFilterProps) => {
+  const { t } = useTranslation("quiz");
+
   const categories = [
-    { value: QuizCategory.ALL, label: "전체" },
-    { value: QuizCategory.AVAILABLE, label: "도전가능" },
-    { value: QuizCategory.PROGRESS, label: "진행중" },
-    { value: QuizCategory.COMPLETED, label: "완료" },
-    { value: QuizCategory.LOCKED, label: "잠김" },
+    { value: QuizCategory.ALL, label: t("category.all") },
+    { value: QuizCategory.AVAILABLE, label: t("category.available") },
+    { value: QuizCategory.PROGRESS, label: t("category.progress") },
+    { value: QuizCategory.COMPLETED, label: t("category.completed") },
+    { value: QuizCategory.LOCKED, label: t("category.locked") },
   ];
 
   return (
@@ -27,7 +30,7 @@ const QuizCategoryFilter = ({
         whiteSpace: "nowrap",
         mb: 3,
         pb: 1,
-        "::-webkit-scrollbar": { display: "none" },
+        ":-webkit-scrollbar": { display: "none" },
       }}
     >
       {categories.map((category) => {

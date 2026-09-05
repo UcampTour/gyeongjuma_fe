@@ -19,10 +19,15 @@ function BottomNavigationBar() {
 
   const menus = [
     { label: t("common:bottomNav.home"), icon: <HomeIcon />, path: "/" },
+    // {
+    //   label: t("common:bottomNav.places"),
+    //   icon: <PlaceIcon />,
+    //   path: "/places",
+    // },
     {
-      label: t("common:bottomNav.places"),
+      label: t("common:bottomNav.course"),
       icon: <PlaceIcon />,
-      path: "/places",
+      path: "/course",
     },
     {
       label: t("common:bottomNav.explore"),
@@ -30,6 +35,7 @@ function BottomNavigationBar() {
       path: "/explore",
       isCenter: true,
     },
+
     {
       label: t("common:bottomNav.quiz"),
       icon: <AssignmentTurnedInIcon />,

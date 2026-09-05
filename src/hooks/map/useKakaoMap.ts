@@ -11,6 +11,7 @@ import { GYEONGJU_CENTER } from "../../constants/map";
 export const useKakaoMap = (mapRef: RefObject<HTMLDivElement | null>) => {
   /* 카카오맵 인스턴스 상태 관리 */
   const [map, setMap] = useState<any>(null);
+  const [clusterer, setClusterer] = useState<any>(null);
 
   useEffect(() => {
     // 지도를 렌더링할 div 요소가 존재하지 않으면 종료
@@ -19,17 +20,25 @@ export const useKakaoMap = (mapRef: RefObject<HTMLDivElement | null>) => {
 
     // 카카오맵 API 로드 후 지도 생성
     window.kakao.maps.load(() => {
-      const kakaoMap = new window.kakao.maps.Map(mapRef.current, {
+      const kakaoMap = new window.kakao.maps.Map(mapRef.current!, {
         center: new window.kakao.maps.LatLng(
           GYEONGJU_CENTER.lat,
           GYEONGJU_CENTER.lng,
-        ), // 초기 중심 좌표: 경주역
+        ),
         level: 5,
       });
 
+      const kakaoClusterer = new window.kakao.maps.MarkerClusterer({
+        map: kakaoMap,
+        averageCenter: true,
+        minLevel: 6,
+        minClusterSize: 1,
+      });
+
       setMap(kakaoMap);
+      setClusterer(kakaoClusterer);
     });
   }, []);
 
-  return map;
+  return { map, clusterer };
 };

@@ -1,10 +1,15 @@
 import highCongestionMarker from "../../assets/map/congestion_high.png";
 import lowCongestionMarker from "../../assets/map/congestion_low.png";
 import mediumCongestionMarker from "../../assets/map/congestion_medium.png";
+import noneMarker from "../../assets/map/none.png";
 import normalMarker from "../../assets/map/normal_marker.png";
-import operatingMarker from "../../assets/map/operating_marker.png";
+import breakOperationMarker from "../../assets/map/operation_break.png";
+import closedOperationMarker from "../../assets/map/operation_closed.png";
+import openOperationMarker from "../../assets/map/operation_open.png";
+// import operatingMarker from "../../assets/map/operating_marker.png";
 import unvisitedFilterMarker from "../../assets/map/unvisited_filter_marker.png";
 import { PlaceFilterType } from "../../models/MapModel";
+
 import type { PlaceListBase } from "../../models/PlaceModel";
 import MapMarker from "./MapMarker";
 
@@ -13,6 +18,7 @@ import MapMarker from "./MapMarker";
  */
 export interface PlaceMarkerProps {
   map: any; // useKakaoMap 훅이 반환한 카카오맵 객체
+  clusterer?: any;
   place: PlaceListBase; // 관광지 정보
   onClick?: (place: PlaceListBase) => void; // 클릭 이벤트 핸들러
   filter: PlaceFilterType;
@@ -21,6 +27,7 @@ export interface PlaceMarkerProps {
 const PlaceMarker = ({
   filter = PlaceFilterType.NONE,
   map,
+  clusterer,
   place,
   onClick,
 }: PlaceMarkerProps) => {
@@ -41,7 +48,16 @@ const PlaceMarker = ({
         return normalMarker; // 기본값 예외 처리
 
       case PlaceFilterType.OPERATING:
-        return operatingMarker; // 운영중 필터 이미지 변수명
+        if (place.operationStatus === "OPEN") {
+          return openOperationMarker;
+        }
+        if (place.operationStatus === "CLOSED") {
+          return closedOperationMarker;
+        }
+        if (place.operationStatus === "BREAK_TIME") {
+          return breakOperationMarker;
+        }
+        return noneMarker; // 운영중 필터 이미지 변수명
 
       case PlaceFilterType.UNVISITED:
         return place.isVisited ? normalMarker : unvisitedFilterMarker; // 미방문 필터 이미지 변수명
@@ -56,6 +72,7 @@ const PlaceMarker = ({
   return (
     <MapMarker
       map={map}
+      clusterer={clusterer}
       lat={place.lat}
       lng={place.lng}
       title={place.placeName}

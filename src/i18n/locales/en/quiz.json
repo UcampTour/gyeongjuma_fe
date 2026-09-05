@@ -1,0 +1,59 @@
+{
+  "title": "Gyeongju Historic Site Quiz",
+  "category": {
+    "all": "All",
+    "available": "Available",
+    "progress": "In Progress",
+    "completed": "Completed",
+    "locked": "Locked"
+  },
+  "quizprogress": "Quiz Progress",
+  "totalQuestions": "Total {{count}} questions",
+  "button": {
+    "retry": "Retry",
+    "resume": "Resume",
+    "challenge": "Challenge"
+  },
+  "intro": {
+    "message": {
+      "available": "Take the quiz and earn points. 🎉",
+      "locked": "Click the stamp to verify your visit! 🔒",
+      "completed": "You have already completed the quiz. 👏",
+      "progress": "You have a quiz in progress. ✍️"
+    },
+    "button": {
+      "locked": "Available after visit verification",
+      "retry": "Try Again",
+      "progress": "Continue Challenge",
+      "start": "Start Challenge"
+    },
+    "stats": {
+      "questions": "Questions",
+      "difficulty": "Difficulty",
+      "difficultyValue": "Normal",
+      "points": "Points"
+    },
+    "empty": {
+      "title": "No quizzes prepared yet",
+      "desc": "Stay tuned for upcoming updates! 😊"
+    },
+    "completedNotice": "* Points are not awarded for quizzes already completed."
+  },
+  "header": {
+    "resultTitle": "Quiz Completed & Results"
+  },
+  "play": {
+    "remainingQuestions": "Remaining",
+    "correctQuestions": "Correct",
+    "currentPoints": "Current Points",
+    "unitQuestion": "questions"
+  },
+  "result": {
+    "scoreSummary": "You got {{correct}} out of {{total}} questions correct.",
+    "pointEarned": "+{{points}} Point",
+    "reviewHeader": "Review My Answers",
+    "accuracyRate": "Accuracy Rate {{rate}}%",
+    "buttonRetry": "Try Again",
+    "buttonBack": "Go Back"
+  }
+}

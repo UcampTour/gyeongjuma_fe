@@ -1,0 +1,32 @@
+{
+  "startEasy": "간편하게 시작하기",
+  "googleLogin": "Google 로그인",
+  "kakaoLogin": "카카오 로그인",
+  "naverLogin": "네이버 로그인",
+  "termsPrefix": "로그인시 ",
+  "privacyPolicy": "개인정보 처리방침",
+  "termsAnd": " 및 ",
+  "termsOfService": "서비스 이용약관",
+  "termsSuffix": "에 동의합니다.",
+  "register": {
+    "title": "추가 정보 등록",
+    "nickname": "닉네임",
+    "nicknamePlaceholder": "2~12자 입력",
+    "nicknameCheck": "확인",
+    "nicknameHelperInUse": "이미 사용 중인 닉네임입니다.",
+    "nicknameHelperAvailable": "사용 가능한 닉네임입니다.",
+    "difficulty": "난이도 선택",
+    "difficultyEasy": "EASY",
+    "difficultyNormal": "NORMAL",
+    "difficultyHard": "HARD",
+    "locale": "언어 선택",
+    "localeKo": "한국어",
+    "localeEn": "English",
+    "localeJa": "日本語",
+    "localeZh": "中文",
+    "submit": "회원가입 완료",
+    "alertCheckNickname": "닉네임 중복 확인을 먼저 해주세요.",
+    "alertRegisterFail": "등록 실패",
+    "errorCheckFail": "중복 확인 실패"
+  }
+}

@@ -1,9 +1,16 @@
 {
   "search": {
-    "placeholder": "관광지를 검색해보세요"
+    "placeholder": "Search for attractions"
   },
   "buttons": {
-    "currentLocation": "current location",
-    "nearbyAttractions": "주변 관광지"
+    "currentLocation": "Current location",
+    "nearbyAttractions": "Nearby attractions"
+  },
+  "label": {
+    "unVisited": "Unvisited",
+    "isVisited": "Visited"
+  },
+  "title": {
+    "nearbyPlace": "Popular places near me"
   }
 }

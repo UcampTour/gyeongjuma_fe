@@ -5,10 +5,7 @@ import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import defaultPlaceImg from "../../../assets/default_place_img.png";
 import { CongestionLevel, OperationStatus } from "../../../models/commonModel";
-import {
-  statusBadgeStyles,
-  type PlaceListBase,
-} from "../../../models/PlaceModel";
+import { type PlaceListBase } from "../../../models/PlaceModel";
 import CommonStamp from "../../common/CommonStamp";
 import StatusBadge from "../../common/StatusBadge";
 
@@ -18,14 +15,27 @@ interface PlaceCardProps {
 }
 
 const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("places");
 
-  const currentBadge =
+  // 배경색과 다국어 번역 키 매핑
+  const badgeConfig: Record<
+    CongestionLevel | OperationStatus,
+    { translationKey: string; bgColor: string }
+  > = {
+    [CongestionLevel.HIGH]: { translationKey: "badge.high", bgColor: "#C05656" },
+    [CongestionLevel.MEDIUM]: { translationKey: "badge.medium", bgColor: "#E0A928" },
+    [CongestionLevel.LOW]: { translationKey: "badge.low", bgColor: "#3F8E72" },
+    [CongestionLevel.NONE]: { translationKey: "badge.none", bgColor: "#d8d8d8" },
+    [OperationStatus.CLOSED]: { translationKey: "badge.closed", bgColor: "#757575" },
+    [OperationStatus.BREAK_TIME]: { translationKey: "badge.breakTime", bgColor: "#E2723B" },
+    [OperationStatus.OPEN]: { translationKey: "badge.open", bgColor: "#3F8E72" },
+  };
+
+  const currentConfig =
     place.operationStatus === OperationStatus.OPEN &&
     place.congestion !== CongestionLevel.NONE
-      ? statusBadgeStyles[place.congestion]
-      : statusBadgeStyles[place.operationStatus] ||
-        statusBadgeStyles[OperationStatus.NONE];
+      ? badgeConfig[place.congestion]
+      : badgeConfig[place.operationStatus] || badgeConfig[OperationStatus.NONE];
 
   return (
     <Card
@@ -63,8 +73,8 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
           }}
         />
         <StatusBadge
-          label={currentBadge.label}
-          bgcolor={currentBadge.bgColor}
+          label={t(currentConfig.translationKey)}
+          bgcolor={currentConfig.bgColor}
         />
       </Box>
 
@@ -91,7 +101,6 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
               mb: 0.1,
             }}
           >
-            {/* {t(`places:category.${place.category.toLowerCase()}`)} */}
             {place.category}
           </Typography>
 
@@ -171,17 +180,6 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
             </Typography>
           </Box>
 
-          {/* 별점 - 이 기능은 일단 보류 */}
-          {/* <Box sx={{ display: "flex", alignItems: "center", flexShrink: 0, whiteSpace: "nowrap" }}>
-            <StarIcon sx={{ fontSize: "14px", color: "#E0B134", mr: 0.3, flexShrink: 0 }} />
-            <Typography variant="body2" sx={{ color: "#7A7265", fontSize: "12px", fontWeight: "bold", display: "flex", alignItems: "center", lineHeight: 1.2 }}>
-              {place.rating}
-              <Box component="span" sx={{ fontSize: "11px", color: "#958D80", ml: 0.2, fontWeight: 400 }}>
-                ({place.reviewCount})
-              </Box>
-            </Typography>
-          </Box> */}
-
           {/* 찜 */}
           <Box
             sx={{
@@ -224,7 +222,7 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
             transform: "rotate(15deg)",
           }}
         >
-          <CommonStamp label="방문완료" />
+          <CommonStamp label={t("visitcomplete")} />
         </Box>
       )}
     </Card>

@@ -1,6 +1,10 @@
 import HeadphonesOutlinedIcon from "@mui/icons-material/HeadphonesOutlined";
 import { Box, Button, Stack, styled, Switch, Typography } from "@mui/material";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { audioPlayer } from "../../../hooks/audio/AudioPlayer";
+import { useAudioStore } from "../../../store/audioPlayerStore";
 import AudioItem from "./AudioItem";
 
 export interface AudioListProps {
@@ -8,8 +12,31 @@ export interface AudioListProps {
 }
 
 const AudioList = ({ audioList }: AudioListProps) => {
+  const { t } = useTranslation();
+  const { setAudio, setPlaying } = useAudioStore();
   const [hardMode, setHardMode] = useState<boolean>(false);
+  const navigate = useNavigate();
 
+  /**
+   * 전체듣기
+   */
+  const handlePlayAll = () => {
+    const firstAudio = audioList[0];
+
+    // 1. 재생목록 설정 + 첫 번째 오디오 재생
+    audioPlayer.playPlaylist(audioList);
+
+    setAudio({
+      title: firstAudio.title,
+      imageUrl: firstAudio.imageUrl,
+      audioId: firstAudio.audioId,
+      placeId: firstAudio.placeId,
+    });
+
+    setPlaying(true);
+
+    navigate(`/audio/${firstAudio.placeId}/${firstAudio.audioId}`);
+  };
   if (audioList.length === 0) {
     return (
       <Box
@@ -17,7 +44,7 @@ const AudioList = ({ audioList }: AudioListProps) => {
           mt: 2,
           px: 3,
           py: 5,
-          borderRadius: 3,
+          borderRadius: "24px",
           bgcolor: "#FCFBF8",
           border: "1px dashed #D9CDBD",
           display: "flex",
@@ -41,7 +68,7 @@ const AudioList = ({ audioList }: AudioListProps) => {
             mb: 0.5,
           }}
         >
-          등록된 오디오가 없습니다.
+          {t("places:audio.emptyState.title")}
         </Typography>
 
         <Typography
@@ -52,9 +79,9 @@ const AudioList = ({ audioList }: AudioListProps) => {
             lineHeight: 1.7,
           }}
         >
-          아직 제공되는 오디오 가이드가 없어요.
+          {t("places:audio.emptyState.message")}
           <br />
-          추후 업데이트될 예정입니다.
+          {t("places:audio.emptyState.message2")}
         </Typography>
       </Box>
     );
@@ -83,7 +110,7 @@ const AudioList = ({ audioList }: AudioListProps) => {
               fontSize: "0.875rem",
             }}
           >
-            이야기{" "}
+            {t("places:audio.label.story")}
             <Box
               component="span"
               sx={{
@@ -94,7 +121,7 @@ const AudioList = ({ audioList }: AudioListProps) => {
             </Box>
           </Typography>
 
-          <Stack
+          {/* <Stack
             direction="row"
             spacing={1.5}
             sx={{
@@ -114,7 +141,7 @@ const AudioList = ({ audioList }: AudioListProps) => {
               checked={hardMode}
               onChange={(e) => setHardMode(e.target.checked)}
             />
-          </Stack>
+          </Stack> */}
         </Stack>
         <Button
           variant="contained"
@@ -123,14 +150,17 @@ const AudioList = ({ audioList }: AudioListProps) => {
           sx={{
             py: 1,
             px: 0.5,
+            borderRadius: "16px",
             // borderRadius: "16px",
             fontWeight: 700,
             fontSize: "0.955rem",
             bgcolor: "#A08E73", // "#2C2C2C",
             boxShadow: "none",
           }}
+          disabled={audioList.length === 0}
+          onClick={handlePlayAll}
         >
-          전체듣기
+          {t("places:audio.label.playAll")}
         </Button>
       </Stack>
 

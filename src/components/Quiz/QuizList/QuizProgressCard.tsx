@@ -1,6 +1,24 @@
+// QuizProgressCard.tsx
 import { Box, LinearProgress, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
+import { QuizStatus, type QuizListItem } from "../../../models/QuizModel";
 
-const QuizProgressCard = () => {
+interface QuizProgressCardProps {
+  quizData: QuizListItem[];
+}
+
+const QuizProgressCard = ({ quizData }: QuizProgressCardProps) => {
+  const { t } = useTranslation("quiz");
+
+  const totalQuizCount = quizData.length;
+
+  const completedCount = quizData.filter(
+    (quiz) => quiz.quizStatus === QuizStatus.COMPLETED
+  ).length;
+
+  const progressPercent =
+    totalQuizCount > 0 ? Math.round((completedCount / totalQuizCount) * 100) : 0;
+
   return (
     <Box
       sx={{
@@ -25,13 +43,13 @@ const QuizProgressCard = () => {
           mr: 1.5,
         }}
       >
-        퀴즈 진척도
+        {t("quizprogress")}
       </Typography>
 
       <Box sx={{ display: "flex", alignItems: "center", flex: 1, gap: 1.5 }}>
         <LinearProgress
           variant="determinate"
-          value={35}
+          value={progressPercent}
           sx={{
             flex: 1,
             height: 8,
@@ -51,7 +69,7 @@ const QuizProgressCard = () => {
             flexShrink: 0,
           }}
         >
-          35%
+          {progressPercent}%
         </Typography>
       </Box>
     </Box>

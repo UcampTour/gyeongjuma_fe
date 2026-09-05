@@ -1,23 +1,26 @@
 import { Box } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { PlaceCategory } from "../../../models/PlaceModel";
+import { OperationStatus } from "../../../models/commonModel";
 
-interface PlaceCategoryFilterProps {
-  selectedCategory: PlaceCategory;
-  setSelectedCategory: (category: PlaceCategory) => void;
+export type FilterOperationStatus = OperationStatus | "ALL";
+
+interface PlaceCongestionFilterProps {
+  selectedStatus: FilterOperationStatus;
+  setSelectedStatus: (status: FilterOperationStatus) => void;
 }
 
-const PlaceCategoryFilter = ({
-  selectedCategory,
-  setSelectedCategory,
-}: PlaceCategoryFilterProps) => {
-  const { t } = useTranslation();
+const PlaceCongestionFilter = ({
+  selectedStatus,
+  setSelectedStatus,
+}: PlaceCongestionFilterProps) => {
+  const { t } = useTranslation("places");
 
-  const categories = [
-    { category: PlaceCategory.ALL, label: t("places:category.all") },
-    { category: PlaceCategory.HISTORIC, label: t("places:category.historic") },
-    { category: PlaceCategory.TOURIST, label: t("places:category.tourist") },
-    { category: PlaceCategory.OTHER, label: t("places:category.other") },
+  const statuses: { status: FilterOperationStatus; label: string }[] = [
+    { status: "ALL", label: t("status.all") },
+    { status: OperationStatus.OPEN, label: t("status.open") },
+    { status: OperationStatus.BREAK_TIME, label: t("status.breakTime") },
+    { status: OperationStatus.CLOSED, label: t("status.closed") },
+    { status: OperationStatus.NONE, label: t("status.none") },
   ];
 
   return (
@@ -29,15 +32,15 @@ const PlaceCategoryFilter = ({
         whiteSpace: "nowrap",
         mb: 3,
         pb: 1,
-        "::-webkit-scrollbar": { display: "none" },
+        ":-webkit-scrollbar": { display: "none" },
       }}
     >
-      {categories.map((category) => {
-        const isSelected = selectedCategory === category.category;
+      {statuses.map((item) => {
+        const isSelected = selectedStatus === item.status;
         return (
           <Box
-            key={category.category}
-            onClick={() => setSelectedCategory(category.category)}
+            key={item.status}
+            onClick={() => setSelectedStatus(item.status)}
             sx={{
               px: 2.2,
               py: 0.8,
@@ -55,7 +58,7 @@ const PlaceCategoryFilter = ({
               transition: "all 0.2s",
             }}
           >
-            {category.label}
+            {item.label}
           </Box>
         );
       })}
@@ -63,4 +66,4 @@ const PlaceCategoryFilter = ({
   );
 };
 
-export default PlaceCategoryFilter;
+export default PlaceCongestionFilter;

@@ -4,6 +4,7 @@ import PendingIcon from "@mui/icons-material/Pending";
 import QuizIcon from "@mui/icons-material/Quiz";
 import { Box, Button, Card, CardMedia, Typography } from "@mui/material";
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 import { QuizStatus, type QuizListItem } from "../../../models/QuizModel";
 
 interface QuizCardProps {
@@ -12,6 +13,8 @@ interface QuizCardProps {
 }
 
 export const QuizCard = ({ quiz, onClick }: QuizCardProps) => {
+  const { t } = useTranslation("quiz");
+
   const isLocked = quiz.quizStatus === QuizStatus.LOCKED;
   const isAvailable = quiz.quizStatus === QuizStatus.AVAILABLE;
   const isProgressing = quiz.quizStatus === QuizStatus.PROGRESS;
@@ -170,7 +173,7 @@ export const QuizCard = ({ quiz, onClick }: QuizCardProps) => {
                 textOverflow: "ellipsis",
               }}
             >
-              {`총 ${quiz.totalQuestions}문항`}
+              {t("totalQuestions", { count: quiz.totalQuestions })}
             </Typography>
           </Box>
 
@@ -179,7 +182,7 @@ export const QuizCard = ({ quiz, onClick }: QuizCardProps) => {
             variant={isProgressing ? "outlined" : "contained"}
             disabled={isLocked}
             onClick={(e) => {
-              e.stopPropagation(); // 카드 전체 onClick과의 중복 방지
+              e.stopPropagation();
               if (!isLocked) onClick();
             }}
             sx={{
@@ -211,10 +214,10 @@ export const QuizCard = ({ quiz, onClick }: QuizCardProps) => {
             }}
           >
             {isCompleted
-              ? "다시 풀기"
+              ? t("button.retry")
               : isProgressing
-                ? "이어 풀기"
-                : "도전하기"}
+                ? t("button.resume")
+                : t("button.challenge")}
           </Button>
         </Box>
       </Box>

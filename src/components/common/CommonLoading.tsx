@@ -3,6 +3,8 @@ import { Backdrop, CircularProgress, Stack, Typography } from "@mui/material";
 export interface LoadingProps {
   isLoading: boolean;
   loadingMsg?: string;
+  iconProps?: React.ReactNode; // icon, size, color, ...
+  description?: string;
 }
 
 const CommonLoading = ({ loading }: { loading?: LoadingProps }) => {
@@ -20,6 +22,11 @@ const CommonLoading = ({ loading }: { loading?: LoadingProps }) => {
         <CircularProgress color="inherit" />
 
         <Typography sx={{ fontWeight: 600 }}>{loading?.loadingMsg}</Typography>
+        <Typography
+          sx={{ fontWeight: 300, whiteSpace: "pre-line", textAlign: "center" }}
+        >
+          {loading?.description}
+        </Typography>
       </Stack>
     </Backdrop>
   );

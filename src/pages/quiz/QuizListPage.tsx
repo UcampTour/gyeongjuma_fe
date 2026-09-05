@@ -4,10 +4,12 @@ import QuizBottomSheet from "../../components/Quiz/QuizList/QuizBottomSheet";
 import QuizCategoryFilter from "../../components/Quiz/QuizList/QuizCategoryFilter";
 import QuizList from "../../components/Quiz/QuizList/QuizList";
 import QuizProgressCard from "../../components/Quiz/QuizList/QuizProgressCard";
-import { useQuizList } from "../../hooks/useQuizList";
+import { useQuizList } from "../../hooks/quiz/useQuizList";
+import { useTranslation } from "react-i18next";
 
 const QuizListPage = () => {
   const {
+    quizData, 
     selectedCategory,
     setSelectedCategory,
     quizList,
@@ -17,6 +19,8 @@ const QuizListPage = () => {
     drawerClose,
     isLoading,
   } = useQuizList();
+
+  const { t } = useTranslation("quiz");
 
   if (isLoading || !quizList) {
     return (
@@ -36,14 +40,14 @@ const QuizListPage = () => {
 
   return (
     <Box sx={{ bgcolor: "#F7F5EE", minHeight: "100vh", pb: 16 }}>
-      <PageHeader title="경주의 유적지 퀴즈" />
+      <PageHeader title={t("title")} />
 
       <Box sx={{ px: 2 }}>
         <QuizCategoryFilter
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
         />
-        <QuizProgressCard />
+        <QuizProgressCard quizData={quizData} />
         <QuizList quizList={quizList} handleQuizClick={handleQuizClick} />
       </Box>
 

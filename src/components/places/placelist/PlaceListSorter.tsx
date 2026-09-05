@@ -23,14 +23,13 @@ const PlaceListSorter = ({ sortBy, setSortBy }: PlaceListSorterProps) => {
         onChange={(e) => setSortBy(e.target.value as PlaceSortType)}
         displayEmpty
         sx={{
-          height: "100%", // 부모(48px)를 꽉 채움
+          height: "100%", 
           bgcolor: "#FFFFFF",
           borderRadius: "8px",
           fontSize: "13px",
           color: "#555555",
           "& .MuiOutlinedInput-notchedOutline": { border: "1px solid #E3DCCE" },
           fontWeight: 500,
-          // Select 내부의 텍스트를 Flex로 중앙 정렬
           "& .MuiSelect-select": {
             display: "flex",
             alignItems: "center",

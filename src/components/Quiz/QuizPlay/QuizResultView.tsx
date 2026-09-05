@@ -11,6 +11,7 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import type { QuizItem, QuizResultResponse } from "../../../models/QuizModel";
 
 interface QuizResultViewProps {
@@ -28,6 +29,8 @@ export const QuizResultView = ({
   onRetry,
   onGoToList,
 }: QuizResultViewProps) => {
+  const { t } = useTranslation("quiz");
+
   if (resultLoading || !quizData) {
     return (
       <Box
@@ -43,6 +46,10 @@ export const QuizResultView = ({
       </Box>
     );
   }
+
+  const accuracy = Math.round(
+    (quizResultData.correctQuestions / quizData.questions.length) * 100,
+  );
 
   return (
     <>
@@ -65,11 +72,10 @@ export const QuizResultView = ({
             textAlign: "center",
           }}
         >
-          총 {quizData.totalQuestions}문제 중{" "}
-          <Box component="span" sx={{ color: "#A08E73", fontWeight: 800 }}>
-            {quizResultData?.correctQuestions}문제
-          </Box>
-          를 맞혔습니다.
+          {t("result.scoreSummary", {
+            total: quizData.totalQuestions,
+            correct: quizResultData?.correctQuestions ?? 0,
+          })}
         </Typography>
 
         <Paper
@@ -89,14 +95,15 @@ export const QuizResultView = ({
           <Typography
             sx={{ fontWeight: 800, color: "#1F1F1F", fontSize: "0.98rem" }}
           >
-            +{quizResultData.correctQuestions * 50} Point
+            {t("result.pointEarned", {
+              points: quizResultData.correctQuestions * 50,
+            })}
           </Typography>
         </Paper>
       </Box>
 
       <Divider sx={{ my: 1, borderColor: "rgba(160, 142, 115, 0.2)" }} />
 
-      {/* 리뷰 리스트 헤더 */}
       <Box
         sx={{
           display: "flex",
@@ -112,20 +119,15 @@ export const QuizResultView = ({
           variant="subtitle2"
           sx={{ color: "#A08E73", fontWeight: 700 }}
         >
-          내 정답 확인하기
+          {t("result.reviewHeader")}
         </Typography>
         <Typography
           sx={{ fontSize: "0.8rem", color: "#7A7265", fontWeight: 600 }}
         >
-          정답률{" "}
-          {Math.round(
-            (quizResultData.correctQuestions / quizData.questions.length) * 100,
-          )}
-          %
+          {t("result.accuracyRate", { rate: accuracy })}
         </Typography>
       </Box>
 
-      {/* 리뷰 카드 컨테이너 */}
       <Box
         sx={{
           width: "100%",
@@ -279,7 +281,6 @@ export const QuizResultView = ({
         })}
       </Box>
 
-      {/* 하단 버튼 */}
       <Box sx={{ display: "flex", gap: 1.5, mt: "auto", pt: 1, flexShrink: 0 }}>
         <Button
           variant="outlined"
@@ -295,7 +296,7 @@ export const QuizResultView = ({
             fontSize: "0.9rem",
           }}
         >
-          다시 도전하기
+          {t("result.buttonRetry")}
         </Button>
         <Button
           variant="contained"
@@ -311,7 +312,7 @@ export const QuizResultView = ({
             boxShadow: "none",
           }}
         >
-          돌아가기
+          {t("result.buttonBack")}
         </Button>
       </Box>
     </>

@@ -1,15 +1,8 @@
 import { useEffect, useState } from "react";
-import {
-  fetchQuizDetail,
-  fetchQuizResult,
-  submitQuizAnswer,
-} from "../api/quizService";
-import {
-  QuizStatus,
-  type QuizItem,
-  type QuizResultResponse,
-} from "../models/QuizModel";
-import { useAnimatedNumber } from "./useAnimatedNumber";
+import { QuizStatus, type QuizItem, type QuizResultResponse } from "../../models/QuizModel";
+import { useAnimatedNumber } from "../common/useAnimatedNumber";
+import { fetchQuizDetail, fetchQuizResult, submitQuizAnswer } from "../../api/quizApi";
+
 
 export interface QuizPlayState {
   stage: string;
