@@ -4,7 +4,7 @@ import type { PlaceItem } from "../../../hooks/admin/useAdminPlace";
 
 interface AdminPlaceTableProps {
   paginatedPlaces: PlaceItem[];
-  selectedPlaceId: number;
+  selectedPlaceId: number | null;
   totalCount: number;
   page: number;
   rowsPerPage: number;
