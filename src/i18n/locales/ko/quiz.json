@@ -48,12 +48,12 @@
     "currentPoints": "현재 포인트",
     "unitQuestion": "문항"
   },
- "result": {
+  "result": {
     "scoreSummary": "총 {{total}}문제 중 {{correct}}문제를 맞혔습니다.",
     "pointEarned": "+{{points}} Point",
     "reviewHeader": "내 정답 확인하기",
     "accuracyRate": "정답률 {{rate}}%",
     "buttonRetry": "다시 도전하기",
     "buttonBack": "돌아가기"
-}
+  }
 }

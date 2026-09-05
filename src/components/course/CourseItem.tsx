@@ -1,53 +1,16 @@
 import { Box, IconButton, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import type { CourseListItem } from "../../models/CourseModel";
+import { getCourseTypeLabel } from "../../pages/course/courseConstants";
 
 interface CourseItemProps {
   item: CourseListItem;
 }
 
-export interface CourseListItem {
-  courseId: number;
-  title: string;
-  description: string;
-  image: string;
-  type: "WALK" | "TRANSIT" | "DRIVE";
-  duration: number;
-}
-
-const courseTypeInfo = {
-  WALK: {
-    label: "도보",
-    emoji: "🚶",
-  },
-  TRANSIT: {
-    label: "대중교통",
-    emoji: "🚌",
-  },
-  DRIVE: {
-    label: "드라이브",
-    emoji: "🚗",
-  },
-} as const;
-
-const formatDuration = (duration: number) => {
-  const hours = Math.floor(duration / 60);
-  const minutes = duration % 60;
-
-  if (hours === 0) {
-    return `${minutes}분`;
-  }
-
-  if (minutes === 0) {
-    return `${hours}시간`;
-  }
-
-  return `${hours}시간 ${minutes}분`;
-};
-
 const CourseItem = ({ item }: CourseItemProps) => {
   const navigate = useNavigate();
 
-  const courseType = courseTypeInfo[item.type];
+  console.log("item: ", item);
 
   return (
     <Box
@@ -55,7 +18,7 @@ const CourseItem = ({ item }: CourseItemProps) => {
       sx={{
         position: "relative",
         width: "100%",
-        height: 120,
+        height: 110,
         overflow: "hidden",
         borderRadius: 3,
         cursor: "pointer",
@@ -64,7 +27,7 @@ const CourseItem = ({ item }: CourseItemProps) => {
       {/* 배경 이미지 */}
       <Box
         component="img"
-        src={item.image}
+        src={item.thumbnailUrl}
         alt={item.title}
         sx={{
           position: "absolute",
@@ -141,28 +104,7 @@ const CourseItem = ({ item }: CourseItemProps) => {
               color: "rgba(255,255,255,0.95)",
             }}
           >
-            {courseType.emoji} {courseType.label}
-          </Typography>
-
-          {/* 구분점 */}
-          <Box
-            sx={{
-              width: 3,
-              height: 3,
-              borderRadius: "50%",
-              bgcolor: "rgba(255,255,255,0.7)",
-            }}
-          />
-
-          {/* 소요 시간 */}
-          <Typography
-            sx={{
-              fontSize: 12,
-              fontWeight: 500,
-              color: "rgba(255,255,255,0.95)",
-            }}
-          >
-            ⏱ {formatDuration(item.duration)}
+            {getCourseTypeLabel(item?.type)}
           </Typography>
         </Stack>
       </Box>

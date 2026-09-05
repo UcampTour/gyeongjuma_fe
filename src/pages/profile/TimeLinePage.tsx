@@ -1,18 +1,48 @@
+import { Box, CardMedia, Paper, Typography } from "@mui/material";
 import { useState } from "react";
-import { Box, Typography, CardMedia, Paper } from "@mui/material";
-import PageHeader from "../../components/common/PageHeader";
 import defaultPlaceImg from "../../assets/default_place_img.png";
+import PageHeader from "../../components/common/PageHeader";
+import TimeLinePage from "../../components/profile/TimeLineMap";
 
 const TimelinePage = () => {
   // 'summary' (요약 타임라인) 또는 'map' (지도 보기) 탭 상태 관리
   const [activeTab, setActiveTab] = useState<"summary" | "map">("summary");
 
-  const [timelineData] = useState([
-    { id: 1, name: "불국사", date: "2026.05.01 방문", image: defaultPlaceImg },
-    { id: 2, name: "첨성대", date: "2026.05.03 방문", image: defaultPlaceImg },
-    { id: 3, name: "동궁과 월지", date: "2026.05.05 방문", image: defaultPlaceImg },
-    { id: 4, name: "대릉원", date: "2026.05.07 방문", image: defaultPlaceImg },
-  ]);
+  // 더미 데이터에 좌표 정보 추가
+  const timelineData = [
+    {
+      id: 1,
+      name: "불국사",
+      date: "2026.05.01 방문",
+      image: defaultPlaceImg,
+      lat: 35.7898,
+      lng: 129.332,
+    },
+    {
+      id: 2,
+      name: "첨성대",
+      date: "2026.05.03 방문",
+      image: defaultPlaceImg,
+      lat: 35.8347,
+      lng: 129.219,
+    },
+    {
+      id: 3,
+      name: "동궁과 월지",
+      date: "2026.05.05 방문",
+      image: defaultPlaceImg,
+      lat: 35.8283,
+      lng: 129.226,
+    },
+    {
+      id: 4,
+      name: "대릉원",
+      date: "2026.05.07 방문",
+      image: defaultPlaceImg,
+      lat: 35.8397,
+      lng: 129.2116,
+    },
+  ];
 
   const badgeCount = timelineData.length;
   const itemHeight = 130;
@@ -25,7 +55,7 @@ const TimelinePage = () => {
 
     for (let i = 0; i < count - 1; i++) {
       const nextY = currentY + itemHeight;
-      const isEvenStep = i % 2 === 0; 
+      const isEvenStep = i % 2 === 0;
       const startX = isEvenStep ? 160 : 160;
       const endX = isEvenStep ? 160 : 160;
       const cp1X = isEvenStep ? 160 : 160;
@@ -38,11 +68,27 @@ const TimelinePage = () => {
   };
 
   return (
-    <Box sx={{ bgcolor: "#F7F5EE", minHeight: "100vh", display: "flex", flexDirection: "column", pb: activeTab === "map" ? 0 : 16 }}>
+    <Box
+      sx={{
+        bgcolor: "#F7F5EE",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        pb: activeTab === "map" ? 0 : 16,
+      }}
+    >
       <PageHeader title="내 발자취 모음" />
 
       {/* 상단 알약 탭 (칩 스위처) */}
-      <Box sx={{ display: "flex", justifyContent: "center", pt: 2.5, px: 3, flexShrink: 0 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          pt: 2.5,
+          px: 3,
+          flexShrink: 0,
+        }}
+      >
         <Box
           sx={{
             display: "flex",
@@ -63,7 +109,10 @@ const TimelinePage = () => {
               borderRadius: "999px",
               cursor: "pointer",
               bgcolor: activeTab === "summary" ? "#FFFFFF" : "transparent",
-              boxShadow: activeTab === "summary" ? "0 2px 8px rgba(142,114,73,0.12)" : "none",
+              boxShadow:
+                activeTab === "summary"
+                  ? "0 2px 8px rgba(142,114,73,0.12)"
+                  : "none",
               transition: "all 0.2s ease-in-out",
             }}
           >
@@ -87,7 +136,10 @@ const TimelinePage = () => {
               borderRadius: "999px",
               cursor: "pointer",
               bgcolor: activeTab === "map" ? "#FFFFFF" : "transparent",
-              boxShadow: activeTab === "map" ? "0 2px 8px rgba(142,114,73,0.12)" : "none",
+              boxShadow:
+                activeTab === "map"
+                  ? "0 2px 8px rgba(142,114,73,0.12)"
+                  : "none",
               transition: "all 0.2s ease-in-out",
             }}
           >
@@ -107,33 +159,81 @@ const TimelinePage = () => {
       {/* 탭 내용 전환 영역 */}
       {activeTab === "summary" ? (
         /* 기존 요약 타임라인 뷰 */
-        <Box sx={{ px: 3, pt: 2, display: "flex", justifyContent: "center", flex: 1 }}>
-          <Box 
-            sx={{ 
-              position: "relative", 
-              display: "flex", 
-              flexDirection: "column", 
-              py: 2, 
-              width: "100%", 
+        <Box
+          sx={{
+            px: 3,
+            pt: 2,
+            display: "flex",
+            justifyContent: "center",
+            flex: 1,
+          }}
+        >
+          <Box
+            sx={{
+              position: "relative",
+              display: "flex",
+              flexDirection: "column",
+              py: 2,
+              width: "100%",
               maxWidth: "400px",
               minHeight: `${svgHeight}px`,
-              alignItems: "center" 
+              alignItems: "center",
             }}
           >
             <svg
-              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0, pointerEvents: "none" }}
-              viewBox={`0 0 320 ${svgHeight}`} 
-              fill="none" 
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                zIndex: 0,
+                pointerEvents: "none",
+              }}
+              viewBox={`0 0 320 ${svgHeight}`}
+              fill="none"
               preserveAspectRatio="none"
             >
               <defs>
-                <filter id="pathShadow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#8E7249" floodOpacity="0.08" />
+                <filter
+                  id="pathShadow"
+                  x="-20%"
+                  y="-20%"
+                  width="140%"
+                  height="140%"
+                >
+                  <feDropShadow
+                    dx="0"
+                    dy="4"
+                    stdDeviation="4"
+                    floodColor="#8E7249"
+                    floodOpacity="0.08"
+                  />
                 </filter>
               </defs>
-              <path d={generateDynamicPath(badgeCount)} stroke="#E5DEC9" strokeWidth="12" strokeLinecap="round" fill="none" filter="url(#pathShadow)" />
-              <path d={generateDynamicPath(badgeCount)} stroke="#FFFFFF" strokeWidth="6" strokeLinecap="round" fill="none" />
-              <path d={generateDynamicPath(badgeCount)} stroke="#D3C5B4" strokeWidth="2" strokeDasharray="4 6" strokeLinecap="round" fill="none" />
+              <path
+                d={generateDynamicPath(badgeCount)}
+                stroke="#E5DEC9"
+                strokeWidth="12"
+                strokeLinecap="round"
+                fill="none"
+                filter="url(#pathShadow)"
+              />
+              <path
+                d={generateDynamicPath(badgeCount)}
+                stroke="#FFFFFF"
+                strokeWidth="6"
+                strokeLinecap="round"
+                fill="none"
+              />
+              <path
+                d={generateDynamicPath(badgeCount)}
+                stroke="#D3C5B4"
+                strokeWidth="2"
+                strokeDasharray="4 6"
+                strokeLinecap="round"
+                fill="none"
+              />
             </svg>
 
             {timelineData.map((item, index) => {
@@ -166,10 +266,26 @@ const TimelinePage = () => {
                       textAlign: isEven ? "left" : "right",
                     }}
                   >
-                    <Typography sx={{ fontWeight: 700, fontSize: "13px", color: "#2C251E", mb: 0.5, lineHeight: 1.3, wordBreak: "keep-all" }}>
+                    <Typography
+                      sx={{
+                        fontWeight: 700,
+                        fontSize: "13px",
+                        color: "#2C251E",
+                        mb: 0.5,
+                        lineHeight: 1.3,
+                        wordBreak: "keep-all",
+                      }}
+                    >
                       {item.name}
                     </Typography>
-                    <Typography sx={{ fontSize: "11px", color: "#8C8273", fontWeight: 500, letterSpacing: "-0.3px" }}>
+                    <Typography
+                      sx={{
+                        fontSize: "11px",
+                        color: "#8C8273",
+                        fontWeight: 500,
+                        letterSpacing: "-0.3px",
+                      }}
+                    >
                       {item.date}
                     </Typography>
                   </Paper>
@@ -181,7 +297,8 @@ const TimelinePage = () => {
                       borderRadius: "50%",
                       overflow: "hidden",
                       border: "3px solid #FFFFFF",
-                      boxShadow: "0 6px 16px rgba(142,114,73,0.2), 0 2px 4px rgba(0,0,0,0.05)",
+                      boxShadow:
+                        "0 6px 16px rgba(142,114,73,0.2), 0 2px 4px rgba(0,0,0,0.05)",
                       bgcolor: "#FFFFFF",
                       flexShrink: 0,
                       mx: "auto",
@@ -190,7 +307,12 @@ const TimelinePage = () => {
                       transform: "translateX(-50%)",
                     }}
                   >
-                    <CardMedia component="img" image={item.image} alt={item.name} sx={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <CardMedia
+                      component="img"
+                      image={item.image}
+                      alt={item.name}
+                      sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
                   </Box>
 
                   <Box sx={{ width: "125px" }} />
@@ -201,21 +323,22 @@ const TimelinePage = () => {
         </Box>
       ) : (
         /* 지도 보기 탭 영역 (풀 화면) */
-        <Box 
-          sx={{ 
-            flex: 1,
+        <Box
+          sx={{
             mt: 2,
             width: "100%",
-            height: "calc(100vh - 120px)", // 헤더와 탭 영역의 높이를 제외한 나머지 전체 화면
-            bgcolor: "#EBE5D8",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            height: "calc(100vh - 150px)",
+            overflow: "hidden",
           }}
         >
-          <Typography sx={{ color: "#8C8273", fontWeight: 600, fontSize: "14px" }}>
-            🗺️ 지도 영역
-          </Typography>
+          <TimeLinePage
+            places={timelineData.map((item) => ({
+              id: item.id,
+              name: item.name,
+              lat: item.lat,
+              lng: item.lng,
+            }))}
+          />
         </Box>
       )}
     </Box>

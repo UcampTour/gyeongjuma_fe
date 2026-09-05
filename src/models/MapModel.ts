@@ -5,7 +5,7 @@
  * @since 2026-06-20
  */
 
-import type { CongestionLevel, OperationStatus } from "./commonModel";
+import type { CongestionLevel } from "./commonModel";
 
 // 마커 인스턴스
 

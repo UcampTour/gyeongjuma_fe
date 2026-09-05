@@ -1,23 +1,25 @@
 import i18n from "i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 
 import commonKo from "./locales/ko/common.json";
+import courseKo from "./locales/ko/course.json";
+import homeKo from "./locales/ko/home.json";
+import loginKo from "./locales/ko/login.json";
 import mapKo from "./locales/ko/map.json";
 import placesKo from "./locales/ko/places.json";
-import quizKo from "./locales/ko/quiz.json";
-import loginKo from "./locales/ko/login.json";
 import profileKo from "./locales/ko/profile.json";
-
+import quizKo from "./locales/ko/quiz.json";
 
 import commonEn from "./locales/en/common.json";
+import courseEn from "./locales/en/course.json";
+import homeEn from "./locales/en/home.json";
 import mapEn from "./locales/en/map.json";
 import placesEn from "./locales/en/places.json";
 
 i18n
   // 브라우저 언어 자동 감지
   // ex) ko-KR -> ko, en-US -> en
-  .use(LanguageDetector)
+  // .use(LanguageDetector)
   .use(initReactI18next) // i18next를 React와 연결
 
   // i18n 초기 설정
@@ -29,6 +31,8 @@ i18n
         map: mapKo,
         places: placesKo,
         quiz: quizKo,
+        course: courseKo,
+        home: homeKo,
         login: loginKo,
         profile: profileKo,
       },
@@ -36,6 +40,8 @@ i18n
         common: commonEn,
         map: mapEn,
         places: placesEn,
+        home: homeEn,
+        course: courseEn,
       },
       // ... more 일단 한글,영어만 추가
     },
@@ -49,7 +55,7 @@ i18n
     defaultNS: "common",
 
     // 프로젝트에서 사용하는 namespace 목록
-    ns: ["common", "map", "places", "quiz", "login", "profile"], // *.json 확장
+    ns: ["common", "map", "places", "quiz", "login", "profile", "home"], // *.json 확장
 
     interpolation: {
       escapeValue: false,

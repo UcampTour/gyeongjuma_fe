@@ -1,6 +1,7 @@
 import HeadphonesOutlinedIcon from "@mui/icons-material/HeadphonesOutlined";
 import { Box, Button, Stack, styled, Switch, Typography } from "@mui/material";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { audioPlayer } from "../../../hooks/audio/AudioPlayer";
 import { useAudioStore } from "../../../store/audioPlayerStore";
@@ -11,6 +12,7 @@ export interface AudioListProps {
 }
 
 const AudioList = ({ audioList }: AudioListProps) => {
+  const { t } = useTranslation();
   const { setAudio, setPlaying } = useAudioStore();
   const [hardMode, setHardMode] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -66,7 +68,7 @@ const AudioList = ({ audioList }: AudioListProps) => {
             mb: 0.5,
           }}
         >
-          등록된 오디오가 없습니다.
+          {t("places:audio.emptyState.title")}
         </Typography>
 
         <Typography
@@ -77,9 +79,9 @@ const AudioList = ({ audioList }: AudioListProps) => {
             lineHeight: 1.7,
           }}
         >
-          아직 제공되는 오디오 가이드가 없어요.
+          {t("places:audio.emptyState.message")}
           <br />
-          추후 업데이트될 예정입니다.
+          {t("places:audio.emptyState.message2")}
         </Typography>
       </Box>
     );
@@ -108,7 +110,7 @@ const AudioList = ({ audioList }: AudioListProps) => {
               fontSize: "0.875rem",
             }}
           >
-            이야기{" "}
+            {t("places:audio.label.story")}
             <Box
               component="span"
               sx={{
@@ -119,7 +121,7 @@ const AudioList = ({ audioList }: AudioListProps) => {
             </Box>
           </Typography>
 
-          <Stack
+          {/* <Stack
             direction="row"
             spacing={1.5}
             sx={{
@@ -139,7 +141,7 @@ const AudioList = ({ audioList }: AudioListProps) => {
               checked={hardMode}
               onChange={(e) => setHardMode(e.target.checked)}
             />
-          </Stack>
+          </Stack> */}
         </Stack>
         <Button
           variant="contained"
@@ -158,7 +160,7 @@ const AudioList = ({ audioList }: AudioListProps) => {
           disabled={audioList.length === 0}
           onClick={handlePlayAll}
         >
-          전체듣기
+          {t("places:audio.label.playAll")}
         </Button>
       </Stack>
 

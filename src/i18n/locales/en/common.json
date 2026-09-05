@@ -1,10 +1,23 @@
 {
   "bottomNav": {
-    "explore": "explore",
-    "places": "places",
-    "course": "course",
-    "quiz": "quiz",
-    "profile": "profile",
-    "home": "home"
+    "explore": "Map",
+    "course": "Courses",
+    "places": "Places",
+    "quiz": "Quiz",
+    "profile": "Profile",
+    "home": "Home"
+  },
+  "label": {
+    "congestionLevel": "Peak Hours",
+    "isOpen": "Open Now",
+    "unvisited": "Unvisited"
+  },
+  "emptyState": {
+    "none": "No Information"
+  },
+  "mode": {
+    "easy": "Kids",
+    "normal": "Standard",
+    "hard": "Expert"
   }
 }

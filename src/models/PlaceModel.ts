@@ -19,23 +19,36 @@ export interface PlaceSearchParams extends PlaceLocPrams {
   sort?: string; // 기본값 "distance"
 }
 
+export interface DescriptionType {
+  easy: string;
+  normal: string;
+  hard: string;
+}
 /**
  * 관광지 목록 Response
  */
 export interface PlaceListBase {
   placeId: number; // 관광지 고유 ID
   placeName: string; // 관광지 이름 (예: 첨성대)
-  description: string; // 관광지 간단 설명
+  originalPlaceName: string; // 관광지 이름 (예: 첨성대)
+  subPlaceName: string; // 관광지 이름 (예: 첨성대)
+  description: DescriptionType; // 관광지 해설
   category: string; // 관광지 카테고리 (추후 ENUM 변경)
-  rating: number; // 관광지 평점
-  reviewCount: number; // 평점 참여자 수
-  likes: number; // 좋아요 수
+  tel?: string;
+  // rating: number; // 관광지 평점
+  // reviewCount: number; // 평점 참여자 수
+  parkinglikes: number; // 좋아요 수
+  visitCnt: number;
   lat: number; // 위도
   lng: number; // 경도
   congestion: CongestionLevel; // 혼잡도
   operationStatus: OperationStatus; // 운영 상태
+  operationHour: string;
+  parking: string;
+
   isVisited: boolean; // 방문 여부 상태
   isFavorite: boolean; // 즐겨찾기 여부 상태
+
   imageUrl: string; // 대표 이미지
   distance: number | null; // 내 위치로부터의 거리 (Integer -> number)
   add1?: string;

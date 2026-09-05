@@ -11,5 +11,13 @@
     "congestionLevel": "예상혼잡도",
     "isOpen": "운영중",
     "unvisited": "미방문지"
+  },
+  "emptyState": {
+    "none": "정보없음"
+  },
+  "mode": {
+    "easy": "어린이",
+    "normal": "기본",
+    "hard": "전문가"
   }
 }

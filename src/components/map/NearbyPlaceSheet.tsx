@@ -1,11 +1,15 @@
 import PersonPinCircleIcon from "@mui/icons-material/PersonPinCircle";
 import { Box, Stack, Typography } from "@mui/material";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Sheet, type SheetRef } from "react-modal-sheet";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import defaultPlaceImage from "../../assets/default_place_img.png";
-import { CongestionLevel, OperationStatus } from "../../models/commonModel";
+import {
+  getCongestionConfig,
+  getOperationStatusConfig,
+} from "../../models/commonModel";
 import type { PlaceListBase } from "../../models/PlaceModel";
 import type { Weather } from "../../pages/map/MapMainPage";
 interface SheetProps {
@@ -29,25 +33,12 @@ export enum SheetState {
 
 export const snapPoints = [0, 0.2, 1];
 
-const STATUS_LABEL = {
-  [OperationStatus.OPEN]: "운영 중",
-  [OperationStatus.CLOSED]: "운영 종료",
-  [OperationStatus.BREAK_TIME]: "브레이크 타임",
-  [OperationStatus.NONE]: "정보 없음",
-} as const;
-
-const CONGESTION_LABEL = {
-  [CongestionLevel.LOW]: "여유로운 시간대",
-  [CongestionLevel.MEDIUM]: "일반적으로 붐비는 정도가 보통인 시간대",
-  [CongestionLevel.HIGH]: "현재 많은 방문객이 몰려 혼잡한 시간대",
-  [CongestionLevel.NONE]: "현재 혼잡도 정보 알 수 없음",
-} as const;
-
 /**
  * 관광지 상세 정보 BottomSheet
  */
 const NearbyPlaceSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
   ({ open, onClose, placeList, currentAddress, weather }, ref) => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     // const mountPoint = document.getElementById("sheet-root"); //  BottomSheet를 지도의 하단에 렌더링하기 위해 mountPoint를 지정
     // const [mountPoint, setMountPoint] = useState<HTMLElement | null>(null);
@@ -216,7 +207,9 @@ const NearbyPlaceSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
                 spacing={1}
                 sx={{ alignItems: "center", mb: 3 }}
               >
-                <Typography variant="subtitle1">내 주변 인기 장소</Typography>
+                <Typography variant="subtitle1">
+                  {t("map:title.nearbyPlace")}
+                </Typography>
                 <Typography
                   variant="subtitle1"
                   sx={{ fontWeight: 700, color: "#BC9A5D" }}
@@ -234,60 +227,98 @@ const NearbyPlaceSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
                     height: 270,
                   }}
                 >
-                  {placeList?.map((place) => (
-                    <SwiperSlide key={place.placeId}>
-                      <Box
-                        onClick={() => handleGoToPlace(place?.placeId)}
-                        sx={{
-                          position: "relative",
-                          width: "100%",
-                          height: 270,
-                          borderRadius: 3,
-                          overflow: "hidden",
-                        }}
-                      >
-                        {/* 1. 이미지 */}
-                        <Box
-                          component="img"
-                          src={place.imageUrl || defaultPlaceImage}
-                          sx={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                          }}
-                        />
+                  {placeList?.map((place) => {
+                    const operationConfig = getOperationStatusConfig(
+                      place?.operationStatus,
+                    );
 
-                        {/* 2. 이미지 위에 얹을 텍스트 레이어 */}
-                        <Box
-                          sx={{
-                            position: "absolute",
-                            bottom: 0,
-                            left: 0,
-                            width: "100%",
-                            padding: 2,
+                    const congestionConfig = getCongestionConfig(
+                      place?.congestion,
+                    );
 
-                            // 글씨가 잘 보이도록 아래쪽에만 반투명한 검은 그라데이션 추가
-                            background:
-                              "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%)",
-                            color: "#fff", // 글자색 흰색 고정
+                    return (
+                      <SwiperSlide key={place.placeId}>
+                        <Box
+                          onClick={() => handleGoToPlace(place.placeId)}
+                          sx={{
+                            position: "relative",
+                            width: "100%",
+                            height: 270,
+                            borderRadius: 3,
+                            overflow: "hidden",
                           }}
                         >
-                          <Box sx={{ fontSize: "1.1rem", fontWeight: "bold" }}>
-                            {place.placeName ?? "장소 이름"}
-                          </Box>
-                          <Box sx={{ fontSize: "0.7rem" }}>
-                            {STATUS_LABEL[place.operationStatus] ?? "정보 없음"}
-                          </Box>
+                          {/* 이미지 */}
                           <Box
-                            sx={{ fontSize: "0.65rem", opacity: 0.8, mt: 0.5 }}
+                            component="img"
+                            src={place.imageUrl || defaultPlaceImage}
+                            sx={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                            }}
+                          />
+
+                          {/* 텍스트 */}
+                          <Box
+                            sx={{
+                              position: "absolute",
+                              bottom: 0,
+                              left: 0,
+                              width: "100%",
+                              p: 2,
+                              background:
+                                "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%)",
+                              color: "#fff",
+                            }}
                           >
-                            {CONGESTION_LABEL[place.congestion] ??
-                              "혼잡도 정보 알 수 없음"}
+                            <Box
+                              sx={{
+                                fontSize: "1.1rem",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {place.placeName ?? "장소 이름"}
+                            </Box>
+
+                            {/* 운영 상태 */}
+                            <Box
+                              sx={{
+                                display: "inline-flex",
+                                mt: 0.5,
+                                px: 1,
+                                py: 0.3,
+                                borderRadius: "999px",
+                                backgroundColor: operationConfig.bgColor,
+                                color: operationConfig.iconColor,
+                                fontSize: "0.7rem",
+                                fontWeight: 600,
+                              }}
+                            >
+                              {operationConfig.label}
+                            </Box>
+
+                            {/* 혼잡도 */}
+                            <Box
+                              sx={{
+                                display: "inline-flex",
+                                ml: 0.5,
+                                px: 1,
+                                py: 0.3,
+                                borderRadius: "999px",
+                                backgroundColor: congestionConfig.bgColor,
+                                color: congestionConfig.iconColor,
+                                fontSize: "0.65rem",
+                                fontWeight: 500,
+                              }}
+                            >
+                              {t(congestionConfig.label)}
+                            </Box>
                           </Box>
                         </Box>
-                      </Box>
-                    </SwiperSlide>
-                  ))}
+                      </SwiperSlide>
+                    );
+                  })}
                 </Swiper>
               )}
             </Box>

@@ -1,0 +1,10 @@
+{
+  "title": "Gyeongju Travel Courses",
+  "search": "Search for a course.",
+  "tabLabel": {
+    "ALL": "All",
+    "WALK": "WALK",
+    "TRANSIT": "TRANSIT",
+    "DRIVE": "DRIVE"
+  }
+}
