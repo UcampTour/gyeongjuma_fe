@@ -13,8 +13,11 @@ import quizKo from "./locales/ko/quiz.json";
 import commonEn from "./locales/en/common.json";
 import courseEn from "./locales/en/course.json";
 import homeEn from "./locales/en/home.json";
+import loginEn from "./locales/en/login.json";
 import mapEn from "./locales/en/map.json";
 import placesEn from "./locales/en/places.json";
+import profileEn from "./locales/en/profile.json";
+import quizEn from "./locales/en/quiz.json";
 
 i18n
   // 브라우저 언어 자동 감지
@@ -40,8 +43,11 @@ i18n
         common: commonEn,
         map: mapEn,
         places: placesEn,
+        quiz: quizEn,
         home: homeEn,
         course: courseEn,
+        login: loginEn,
+        profile: profileEn,
       },
       // ... more 일단 한글,영어만 추가
     },

@@ -11,26 +11,7 @@ import {
   Paper,
   TablePagination,
 } from "@mui/material";
-
-interface SelectedPlace {
-  id: number;
-  name: string;
-}
-
-interface CourseContentItem {
-  courseContentId?: number;
-  language: string;
-  courseName: string;
-  description: string;
-}
-
-interface CourseItem {
-  id: number;
-  type: "WALK" | "PUBLIC" | "DRIVE";
-  isUse: boolean;
-  places: SelectedPlace[];
-  contents: CourseContentItem[];
-}
+import type { CourseItem } from "../../../hooks/admin/useAdminCourse";
 
 interface AdminCourseTableProps {
   paginatedCourses: CourseItem[];
@@ -71,19 +52,15 @@ export const AdminCourseTable: React.FC<AdminCourseTableProps> = ({
           <TableBody>
             {paginatedCourses.length > 0 ? (
               paginatedCourses.map((course, index) => {
-                const koContent = course.contents?.find((c) => c.language === "KO") || course.contents?.[0];
-                const courseName = koContent ? koContent.courseName : "";
-                const description = koContent ? koContent.description : "";
-
                 return (
                   <TableRow key={course.id} hover>
                     <TableCell align="center">{page * rowsPerPage + index + 1}</TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>{courseName}</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>{course.name}</TableCell>
                     <TableCell sx={{ maxWidth: "300px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "text.secondary" }}>
-                      {description}
+                      {course.description}
                     </TableCell>
                     <TableCell align="center">{getTypeText(course.type)}</TableCell>
-                    <TableCell align="center">{course.places.length}개</TableCell>
+                    <TableCell align="center">{course.placeCnt}개</TableCell>
                     <TableCell align="center">{course.isUse ? "Y" : "N"}</TableCell>
                     <TableCell align="center">
                       <Button 

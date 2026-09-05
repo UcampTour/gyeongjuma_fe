@@ -42,6 +42,7 @@ export const AdminCourseFilter: React.FC<AdminCourseFilterProps> = ({ filter, se
             <MenuItem value="WALK">도보</MenuItem>
             <MenuItem value="PUBLIC">대중교통</MenuItem>
             <MenuItem value="DRIVE">운전</MenuItem>
+            <MenuItem value="BIKE">자전거</MenuItem>
           </Select>
         </FormControl>
 

@@ -11,6 +11,7 @@ export const useQuizList = (placeId?: number) => {
 
   const { data, isLoading } = useQuizListQuery();
   const quizData = data?.quizList ?? [];
+  console.log(quizData);
 
   const filteredQuizList = useMemo(() => {
     return quizData.filter((quiz) => {

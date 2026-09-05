@@ -3,55 +3,23 @@ import { useMemo, useState, type ChangeEvent } from "react";
 import { useAdminQuizListQuery } from "../../queries/admin/useAdminQuizQuery";
 
 export interface QuizItem {
-  quizId: number;
-  placeId: number;
-  placeName: string;
-  title: string;
+  description: string;
   difficulty: string;
   isActive: boolean;
+  language: string;
+  placeId: number;
+  placeName: string;
+  placeQuizInfoId: number;
+  questionCnt: number;
+  title: string;
 }
-
-const dummyQuizData: QuizItem[] = [
-  {
-    quizId: 1,
-    placeId: 101,
-    placeName: "불국사",
-    title: "불국사 다보탑의 비밀",
-    difficulty: "HIGH",
-    isActive: true,
-  },
-  {
-    quizId: 2,
-    placeId: 102,
-    placeName: "석굴암",
-    title: "석굴암 본존불의 방향",
-    difficulty: "MEDIUM",
-    isActive: true,
-  },
-  {
-    quizId: 3,
-    placeId: 103,
-    placeName: "첨성대",
-    title: "첨성대 구조 개수",
-    difficulty: "LOW",
-    isActive: false,
-  },
-  {
-    quizId: 4,
-    placeId: 104,
-    placeName: "동궁과 월지",
-    title: "동궁과 월지의 옛 이름",
-    difficulty: "MEDIUM",
-    isActive: true,
-  },
-]
 
 export const useAdminQuiz = () => {
 
   const  { data, isLoading } = useAdminQuizListQuery();
   console.log(data);
+  const quizList = data?.quizSets ?? [];
    
-  const [quizzes, setQuizzes] = useState<QuizItem[]>(dummyQuizData);
   const [keyword, setKeyword] = useState("");
   const [useFlag, setUseFlag] = useState("all");
   const [difficulty, setDifficulty] = useState("all");
@@ -64,7 +32,7 @@ export const useAdminQuiz = () => {
 
     const targetKeyword = keyword.trim().toLowerCase();
 
-    return quizzes.filter((quiz) => {
+    return quizList.filter((quiz) => {
 
       // 1. 검색어 필터
       const matchesSearch =
@@ -85,7 +53,7 @@ export const useAdminQuiz = () => {
 
       return matchesSearch && matchesUsage && matchesDifficulty;
     })
-  }, [quizzes, keyword, useFlag, difficulty]);
+  }, [quizList, keyword, useFlag, difficulty]);
 
   // 퀴즈 페이징
   const paginatedQuizzes = useMemo(() => {

@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import type { ChangeEvent } from "react";
+import { useState } from "react";
 import { useAdminCourseListQuery } from "../../queries/admin/useAdminCourseQuery";
+import { createAdminCourseApi, updateAdminCourseApi } from "../../api/admin/AdminCourseApi";
 
 export interface SelectedPlace {
   id: number;
@@ -16,48 +16,26 @@ export interface CourseContentItem {
 
 export interface CourseItem {
   id: number;
-  type: "WALK" | "PUBLIC" | "DRIVE";
+  type: "WALK" | "BIKE" | "DRIVE" | "TRANSIT";
   isUse: boolean;
   places: SelectedPlace[];
+  name: string;
+  description: string;
+  placeCnt: number;
   contents: CourseContentItem[];
 }
 
 export const SUPPORTED_LANGUAGES = [
-  { code: "KO", label: "KO" },
-  { code: "EN", label: "EN" },
-  { code: "JA", label: "JA" },
-  { code: "ZH", label: "ZH" },
-];
-
-const initialCourses: CourseItem[] = [
-  { 
-    id: 1, 
-    type: "WALK", 
-    isUse: true, 
-    places: [{ id: 103, name: "첨성대" }, { id: 105, name: "대릉원" }],
-    contents: [
-      { 
-        courseContentId: 1, 
-        language: "KO", 
-        courseName: "경주 역사 탐방 도보 코스", 
-        description: "대릉원과 첨성대를 걸어서 둘러보는 추천 코스입니다." 
-      },
-      { 
-        courseContentId: 2, 
-        language: "EN", 
-        courseName: "Gyeongju History Walking Course", 
-        description: "A recommended walking course around Daereungwon and Cheomseongdae." 
-      }
-    ]
-  },
+  { code: "ko", label: "KO" },
+  { code: "en", label: "EN" },
+  { code: "ja", label: "JA" },
+  { code: "zh", label: "ZH" },
 ];
 
 export const useAdminCourse = () => {
-  const { data, isLoading } = useAdminCourseListQuery();
-  const courseData = data?.courses ?? [];
-  console.log(data); 
-  const [courses] = useState<CourseItem[]>(initialCourses);
-  
+  const { data, isLoading, refetch } = useAdminCourseListQuery();
+  const courseList = data?.courses ?? [];
+
   // 검색 및 필터 상태
   const [filter, setFilter] = useState({
     keyword: "",
@@ -78,13 +56,16 @@ export const useAdminCourse = () => {
   const [openPlaceSearch, setOpenPlaceSearch] = useState(false);
 
   // 폼 공통 상태 (타입, 사용여부, 장소)
-  const [formType, setFormType] = useState<"WALK" | "PUBLIC" | "DRIVE">("WALK");
+  const [formType, setFormType] = useState<"WALK" | "BIKE" | "DRIVE" | "TRANSIT">("WALK");
   const [formIsUse, setFormIsUse] = useState(true);
   const [formPlaces, setFormPlaces] = useState<SelectedPlace[]>([]);
 
   // 다국어 탭 상태 및 임시 콘텐츠 배열
-  const [currentLanguage, setCurrentLanguage] = useState<string>("KO");
+  const [currentLanguage, setCurrentLanguage] = useState<string>("ko");
   const [draftContents, setDraftContents] = useState<CourseContentItem[]>([]);
+
+  // 제출 로딩 상태
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 현재 선택된 언어의 콘텐츠 찾기
   const currentContentItem = draftContents.find((c) => c.language === currentLanguage);
@@ -116,15 +97,11 @@ export const useAdminCourse = () => {
     });
   };
 
-  // 필터링 로직 (한국어 혹은 전체 콘텐츠 기준 검색)
-  const filteredCourses = courses.filter((course) => {
-    const koContent = course.contents.find((c) => c.language === "KO") || course.contents[0];
-    const courseName = koContent ? koContent.courseName : "";
-    const description = koContent ? koContent.description : "";
-
+  // 필터링 로직
+  const filteredCourses = courseList.filter((course: CourseItem) => {
     const matchesKeyword = 
-      courseName.toLowerCase().includes(filter.keyword.toLowerCase()) ||
-      description.toLowerCase().includes(filter.keyword.toLowerCase());
+      course.name.toLowerCase().includes(filter.keyword.toLowerCase()) ||
+      course.description.toLowerCase().includes(filter.keyword.toLowerCase());
 
     const matchesType = filter.courseType === "all" || course.type === filter.courseType;
     const matchesUsage =
@@ -148,7 +125,7 @@ export const useAdminCourse = () => {
     setFormIsUse(true);
     setFormPlaces([]);
     setDraftContents([]);
-    setCurrentLanguage("KO");
+    setCurrentLanguage("ko");
     setOpenDialog(true);
   };
 
@@ -160,7 +137,7 @@ export const useAdminCourse = () => {
     setFormIsUse(course.isUse);
     setFormPlaces([...course.places]);
     setDraftContents(JSON.parse(JSON.stringify(course.contents)));
-    setCurrentLanguage("KO");
+    setCurrentLanguage("ko");
     setOpenDialog(true);
   };
 
@@ -192,50 +169,67 @@ export const useAdminCourse = () => {
     setFormPlaces(updated);
   };
 
-  // 코스 저장 로직
-  const handleSaveCourse = () => {
-    const koContent = draftContents.find((c) => c.language === "KO");
+  // 코스 저장 로직 (일반 비동기 함수 + try/catch 연동)
+  const handleSaveCourse = async () => {
+    const koContent = draftContents.find((c) => c.language === "ko");
     if (!koContent || !koContent.courseName.trim()) {
       alert("기본 언어(KO) 코스명은 반드시 입력해야 합니다.");
       return;
     }
-    if (formPlaces.length < 2) {
-      alert("관광지는 최소 2개 이상 추가해야 합니다.");
+    if (formPlaces.length < 1) {
+      alert("관광지는 최소 1개 이상 추가해야 합니다.");
       return;
     }
 
-    const validContents = draftContents.filter((c) => c.courseName.trim() !== "" || c.description.trim() !== "");
+    const validContents = draftContents
+      .filter((c) => c.courseName.trim() !== "" || c.description.trim() !== "")
+      .map((c) => ({
+        language: c.language,
+        courseName: c.courseName,
+        description: c.description,
+      }));
 
     const payload = {
       type: formType,
       isUse: formIsUse,
-      placeCount: formPlaces.length,
-      places: formPlaces,
+      placeIds: formPlaces.map((p) => p.id),
       contents: validContents,
     };
 
-    if (dialogMode === "CREATE") {
-      console.log("코스 등록 API Payload:", payload);
-      alert("등록 API 호출 (구현 예정)");
-    } else {
-      console.log("코스 수정 API Payload (ID:", editingId, "):", payload);
-      alert("수정 API 호출 (구현 예정)");
-    }
+    try {
+      setIsSubmitting(true);
 
-    setOpenDialog(false);
+      if (dialogMode === "CREATE") {
+        await createAdminCourseApi(payload);
+        alert("코스가 성공적으로 등록되었습니다.");
+      } else {
+        if (editingId === null) return;
+        await updateAdminCourseApi(editingId, payload);
+        alert("코스가 성공적으로 수정되었습니다.");
+      }
+
+      setOpenDialog(false);
+      refetch?.();
+    } catch (error: any) {
+      alert(`요청 실패: ${error?.response?.data?.message || error.message}`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const getTypeText = (type: string) => {
     switch (type) {
       case "WALK": return "도보";
-      case "PUBLIC": return "대중교통";
+      case "BIKE": return "자전거";
       case "DRIVE": return "운전";
+      case "TRANSIT": return "대중교통";
       default: return type;
     }
   };
 
   return {
-    courses,
+    courses: courseList,
+    isLoading,
     filter,
     setFilter,
     page,
@@ -257,6 +251,7 @@ export const useAdminCourse = () => {
     currentCourseName,
     currentDescription,
     supportedLanguages: SUPPORTED_LANGUAGES,
+    isSubmitting,
     setCurrentLanguage,
     handleFieldChange,
     handleOpenCreateDialog,

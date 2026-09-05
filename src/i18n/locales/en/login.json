@@ -1,0 +1,32 @@
+{
+  "startEasy": "Start Easily",
+  "googleLogin": "Sign in with Google",
+  "kakaoLogin": "Sign in with Kakao",
+  "naverLogin": "Sign in with Naver",
+  "termsPrefix": "By logging in, you agree to the ",
+  "privacyPolicy": "Privacy Policy",
+  "termsAnd": " and ",
+  "termsOfService": "Terms of Service",
+  "termsSuffix": ".",
+  "register": {
+    "title": "Additional Information",
+    "nickname": "Nickname",
+    "nicknamePlaceholder": "Enter 2-12 characters",
+    "nicknameCheck": "Check",
+    "nicknameHelperInUse": "This nickname is already in use.",
+    "nicknameHelperAvailable": "This nickname is available.",
+    "difficulty": "Select Difficulty",
+    "difficultyEasy": "EASY",
+    "difficultyNormal": "NORMAL",
+    "difficultyHard": "HARD",
+    "locale": "Select Language",
+    "localeKo": "한국어",
+    "localeEn": "English",
+    "localeJa": "日本語",
+    "localeZh": "中文",
+    "submit": "Complete Registration",
+    "alertCheckNickname": "Please check nickname availability first.",
+    "alertRegisterFail": "Registration Failed",
+    "errorCheckFail": "Duplicate check failed"
+  }
+}

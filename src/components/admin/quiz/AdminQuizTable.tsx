@@ -44,11 +44,11 @@ const AdminQuizTable = ({
         <TableBody>
           {paginatedQuizzes.length > 0 ? (
             paginatedQuizzes.map((quiz, index) => (
-              <TableRow key={quiz.quizId} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+              <TableRow key={quiz.placeQuizInfoId} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                 <TableCell align="center" sx={{ color: "text.secondary" }}>
                   {page * rowsPerPage + index + 1}
                 </TableCell>
-                <TableCell align="center">{quiz.quizId}</TableCell>
+                <TableCell align="center">{quiz.placeQuizInfoId}</TableCell>
                 <TableCell align="center">{quiz.placeId}</TableCell>
                 <TableCell align="center" sx={{ fontWeight: 700, color: "#2C2A29" }}>{quiz.placeName}</TableCell>
                 <TableCell align="center" sx={{ fontWeight: 700, color: "#2C2A29" }}>{quiz.title}</TableCell>
@@ -59,7 +59,7 @@ const AdminQuizTable = ({
                   {quiz.isActive ? "Y" : "N"}
                 </TableCell>
                 <TableCell align="center">
-                  <Button onClick={() => navigate(`/admin/quizzes/form/${quiz.quizId}`)} size="small" variant="outlined" sx={{ color: "#2C2A29", borderColor: "#D1D5DB" }}>
+                  <Button onClick={() => navigate(`/admin/quizzes/form/${quiz.placeQuizInfoId}`)} size="small" variant="outlined" sx={{ color: "#2C2A29", borderColor: "#D1D5DB" }}>
                     수정
                   </Button>
                 </TableCell>

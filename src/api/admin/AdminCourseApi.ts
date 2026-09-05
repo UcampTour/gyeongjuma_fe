@@ -11,4 +11,14 @@ export const fetchAdminCourseList = async (): Promise<any> => {
   });
 
   return response.data.data;
-}
+};
+
+export const createAdminCourseApi = async (payload: any) => {
+  const response = await apiClient.post("admin/courses/manage", payload);
+  return response.data.data;
+};
+
+export const updateAdminCourseApi = async (courseId: number, payload: any) => {
+  const response = await apiClient.put(`admin/courses/manage/${courseId}`, payload);
+  return response.data.data;
+};
