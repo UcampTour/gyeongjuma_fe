@@ -50,7 +50,7 @@ const PlaceSearchDialog = ({ open, onClose, handleSelectPlace }: PlaceSearchDial
               </TableHead>
               <TableBody>
                 {filteredPlaces.length > 0 ? (
-                  filteredPlaces.map((place) => (
+                  filteredPlaces.map((place:any) => (
                     <TableRow
                       key={place.placeId}
                       hover
