@@ -1,22 +1,38 @@
-import { Box, Container } from "@mui/material";
+import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import BottomNavigationBar from "../components/common/BottomNavigationBar";
 import AudioMiniPlayer from "../pages/places/AudioMiniPlayer";
 
 const MainLayout = () => {
   return (
-    <>
-      <Container
-        maxWidth="xs"
-        disableGutters
+    <Box
+      sx={{
+        width: "100%",
+        minHeight: "100dvh",
+        bgcolor: "#EFECE2",
+      }}
+    >
+      {/* 모바일 앱 영역 */}
+      <Box
         sx={{
-          bgcolor: "#F9F6EE",
+          width: "100%",
+          maxWidth: 444,
           height: "100dvh",
+          margin: "0 auto",
+          position: "relative",
+          overflow: "hidden",
+          bgcolor: "#F9F6EE",
           display: "flex",
           flexDirection: "column",
         }}
       >
-        <Box sx={{ flex: 1, overflowY: "auto" }}>
+        {/* 페이지 */}
+        <Box
+          sx={{
+            flex: 1,
+            overflowY: "auto",
+          }}
+        >
           <Outlet />
         </Box>
 
@@ -31,30 +47,33 @@ const MainLayout = () => {
           }}
         />
 
+        {/* Audio Mini Player */}
         <Box
           sx={{
-            position: "fixed",
-            bottom: 0,
+            position: "absolute",
+            bottom: 56,
+            left: 0,
             width: "100%",
-            maxWidth: 444,
+            zIndex: 1200,
+          }}
+        >
+          <AudioMiniPlayer />
+        </Box>
+
+        {/* Bottom Navigation */}
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            width: "100%",
             zIndex: 1200,
           }}
         >
           <BottomNavigationBar />
         </Box>
-      </Container>
-      <Box
-        sx={{
-          position: "fixed",
-          bottom: 56,
-          width: "100%",
-          maxWidth: 444,
-          zIndex: 1200,
-        }}
-      >
-        <AudioMiniPlayer />
       </Box>
-    </>
+    </Box>
   );
 };
 

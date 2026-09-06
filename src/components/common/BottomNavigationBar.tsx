@@ -51,14 +51,21 @@ function BottomNavigationBar() {
   const value = menus.findIndex((menu) => menu.path === location.pathname);
 
   return (
+    // <Box
+    //   sx={{
+    //     position: "fixed", //브라우저 viewport를 기준으로 위치잡기 때문에, 444 벗어남
+    //     bottom: 0,
+    //     left: "50%",
+    //     transform: "translateX(-50%)",
+    //     width: "100%",
+    //     maxWidth: "xs",
+    //     zIndex: 1000,
+    //     overflow: "visible",
+    //   }}
+    // >
     <Box
       sx={{
-        position: "fixed",
-        bottom: 0,
-        left: "50%",
-        transform: "translateX(-50%)",
         width: "100%",
-        maxWidth: "xs",
         zIndex: 1000,
         overflow: "visible",
       }}

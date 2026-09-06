@@ -96,6 +96,9 @@ const NearbyPlaceSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
       >
         <Sheet.Container
           style={{
+            width: "min(100vw, 444px)",
+
+            left: "max(0px, calc(50% - 222px))",
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
             transition: "border-radius 0.2s ease",
