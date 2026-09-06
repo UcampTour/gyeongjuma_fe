@@ -82,7 +82,8 @@ const PlaceSummarySheet = forwardRef<HandleSheetRef, SheetProps>(
       <Sheet
         ref={sheetRef}
         isOpen={open}
-        mountPoint={snapIndex === SheetState.MINI ? mountPoint : undefined}
+        // mountPoint={snapIndex === SheetState.MINI ? mountPoint : undefined}
+        mountPoint={mountPoint}
         onClose={onClose}
         snapPoints={SNAP_POINTS}
         initialSnap={SheetState.SUMMARY}
@@ -91,6 +92,12 @@ const PlaceSummarySheet = forwardRef<HandleSheetRef, SheetProps>(
       >
         <Sheet.Container
           style={{
+            width: "min(100vw, 444px)",
+
+            left: "max(0px, calc(50% - 222px))",
+
+            pointerEvents: "auto",
+            // 기존 스타일
             borderTopLeftRadius: isFull ? 0 : 24,
             borderTopRightRadius: isFull ? 0 : 24,
             transition: "border-radius .2s",
