@@ -63,6 +63,21 @@ const PlaceSummarySheet = forwardRef<HandleSheetRef, SheetProps>(
     const isFull = snapIndex === SheetState.FULL;
     const navigate = useNavigate();
 
+    /**
+     *  BottomSheet 스냅 위치 변경 시 호출되는 콜백
+     *  - 스냅 위치가 FULL(100%)이면 상세 페이지로 이동
+     *  - 스냅 위치가 CLOSED(0%)이면 onClose 호출
+     * @param index
+     */
+    const handleSnap = (index: number) => {
+      setSnapIndex(index);
+
+      // 전체 화면까지 올라오면 상세 페이지로 이동
+      if (index === SheetState.FULL && place) {
+        navigate(`/explore/${place.placeId}`);
+      }
+    };
+
     return (
       <Sheet
         ref={sheetRef}
@@ -72,7 +87,7 @@ const PlaceSummarySheet = forwardRef<HandleSheetRef, SheetProps>(
         snapPoints={SNAP_POINTS}
         initialSnap={SheetState.SUMMARY}
         detent="full"
-        onSnap={setSnapIndex}
+        onSnap={handleSnap}
       >
         <Sheet.Container
           style={{
@@ -142,8 +157,7 @@ const PlaceSummarySheet = forwardRef<HandleSheetRef, SheetProps>(
                 {snapIndex === SheetState.SUMMARY && (
                   <Box
                     sx={{ height: "100%" }}
-                    onClick={() => navigate(`/explore/${place?.placeId}`)}
-                    // onClick={() => sheetRef.current?.snapTo(SheetState.FULL)}
+                    onClick={() => navigate(`/explore/${place.placeId}`)}
                   >
                     <PlaceSummaryPage placeId={place.placeId} />
                   </Box>

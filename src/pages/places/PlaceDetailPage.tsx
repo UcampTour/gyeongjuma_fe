@@ -19,6 +19,7 @@ import type { LoadingProps } from "../../components/common/CommonLoading";
 import CommonLoading from "../../components/common/CommonLoading";
 import CommonStamp from "../../components/common/CommonStamp";
 import AudioList from "../../components/places/audio/AudioList";
+import PlaceCommentTab from "../../components/places/PlaceCommentTab";
 import PlaceInfoTab from "../../components/places/PlaceInfoTab";
 import QuizIntro from "../../components/Quiz/QuizList/QuizIntro";
 import { queryClient } from "../../config/queryClient";
@@ -32,7 +33,6 @@ import { type QuizItem } from "../../models/QuizModel";
 import { useAudioQuery } from "../../queries/useAudioQuery";
 import { usePlaceListQuery } from "../../queries/usePlaceListQuery";
 import { useAudioStore } from "../../store/audioPlayerStore";
-import PlaceCommentTab from "../../components/places/PlaceCommentTab";
 
 const PlaceDetailPage = () => {
   const { t } = useTranslation();
@@ -116,7 +116,7 @@ const PlaceDetailPage = () => {
   const handleClose = () => {
     resetAudio();
     audioPlayer.stop();
-    navigate("/explore");
+    navigate(-1);
   };
 
   /**
@@ -217,8 +217,8 @@ const PlaceDetailPage = () => {
                 <FavoriteBorderRoundedIcon sx={{ color: "inherit" }} />
               )}
             </IconButton>
-            <IconButton>
-              <CloseIcon onClick={handleClose} />
+            <IconButton onClick={handleClose}>
+              <CloseIcon />
             </IconButton>
           </Stack>
         </Stack>
@@ -297,9 +297,9 @@ const PlaceDetailPage = () => {
 
         <Box
           sx={{
-            maxHeight: "50vh",
-            overflowY: "auto",
-            pb: "100px",
+            // maxHeight: "50vh",
+            // overflowY: "auto",
+            pb: 14,
 
             // IE, Edge
             msOverflowStyle: "none",

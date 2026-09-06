@@ -1,8 +1,8 @@
 import { Box, Button, Container, Typography } from "@mui/material";
 import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { login as googleLogin, myInfo } from "../../api/authApi";
 import logo from "../../assets/gyeongjuma_logo.png";
 import kakaoIcon from "../../assets/login/kakaoLoginIcon.png";
@@ -13,7 +13,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { login, setAccessToken } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const { t } = useTranslation("login");
 
   // 네이버 로그인 핸들러
@@ -21,10 +21,10 @@ const LoginPage = () => {
     const CLIENT_ID = import.meta.env.VITE_NAVER_CLIENT_ID;
     const REDIRECT_URI = `${window.location.origin}/auth/naver/callback`;
     const STATE = Math.random().toString(36).substring(3);
-    
+
     // response_type을 code가 아닌 token으로 변경
     const naverURL = `https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&state=${STATE}`;
-    
+
     window.location.href = naverURL;
   };
 
@@ -32,9 +32,9 @@ const LoginPage = () => {
   const handleKakaoLogin = () => {
     const REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
     const REDIRECT_URI = `${window.location.origin}/auth/kakao/callback`;
-    
+
     const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-    
+
     window.location.href = kakaoURL;
   };
 
@@ -165,6 +165,7 @@ const LoginPage = () => {
               color: "#1f1f1f",
               bgcolor: "white",
               justifyContent: "center",
+              "&:hover": { bgcolor: "#f5f5f5" },
             }}
           >
             <Box
