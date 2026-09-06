@@ -1,7 +1,7 @@
+import { Box, CircularProgress } from "@mui/material";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, CircularProgress } from "@mui/material";
-import { login as socialLogin, myInfo } from "../../api/authApi";
+import { myInfo, login as socialLogin } from "../../api/authApi";
 import { useAuthStore } from "../../store/useAuthStore";
 
 const KakaoCallbackPage = () => {
@@ -27,18 +27,21 @@ const KakaoCallbackPage = () => {
         const REDIRECT_URI = `${window.location.origin}/auth/kakao/callback`;
 
         // 1. 카카오 토큰 서버에 POST 요청으로 Access Token 요청
-        const tokenResponse = await fetch("https://kauth.kakao.com/oauth/token", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+        const tokenResponse = await fetch(
+          "https://kauth.kakao.com/oauth/token",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+            },
+            body: new URLSearchParams({
+              grant_type: "authorization_code",
+              client_id: REST_API_KEY,
+              redirect_uri: REDIRECT_URI,
+              code: authCode,
+            }),
           },
-          body: new URLSearchParams({
-            grant_type: "authorization_code",
-            client_id: REST_API_KEY,
-            redirect_uri: REDIRECT_URI,
-            code: authCode,
-          }),
-        });
+        );
 
         const tokenData = await tokenResponse.json();
 
@@ -94,7 +97,14 @@ const KakaoCallbackPage = () => {
   }, [navigate, login, setAccessToken]);
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
       <CircularProgress />
     </Box>
   );

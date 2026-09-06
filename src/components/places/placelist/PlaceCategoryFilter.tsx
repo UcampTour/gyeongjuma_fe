@@ -32,7 +32,14 @@ const PlaceCongestionFilter = ({
         whiteSpace: "nowrap",
         mb: 3,
         pb: 1,
-        ":-webkit-scrollbar": { display: "none" },
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
+        // Firefox
+        scrollbarWidth: "none",
+
+        // IE, Edge
+        msOverflowStyle: "none",
       }}
     >
       {statuses.map((item) => {

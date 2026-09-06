@@ -1,11 +1,11 @@
 import { Box } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import CommonSearchBar from "../../components/common/CommonSearchBar";
 import PageHeader from "../../components/common/PageHeader";
+import PlaceCongestionFilter from "../../components/places/placelist/PlaceCategoryFilter";
 import PlaceList from "../../components/places/placelist/PlaceList";
 import PlaceListSorter from "../../components/places/placelist/PlaceListSorter";
 import { usePlaceList } from "../../hooks/place/usePlaceList";
-import PlaceCongestionFilter from "../../components/places/placelist/PlaceCategoryFilter";
-import { useTranslation } from "react-i18next";
 
 const PlaceListPage = () => {
   const {

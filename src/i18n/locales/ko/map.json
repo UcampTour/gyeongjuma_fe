@@ -12,5 +12,8 @@
   },
   "title": {
     "nearbyPlace": "내 주변 인기 장소"
+  },
+  "message": {
+    "searchingCurrentLocation": "현재 위치 찾는 중..."
   }
 }
