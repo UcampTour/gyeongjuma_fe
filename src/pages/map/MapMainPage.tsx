@@ -28,20 +28,10 @@ import { PlaceFilterType } from "../../models/MapModel";
 import type { PlaceListBase } from "../../models/PlaceModel";
 import { useNearbyPlaceListQuery } from "../../queries/useNearbyPlaceListQuery";
 import { usePlaceListQuery } from "../../queries/usePlaceListQuery";
-import { useWeatherQuery } from "../../queries/useWeatherQuery.ts";
 
 /**
  * 지도 메인 페이지
  */
-export interface Weather {
-  temperature: number;
-  feelsLike: number;
-  humidity: number;
-  weather: string;
-  description: string;
-  icon: string;
-  windSpeed: number;
-}
 
 export interface CommonSearchForm {
   keyword: string;
@@ -134,11 +124,6 @@ const MapMainPage = () => {
     startWatchingLocation,
     stopWatchingLocation,
   ]);
-
-  const { data: weather } = useWeatherQuery({
-    latitude: currentLocation?.lat,
-    longitude: currentLocation?.lng,
-  });
 
   /**
    * 마커 클릭 이벤트 핸들러
@@ -309,7 +294,6 @@ const MapMainPage = () => {
             onClose={() => setIsRecommendOpen(false)}
             placeList={nearbyPlaceData}
             currentAddress={currentAddress}
-            weather={weather}
           />
         )}
       </Box>

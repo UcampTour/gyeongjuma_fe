@@ -11,13 +11,11 @@ import {
   getOperationStatusConfig,
 } from "../../models/commonModel";
 import type { PlaceListBase } from "../../models/PlaceModel";
-import type { Weather } from "../../pages/map/MapMainPage";
 interface SheetProps {
   open: boolean;
   onClose: () => void;
   placeList?: PlaceListBase[]; // 관광지 목록 데이터
   currentAddress: string | null;
-  weather?: Weather;
 }
 
 export interface HandleInfoSheetRef {
@@ -37,7 +35,7 @@ export const snapPoints = [0, 0.2, 1];
  * 관광지 상세 정보 BottomSheet
  */
 const NearbyPlaceSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
-  ({ open, onClose, placeList, currentAddress, weather }, ref) => {
+  ({ open, onClose, placeList, currentAddress }, ref) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     // const mountPoint = document.getElementById("sheet-root"); //  BottomSheet를 지도의 하단에 렌더링하기 위해 mountPoint를 지정
@@ -164,43 +162,10 @@ const NearbyPlaceSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
                       whiteSpace: "nowrap",
                     }}
                   >
-                    {currentAddress ?? "현재 위치를 확인 중..."}
+                    {currentAddress ??
+                      t("map:message.searchingCurrentLocation")}
                   </Typography>
                 </Stack>
-
-                {/* 날씨 */}
-                {weather && (
-                  <Stack
-                    direction="row"
-                    spacing={0.5}
-                    sx={{
-                      alignItems: "center",
-                      flexShrink: 0,
-                      bgColor: "#ffffff",
-                    }}
-                  >
-                    <Box
-                      component="img"
-                      src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
-                      alt={weather.description}
-                      sx={{
-                        width: 40,
-                        height: 40,
-                      }}
-                    />
-
-                    <Typography
-                      variant="subtitle2"
-                      sx={{
-                        fontWeight: 600,
-                        fontSize: "0.85rem",
-                        color: "text.primary",
-                      }}
-                    >
-                      {Math.round(weather.temperature)}°C
-                    </Typography>
-                  </Stack>
-                )}
               </Stack>
               <Stack
                 direction="row"
