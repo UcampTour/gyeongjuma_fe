@@ -6,9 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { MapLocation } from "../models/MapModel";
 
 export const useCurrentLocation = () => {
-  const [currentLocation, setCurrentLocation] = useState<MapLocation | null>(
-    null,
-  );
+  const [currentLocation, setCurrentLocation] = useState<MapLocation>();
   const [loading, setLoading] = useState(false);
 
   // 실시간 위치 추적 ID

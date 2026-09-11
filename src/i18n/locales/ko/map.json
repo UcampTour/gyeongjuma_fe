@@ -1,6 +1,8 @@
 {
   "search": {
-    "placeholder": "장소, 주소 검색"
+    "placeholder": "장소, 주소 검색",
+    "listPlaceholder": "관광지 이름을 입력해 검색해 보세요.",
+    "noResult": "{{keyword}} 에 대한 검색 결과가 없습니다."
   },
   "buttons": {
     "currentLocation": "현재 위치",
@@ -15,5 +17,26 @@
   },
   "message": {
     "searchingCurrentLocation": "현재 위치 찾는 중..."
+  },
+  "legend": {
+    "congestion": {
+      "title": "예상 혼잡도",
+      "low": "여유",
+      "medium": "보통",
+      "high": "혼잡",
+      "none": "정보없음"
+    },
+    "operating": {
+      "title": "운영 상태",
+      "open": "운영중",
+      "closed": "운영종료",
+      "breakTime": "브레이크 타임",
+      "none": "정보없음"
+    },
+    "visited": {
+      "title": "방문 여부",
+      "unvisited": "미방문",
+      "completed": "방문 완료"
+    }
   }
 }

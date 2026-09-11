@@ -1,10 +1,18 @@
 {
-  "category": {
+  "title": "Explore Gyeongju's Attractions",
+
+  "placehorder": "Search for an attraction",
+
+  "visitcomplete": "Visited",
+
+  "status": {
     "all": "All",
-    "tourist": "Tourist Attractions",
-    "historic": "Historic Sites",
-    "other": "Other"
+    "open": "Open",
+    "breakTime": "Preparing",
+    "closed": "Closed",
+    "none": "No Information"
   },
+
   "sortType": {
     "default": "Default",
     "likes": "Favorites",
@@ -14,50 +22,58 @@
   "detail": {
     "tabs": {
       "info": "Info",
-      "commentary": "Guide",
+      "commentary": "Commentary",
       "audio": "Audio",
       "quiz": "Quiz"
     },
+
     "info": {
       "menu": {
         "address": "Address",
-        "operationInfo": "Business Hours",
-        "operationStatus": "Operating Status",
-        "operationHour": "Hours",
+        "operationInfo": "Hours",
+        "operationStatus": "Status",
+        "operationHour": "Operating Hours",
         "distance": "Distance",
         "congestion": "Expected Crowding",
         "favorite": "Favorites",
-        "isVisited": "Visit Status",
+        "isVisited": "Visited",
         "parking": "Parking",
-        "tel": "Tel"
+        "tel": "Phone",
+        "visitCnt": "Visitors",
+        "favoriteCount": "Favorites"
       },
+
       "value": {
-        "distance": "from your current location"
+        "distance": "From your current location"
       }
     },
+
     "description": {
-      "emptyState": "The guide is not available yet."
+      "emptyState": "No commentary is available yet."
     }
   },
 
   "congestion": {
     "title": "Expected Crowding",
+
     "status": {
       "low": "Low",
       "medium": "Moderate",
       "high": "Crowded",
       "none": "No Information"
     },
+
     "description": {
-      "low": "Less crowded than usual",
-      "medium": "About as crowded as usual",
-      "high": "More crowded than usual",
-      "none": "No expected crowding information"
+      "low": "Usually less crowded than usual",
+      "medium": "Usually about as crowded as usual",
+      "high": "Usually more crowded than usual",
+      "none": "No crowding information available"
     }
   },
 
   "operation": {
     "title": "Operating Hours",
+
     "status": {
       "open": "Open",
       "alwaysOpen": "Always Open",
@@ -81,22 +97,31 @@
 
   "audio": {
     "emptyState": {
-      "title": "No Audio Available",
+      "title": "No Audio Available.",
       "message": "There is no audio guide available yet.",
       "message2": "Stay tuned for future updates! 😊"
     },
+
     "label": {
       "story": "Story",
       "playAll": "Play All"
+    },
+
+    "list": {
+      "title": "Gyeongju Audio Tour 🎧",
+      "emptyState": "No attractions with audio guides.",
+      "emptyVisitState": "No visited attractions with audio guides.",
+      "listMessage": "Explore the stories of Gyeongju with an audio guide.",
+      "allVisitState": "You've visited all audio attractions!"
     }
   },
 
   "message": {
-    "alreadyVisited": "You have already visited this attraction.",
-    "confirmVisitTitle": "Verify Visit",
+    "alreadyVisited": "This attraction has already been marked as visited.",
+    "confirmVisitTitle": "Verify Your Visit",
     "confirmVisitMessage": "Would you like to verify your visit?",
-    "loadingVisitTitle": "Verifying Visit",
-    "loadingVisitMessgae": "We're checking if you've arrived at the attraction.\n Please wait a moment!",
-    "successVisit": "Visit verified! 🎉\n{{placeName}} stamp acquired!\nNow take the quiz and earn points."
+    "loadingVisitTitle": "Verifying Your Visit",
+    "loadingVisitMessgae": "We're checking if you've arrived at the attraction.\nPlease wait a moment!",
+    "successVisit": "Visit verified! 🎉\nYou've earned a stamp for {{placeName}}!\nNow take the quiz to earn points."
   }
 }

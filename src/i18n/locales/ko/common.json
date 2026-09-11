@@ -19,5 +19,8 @@
     "easy": "어린이",
     "normal": "기본",
     "hard": "전문가"
+  },
+  "button": {
+    "cancel": "취소"
   }
 }

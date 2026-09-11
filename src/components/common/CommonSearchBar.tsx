@@ -69,7 +69,7 @@ const CommonSearchBar = ({
         },
       }}
       sx={{
-        mb: 3,
+        mb: 2,
         "& .MuiOutlinedInput-root": {
           bgcolor: "#FFFFFF",
           borderRadius: "24px",

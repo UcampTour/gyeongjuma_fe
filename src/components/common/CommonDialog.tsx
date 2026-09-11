@@ -39,6 +39,7 @@ const CommonDialog = ({
           sx: {
             borderRadius: "15px",
             width: "70%",
+            maxWidth: "400px",
             minHeight: "20%",
             px: 1.5,
             pb: 2,

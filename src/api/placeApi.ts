@@ -31,6 +31,9 @@ export const getPlaceList = async (
 export const certifyVisit = async (placeId: number, params: PlaceLocPrams) => {
   const response = await apiClient.post(
     `/visit/${placeId}?latitude=${params.latitude}&longitude=${params.longitude}`,
+    {
+      timeout: 10000, // 10초
+    },
   );
   return response.data;
 };

@@ -33,13 +33,14 @@ import { type QuizItem } from "../../models/QuizModel";
 import { useAudioQuery } from "../../queries/useAudioQuery";
 import { usePlaceListQuery } from "../../queries/usePlaceListQuery";
 import { useAudioStore } from "../../store/audioPlayerStore";
+import { useBottomNavStore } from "../../store/useBottomNavStore";
 
 const PlaceDetailPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { alert, confirm } = useCommonDialog();
 
-  const { updateCurrentLocation } = useCurrentLocation();
+  const { currentLocation, updateCurrentLocation } = useCurrentLocation();
   const [loading, setLoading] = useState<LoadingProps>();
 
   const commonLoading = useCommonLoading(loading);
@@ -47,9 +48,22 @@ const PlaceDetailPage = () => {
   const { placeId: paramPlaceId } = useParams<{ placeId: string }>();
   const placeId = Number(paramPlaceId);
 
+  const { isVisible, hide, show } = useBottomNavStore();
+
+  useEffect(() => {
+    hide();
+    return () => {
+      show();
+    };
+  }, [hide, show]);
+
+  useEffect(() => {
+    updateCurrentLocation();
+  }, [updateCurrentLocation]);
+
   const { data: placeList = [] } = usePlaceListQuery({
-    latitude: 0,
-    longitude: 0,
+    latitude: currentLocation?.lat ?? 0,
+    longitude: currentLocation?.lng ?? 0,
   });
 
   const place = placeList.find((p) => p.placeId === placeId);
@@ -236,6 +250,7 @@ const PlaceDetailPage = () => {
             justifyContent: "space-between",
             alignItems: "flex-start",
             pr: 1,
+            mb: place?.subPlaceName ? 0 : 1,
           }}
         >
           {/* 타이틀 영역 */}
@@ -299,7 +314,7 @@ const PlaceDetailPage = () => {
           sx={{
             // maxHeight: "50vh",
             // overflowY: "auto",
-            pb: 14,
+            // pb: 14,
 
             // IE, Edge
             msOverflowStyle: "none",

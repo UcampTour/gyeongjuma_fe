@@ -1,12 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
-import { QuizCategory, QuizStatus, type QuizListItem } from "../../models/QuizModel";
 import { fetchQuizList } from "../../api/quizApi";
+import {
+  QuizCategory,
+  QuizStatus,
+  type QuizListItem,
+} from "../../models/QuizModel";
 
 const STATUS_PRIORITY: QuizStatus[] = [
-  QuizStatus.PROGRESS,   // 진행중
-  QuizStatus.AVAILABLE,  // 도전가능
-  QuizStatus.COMPLETED,  // 도전완료
-  QuizStatus.LOCKED,     // 잠김
+  QuizStatus.PROGRESS, // 진행중
+  QuizStatus.AVAILABLE, // 도전가능
+  QuizStatus.COMPLETED, // 도전완료
+  QuizStatus.LOCKED, // 잠김
 ];
 
 export const useQuizList = (placeId?: number) => {
@@ -41,7 +45,7 @@ export const useQuizList = (placeId?: number) => {
     return [...quizData].sort((a, b) => {
       const indexA = STATUS_PRIORITY.indexOf(a.quizStatus);
       const indexB = STATUS_PRIORITY.indexOf(b.quizStatus);
-      
+
       const priorityA = indexA === -1 ? 999 : indexA;
       const priorityB = indexB === -1 ? 999 : indexB;
 

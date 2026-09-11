@@ -1,11 +1,13 @@
 import { Box, CardMedia, Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { fetchTimeline } from "../../api/profileApi";
 import defaultPlaceImg from "../../assets/default_place_img.png";
 import PageHeader from "../../components/common/PageHeader";
 import TimeLinePage from "../../components/profile/TimeLineMap";
-import { fetchTimeline } from "../../api/profileApi";
 
 const TimelinePage = () => {
+  const navigate = useNavigate();
   // 'summary' (요약 타임라인) 또는 'map' (지도 보기) 탭 상태 관리
   const [activeTab, setActiveTab] = useState<"summary" | "map">("summary");
   const [timelineData, setTimelineData] = useState<any[]>([]);
@@ -78,6 +80,10 @@ const TimelinePage = () => {
     return path;
   };
 
+  const handleClick = (placeId: string) => {
+    navigate(`/explore/${placeId}`);
+  };
+
   return (
     <Box
       sx={{
@@ -89,6 +95,46 @@ const TimelinePage = () => {
       }}
     >
       <PageHeader title="내 발자취 모음" />
+      <Box
+        sx={{
+          px: 3,
+          pt: 2,
+          pb: 0.5,
+          textAlign: "center",
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: "15px",
+            fontWeight: 700,
+            color: "#2C251E",
+            lineHeight: 1.5,
+          }}
+        >
+          🏆 지금까지{" "}
+          <Box
+            component="span"
+            sx={{
+              color: "#BC9A5D",
+              fontWeight: 800,
+            }}
+          >
+            {badgeCount}곳
+          </Box>{" "}
+          의 관광지를 방문했어요!
+        </Typography>
+
+        <Typography
+          sx={{
+            mt: 0.3,
+            fontSize: "12px",
+            color: "#8C8273",
+            fontWeight: 500,
+          }}
+        >
+          경주의 추억을 차곡차곡 모으고 있어요 ✨
+        </Typography>
+      </Box>
 
       {/* 상단 알약 탭 (칩 스위처) */}
       <Box
@@ -303,6 +349,7 @@ const TimelinePage = () => {
 
                   <Box
                     sx={{
+                      cursor: "pointer",
                       width: 64,
                       height: 64,
                       borderRadius: "50%",
@@ -317,6 +364,7 @@ const TimelinePage = () => {
                       left: "50%",
                       transform: "translateX(-50%)",
                     }}
+                    onClick={() => handleClick(item.id)}
                   >
                     <CardMedia
                       component="img"
@@ -348,6 +396,7 @@ const TimelinePage = () => {
               name: item.name,
               lat: item.lat,
               lng: item.lng,
+              image: item.image,
             }))}
           />
         </Box>

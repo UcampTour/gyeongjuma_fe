@@ -136,7 +136,7 @@ const MapMainPage = () => {
 
   const legendConfig = useMemo(
     () => getLegendConfig(selectedFilter, placeData),
-    [selectedFilter, placeData],
+    [selectedFilter, placeData, getLegendConfig],
   );
 
   const handleGoToFilterList = () => {
@@ -292,7 +292,7 @@ const MapMainPage = () => {
             ref={infoSheetRef}
             open={isRecommendOpen}
             onClose={() => setIsRecommendOpen(false)}
-            placeList={nearbyPlaceData}
+            placeList={nearbyPlaceData.slice(0, 10)}
             currentAddress={currentAddress}
           />
         )}
