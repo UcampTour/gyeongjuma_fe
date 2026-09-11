@@ -7,7 +7,7 @@
   },
   "sortType": {
     "default": "Default",
-    "likes": "Most Liked",
+    "likes": "Favorites",
     "distance": "Distance"
   },
 

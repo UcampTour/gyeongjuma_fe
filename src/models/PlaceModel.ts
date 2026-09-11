@@ -39,6 +39,7 @@ export interface PlaceListBase {
   // reviewCount: number; // 평점 참여자 수
   parkinglikes: number; // 좋아요 수
   visitCnt: number;
+  totalFavorite: number; //총 즐겨찾기 수
   lat: number; // 위도
   lng: number; // 경도
   congestion: CongestionLevel; // 혼잡도

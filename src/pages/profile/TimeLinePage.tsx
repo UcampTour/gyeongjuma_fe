@@ -1,48 +1,59 @@
 import { Box, CardMedia, Paper, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import defaultPlaceImg from "../../assets/default_place_img.png";
 import PageHeader from "../../components/common/PageHeader";
 import TimeLinePage from "../../components/profile/TimeLineMap";
+import { fetchTimeline } from "../../api/profileApi";
 
 const TimelinePage = () => {
   // 'summary' (요약 타임라인) 또는 'map' (지도 보기) 탭 상태 관리
   const [activeTab, setActiveTab] = useState<"summary" | "map">("summary");
+  const [timelineData, setTimelineData] = useState<any[]>([]);
 
-  // 더미 데이터에 좌표 정보 추가
-  const timelineData = [
-    {
-      id: 1,
-      name: "불국사",
-      date: "2026.05.01 방문",
-      image: defaultPlaceImg,
-      lat: 35.7898,
-      lng: 129.332,
-    },
-    {
-      id: 2,
-      name: "첨성대",
-      date: "2026.05.03 방문",
-      image: defaultPlaceImg,
-      lat: 35.8347,
-      lng: 129.219,
-    },
-    {
-      id: 3,
-      name: "동궁과 월지",
-      date: "2026.05.05 방문",
-      image: defaultPlaceImg,
-      lat: 35.8283,
-      lng: 129.226,
-    },
-    {
-      id: 4,
-      name: "대릉원",
-      date: "2026.05.07 방문",
-      image: defaultPlaceImg,
-      lat: 35.8397,
-      lng: 129.2116,
-    },
-  ];
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const data = await fetchTimeline();
+        const visits = data.visits || [];
+
+        const mappedData = visits.map((item: any) => {
+          // 날짜 문자열("2026-07-28 05:01:07" 또는 "2026-07-28T...")에서 일까지만 추출
+          let formattedDate = "";
+          if (item.visitedAt) {
+            const datePart = item.visitedAt.split(" ")[0].split("T")[0]; // "2026-07-28"
+            const parts = datePart.split("-");
+            if (parts.length === 3) {
+              formattedDate = `${parts[0]}.${parts[1]}.${parts[2]} 방문`;
+            } else {
+              formattedDate = `${datePart} 방문`;
+            }
+          }
+
+          return {
+            id: item.visitId,
+            name: item.placeName,
+            // 원본 방문 일시(오래된 순 정렬용 raw 값 보관)
+            rawDate: item.visitedAt || "",
+            date: formattedDate,
+            image: item.imageUrl || defaultPlaceImg,
+            lat: item.lat,
+            lng: item.lng,
+          };
+        });
+
+        // 날짜 기준 오름차순(오래된 순) 정렬
+        mappedData.sort((a: any, b: any) => {
+          return new Date(a.rawDate).getTime() - new Date(b.rawDate).getTime();
+        });
+
+        setTimelineData(mappedData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getData();
+  }, []);
 
   const badgeCount = timelineData.length;
   const itemHeight = 130;
