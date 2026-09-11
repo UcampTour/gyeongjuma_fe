@@ -18,26 +18,22 @@ interface PlaceCardProps {
 const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
   const { t } = useTranslation("places");
 
-  // 1. 유저 스토어에서 difficulty 가져오기 (없으면 기본값 "normal")
   const difficulty = useAuthStore((state) => state.member?.difficulty) || "normal";
-  
-  // 2. 소문자로 변환 후, description 객체에서 알맞은 키값 매칭
-  // 예: difficulty가 "EASY"나 "Easy"여도 소문자로 변환하여 "easy"를 안전하게 가져옴
   const lowerDifficulty = difficulty.toLowerCase() as keyof typeof place.description;
   const currentDescription = place.description?.[lowerDifficulty] || place.description?.normal || "";
 
-  // 배경색과 다국어 번역 키 매핑
+  // 현재 json 구조(congestion.status 및 status)에 맞게 번역 경로 수정
   const badgeConfig: Record<
     CongestionLevel | OperationStatus,
     { translationKey: string; bgColor: string }
   > = {
-    [CongestionLevel.HIGH]: { translationKey: "badge.high", bgColor: "#C05656" },
-    [CongestionLevel.MEDIUM]: { translationKey: "badge.medium", bgColor: "#E0A928" },
-    [CongestionLevel.LOW]: { translationKey: "badge.low", bgColor: "#3F8E72" },
-    [CongestionLevel.NONE]: { translationKey: "badge.none", bgColor: "#d8d8d8" },
-    [OperationStatus.CLOSED]: { translationKey: "badge.closed", bgColor: "#757575" },
-    [OperationStatus.BREAK_TIME]: { translationKey: "badge.breakTime", bgColor: "#E2723B" },
-    [OperationStatus.OPEN]: { translationKey: "badge.open", bgColor: "#3F8E72" },
+    [CongestionLevel.HIGH]: { translationKey: "congestion.status.high", bgColor: "#C05656" },
+    [CongestionLevel.MEDIUM]: { translationKey: "congestion.status.medium", bgColor: "#E0A928" },
+    [CongestionLevel.LOW]: { translationKey: "congestion.status.low", bgColor: "#3F8E72" },
+    [CongestionLevel.NONE]: { translationKey: "congestion.status.none", bgColor: "#d8d8d8" },
+    [OperationStatus.CLOSED]: { translationKey: "status.closed", bgColor: "#757575" },
+    [OperationStatus.BREAK_TIME]: { translationKey: "status.breakTime", bgColor: "#E2723B" },
+    [OperationStatus.OPEN]: { translationKey: "status.open", bgColor: "#3F8E72" },
   };
 
   const currentConfig =
@@ -102,7 +98,7 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
       >
         {/* 상단 타이틀 부분 */}
         <Box>
-          <Typography
+          {/* <Typography
             sx={{
               color: "#AC8E61",
               fontSize: "12px",
@@ -111,14 +107,14 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
             }}
           >
             {place.category}
-          </Typography>
+          </Typography> */}
 
           <Typography
             sx={{
               fontWeight: 800,
               fontSize: "17px",
               color: "#111111",
-              mb: 0.3,
+              mb: 0,
               whiteSpace: "nowrap",
               overflow: "hidden",
               textOverflow: "ellipsis",
@@ -132,6 +128,8 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
               color: "#958D80",
               fontSize: "12.5px",
               lineHeight: 1.3,
+              mt: "8px",
+              mb: "2px",
               overflow: "hidden",
               textOverflow: "ellipsis",
               display: "-webkit-box",
@@ -152,7 +150,6 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
             width: "100%",
             columnGap: 2.5,
             rowGap: 0.4,
-            mt: 0.8,
             flexWrap: "wrap",
             overflow: "hidden",
           }}
@@ -215,7 +212,7 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
                 lineHeight: 1.2,
               }}
             >
-              {place.parkinglikes}
+              {place.totalFavorite}
             </Typography>
           </Box>
         </Box>
