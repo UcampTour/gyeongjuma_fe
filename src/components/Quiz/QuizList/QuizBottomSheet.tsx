@@ -22,6 +22,12 @@ const QuizBottomSheet = ({
       onClose={drawerClose}
       snapPoints={[0, 0.8, 1]}
       initialSnap={1}
+      style={{
+        maxWidth: "444px",
+        margin: "0 auto",
+        left: 0,
+        right: 0,
+      }}
     >
       <Sheet.Container
         style={{
@@ -30,6 +36,9 @@ const QuizBottomSheet = ({
           backgroundColor: "#FFFFFF",
           height: "auto",
           maxHeight: "90vh",
+          width: "100%",
+          maxWidth: "444px",
+          margin: "0 auto",
         }}
       >
         <Sheet.Header />
@@ -44,7 +53,15 @@ const QuizBottomSheet = ({
         </Sheet.Content>
       </Sheet.Container>
 
-      <Sheet.Backdrop onTap={drawerClose} />
+      <Sheet.Backdrop 
+        onTap={drawerClose} 
+        style={{
+          maxWidth: "444px",
+          margin: "0 auto",
+          left: 0,
+          right: 0,
+        }}
+      />
     </Sheet>
   );
 };
