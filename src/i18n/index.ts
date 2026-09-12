@@ -19,11 +19,21 @@ import placesEn from "./locales/en/places.json";
 import profileEn from "./locales/en/profile.json";
 import quizEn from "./locales/en/quiz.json";
 
+import commonJa from "./locales/ja/common.json";
+import courseJa from "./locales/ja/course.json";
+import homeJa from "./locales/ja/home.json";
 import loginJa from "./locales/ja/login.json";
+import mapJa from "./locales/ja/map.json";
+import placesJa from "./locales/ja/places.json";
 import profileJa from "./locales/ja/profile.json";
 import quizJa from "./locales/ja/quiz.json";
 
+import commonZh from "./locales/zh/common.json";
+import courseZh from "./locales/zh/course.json";
+import homeZh from "./locales/zh/home.json";
 import loginZh from "./locales/zh/login.json";
+import mapZh from "./locales/zh/map.json";
+import placesZh from "./locales/zh/places.json";
 import profileZh from "./locales/zh/profile.json";
 import quizZh from "./locales/zh/quiz.json";
 
@@ -31,11 +41,9 @@ i18n
   // 브라우저 언어 자동 감지
   // ex) ko-KR -> ko, en-US -> en
   // .use(LanguageDetector)
-  .use(initReactI18next) // i18next를 React와 연결
+  .use(initReactI18next)
 
-  // i18n 초기 설정
   .init({
-    // 언어별 번역 리소스 등록
     resources: {
       ko: {
         common: commonKo,
@@ -47,38 +55,58 @@ i18n
         login: loginKo,
         profile: profileKo,
       },
+
       en: {
         common: commonEn,
         map: mapEn,
         places: placesEn,
         quiz: quizEn,
-        home: homeEn,
         course: courseEn,
+        home: homeEn,
         login: loginEn,
         profile: profileEn,
       },
+
       ja: {
+        common: commonJa,
+        map: mapJa,
+        places: placesJa,
+        quiz: quizJa,
+        course: courseJa,
+        home: homeJa,
         login: loginJa,
         profile: profileJa,
-        quiz: quizJa,
       },
+
       zh: {
+        common: commonZh,
+        map: mapZh,
+        places: placesZh,
+        quiz: quizZh,
+        course: courseZh,
+        home: homeZh,
         login: loginZh,
         profile: profileZh,
-        quiz: quizZh,
       },
     },
 
-    // 감지된 언어가 없거나 지원하지 않는 언어일 경우 기본 언어
+    // 지원하지 않는 언어일 경우 한국어 사용
     fallbackLng: "ko",
 
-    // useTranslation() 사용 시 기본 namespace
-    // ex) t("nav.home")
-    // => common:nav.home
+    // 기본 namespace
     defaultNS: "common",
 
     // 프로젝트에서 사용하는 namespace 목록
-    ns: ["common", "map", "places", "quiz", "login", "profile", "home"], // *.json 확장
+    ns: [
+      "common",
+      "map",
+      "places",
+      "quiz",
+      "course",
+      "home",
+      "login",
+      "profile",
+    ],
 
     interpolation: {
       escapeValue: false,
