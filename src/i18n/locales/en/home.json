@@ -2,16 +2,14 @@
   "message": {
     "greeting": "{{nickname}},",
     "greetingQuestion": "Are you planning a trip to Gyeongju?",
-    "greetingDescription": "Before you go, discover the places you'd like to visit."
+    "greetingDescription": "Before you go, find the places you'd like to visit in advance."
   },
-
   "quickMenu": {
     "favorite": "Favorites",
-    "placeList": "Today's Picks",
+    "placeList": "Explore Attractions",
     "audio": "Audio Tour",
     "course": "Stamp Tour"
   },
-
   "subTitle": {
     "bestPlace": "Popular Attractions"
   }

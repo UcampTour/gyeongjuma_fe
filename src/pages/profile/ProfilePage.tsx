@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { useTranslation } from "react-i18next"; // 💡 i18n 훅 추가
+import { useTranslation } from "react-i18next"; 
 import PageHeader from "../../components/common/PageHeader";
 import ProfileCard from "../../components/profile/ProfileCard";
 import TravelProgress from "../../components/profile/TravelProgress";
@@ -33,7 +33,6 @@ const ProfilePage = () => {
         {/* 2. 나의 여행 진행도 카드 */}
         <TravelProgress
           courseCount={profileData.courseCount}
-          distance={profileData.distance}
           quizCount={profileData.quizCount}
           visitCount={profileData.visitPlaceCnt}
         />

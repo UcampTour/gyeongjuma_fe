@@ -1,6 +1,5 @@
 import HeadphonesOutlinedIcon from "@mui/icons-material/HeadphonesOutlined";
 import { Box, Button, Stack, styled, Switch, Typography } from "@mui/material";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { audioPlayer } from "../../../hooks/audio/AudioPlayer";
@@ -14,7 +13,6 @@ export interface AudioListProps {
 const AudioList = ({ audioList }: AudioListProps) => {
   const { t } = useTranslation();
   const { setAudio, setPlaying } = useAudioStore();
-  const [hardMode, setHardMode] = useState<boolean>(false);
   const navigate = useNavigate();
 
   /**

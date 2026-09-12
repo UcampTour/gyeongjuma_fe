@@ -11,8 +11,8 @@ import { CongestionLevel, OperationStatus } from "./commonModel";
  */
 
 export interface PlaceLocPrams {
-  latitude: number; // 필수
-  longitude: number; // 필수
+  latitude?: number; // 필수
+  longitude?: number; // 필수
 }
 export interface PlaceSearchParams extends PlaceLocPrams {
   search?: string;
@@ -39,6 +39,8 @@ export interface PlaceListBase {
   // reviewCount: number; // 평점 참여자 수
   parkinglikes: number; // 좋아요 수
   visitCnt: number;
+  totalFavorite: number; //총 즐겨찾기 수
+  audioCount: number; // 오디오 파일 개수
   lat: number; // 위도
   lng: number; // 경도
   congestion: CongestionLevel; // 혼잡도

@@ -1,16 +1,44 @@
 {
   "search": {
-    "placeholder": "Search for attractions"
+    "placeholder": "Search places or addresses",
+    "listPlaceholder": "Enter the name of an attraction to search.",
+    "noResult": "No search results found for {{keyword}}."
   },
   "buttons": {
-    "currentLocation": "Current location",
-    "nearbyAttractions": "Nearby attractions"
+    "currentLocation": "Current Location",
+    "nearbyAttractions": "Nearby Attractions"
   },
   "label": {
-    "unVisited": "Unvisited",
+    "unVisited": "Not Visited",
     "isVisited": "Visited"
   },
   "title": {
-    "nearbyPlace": "Popular places near me"
+    "nearbyPlace": "Popular Places Near Me"
+  },
+  "message": {
+    "moveToGyeongjuCenter": "Go to Gyeongju Center",
+    "moveToCurrentLoc": "Go to Current Location",
+    "searchingCurrentLocation": "Finding your current location..."
+  },
+  "legend": {
+    "congestion": {
+      "title": "Expected Crowding",
+      "low": "Low",
+      "medium": "Moderate",
+      "high": "Crowded",
+      "none": "No Information"
+    },
+    "operating": {
+      "title": "Operating Status",
+      "open": "Open",
+      "closed": "Closed",
+      "breakTime": "Break Time",
+      "none": "No Information"
+    },
+    "visited": {
+      "title": "Visit Status",
+      "unvisited": "Not Visited",
+      "completed": "Visited"
+    }
   }
 }

@@ -1,30 +1,19 @@
+import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import { Box, Chip, Stack, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import CommonLoading from "../../components/common/CommonLoading";
 import PageHeader from "../../components/common/PageHeader";
 import PlaceCard from "../../components/places/placelist/PlaceCard";
 import { usePlaceList } from "../../hooks/place/usePlaceList";
 
 type BookmarkFilter = "ALL" | "VISITED" | "UNVISITED";
 
-const bookmarkFilters = [
-  {
-    type: "ALL" as const,
-    label: "전체",
-  },
-  {
-    type: "VISITED" as const,
-    label: "방문 완료",
-  },
-  {
-    type: "UNVISITED" as const,
-    label: "방문 전",
-  },
-];
-
 const BookmarkPage = () => {
   const navigate = useNavigate();
-  const { placeList } = usePlaceList();
+  const { t } = useTranslation();
+  const { placeList, isLoading } = usePlaceList();
 
   const [selectedFilter, setSelectedFilter] = useState<BookmarkFilter>("ALL");
 
@@ -67,6 +56,33 @@ const BookmarkPage = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <CommonLoading
+        loading={{
+          isLoading: true,
+          loadingMsg: t("places:bookmark.message.loadingPlaceList"),
+          description: t("places:bookmark.message.loadingPlaceListDesc"),
+        }}
+      />
+    );
+  }
+
+  const bookmarkFilters = [
+    {
+      type: "ALL" as const,
+      label: t("common:label.all"),
+    },
+    {
+      type: "VISITED" as const,
+      label: t("common:label.visited"),
+    },
+    {
+      type: "UNVISITED" as const,
+      label: t("common:label.unvisited"),
+    },
+  ];
+
   return (
     <Box
       sx={{
@@ -79,7 +95,7 @@ const BookmarkPage = () => {
     >
       {/* 고정 헤더 */}
       <Box sx={{ flexShrink: 0 }}>
-        <PageHeader title="즐겨찾기 관광지" />
+        <PageHeader title={t("places:bookmark.title")} />
 
         {/* 방문 상태 필터 */}
         <Stack
@@ -170,15 +186,13 @@ const BookmarkPage = () => {
               pb: 10,
             }}
           >
-            <Typography
+            <FavoriteBorderRoundedIcon
               sx={{
-                fontSize: 40,
+                fontSize: 48,
+                color: "#BC9A5D",
                 mb: 1,
               }}
-            >
-              ♡
-            </Typography>
-
+            />
             <Typography
               sx={{
                 fontSize: 16,
@@ -188,10 +202,10 @@ const BookmarkPage = () => {
               }}
             >
               {selectedFilter === "ALL"
-                ? "아직 즐겨찾기한 관광지가 없어요"
+                ? t("places:message.emptyBookmark")
                 : selectedFilter === "VISITED"
-                  ? "방문 완료한 관광지가 없어요"
-                  : "아직 방문하지 않은 관광지가 없어요"}
+                  ? t("places:message.emptyVisitState")
+                  : t("places:message.allVisitedState")}
             </Typography>
 
             <Typography
@@ -200,7 +214,7 @@ const BookmarkPage = () => {
                 color: "#8A8178",
               }}
             >
-              마음에 드는 관광지를 즐겨찾기에 추가해보세요.
+              {t("places:bookmark.allVisitedState")}
             </Typography>
           </Box>
         )}
