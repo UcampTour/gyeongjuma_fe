@@ -1,25 +1,25 @@
-import React from "react";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import {
   Box,
-  Typography,
   Button,
-  TextField,
+  ButtonGroup,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  FormControl,
+  IconButton,
+  InputLabel,
   MenuItem,
   Select,
-  FormControl,
-  InputLabel,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  IconButton,
   Stack,
-  Divider,
-  ButtonGroup,
+  TextField,
+  Typography,
 } from "@mui/material";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import React from "react";
 
 interface SelectedPlace {
   id: number;
@@ -39,7 +39,10 @@ interface AdminCourseDialogProps {
   currentDescription: string;
   supportedLanguages: { code: string; label: string }[];
   setCurrentLanguage: (lang: string) => void;
-  handleFieldChange: (field: "courseName" | "description", value: string) => void;
+  handleFieldChange: (
+    field: "courseName" | "description",
+    value: string,
+  ) => void;
   handleCloseDialog: () => void;
   handleSaveCourse: () => void;
   setOpenPlaceSearch: (open: boolean) => void;
@@ -78,9 +81,9 @@ export const AdminCourseDialog: React.FC<AdminCourseDialogProps> = ({
           <Box sx={{ display: "flex", gap: 2 }}>
             <FormControl size="small" fullWidth>
               <InputLabel>유형</InputLabel>
-              <Select 
-                value={formType} 
-                label="유형" 
+              <Select
+                value={formType}
+                label="유형"
                 onChange={(e) => setFormType(e.target.value as any)}
               >
                 <MenuItem value="WALK">도보</MenuItem>
@@ -92,9 +95,9 @@ export const AdminCourseDialog: React.FC<AdminCourseDialogProps> = ({
 
             <FormControl size="small" fullWidth>
               <InputLabel>사용 여부</InputLabel>
-              <Select 
-                value={formIsUse ? "Y" : "N"} 
-                label="사용 여부" 
+              <Select
+                value={formIsUse ? "Y" : "N"}
+                label="사용 여부"
                 onChange={(e) => setFormIsUse(e.target.value === "Y")}
               >
                 <MenuItem value="Y">사용 (Y)</MenuItem>
@@ -107,7 +110,14 @@ export const AdminCourseDialog: React.FC<AdminCourseDialogProps> = ({
 
           {/* 다국어 탭 및 입력 영역 (코스명 + 설명) */}
           <Box>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1.5 }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mb: 1.5,
+              }}
+            >
               <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
                 코스 정보 (다국어)
               </Typography>
@@ -115,14 +125,22 @@ export const AdminCourseDialog: React.FC<AdminCourseDialogProps> = ({
                 {supportedLanguages.map((lang) => (
                   <Button
                     key={lang.code}
-                    variant={currentLanguage === lang.code ? "contained" : "outlined"}
+                    variant={
+                      currentLanguage === lang.code ? "contained" : "outlined"
+                    }
                     onClick={() => setCurrentLanguage(lang.code)}
                     sx={{
-                      bgcolor: currentLanguage === lang.code ? "#AC8E61" : "transparent",
+                      bgcolor:
+                        currentLanguage === lang.code
+                          ? "#AC8E61"
+                          : "transparent",
                       color: currentLanguage === lang.code ? "#fff" : "#AC8E61",
                       borderColor: "#AC8E61",
                       "&:hover": {
-                        bgcolor: currentLanguage === lang.code ? "#8f734a" : "rgba(172, 142, 97, 0.04)",
+                        bgcolor:
+                          currentLanguage === lang.code
+                            ? "#8f734a"
+                            : "rgba(172, 142, 97, 0.04)",
                       },
                     }}
                   >
@@ -138,7 +156,9 @@ export const AdminCourseDialog: React.FC<AdminCourseDialogProps> = ({
                 size="small"
                 fullWidth
                 value={currentCourseName}
-                onChange={(e) => handleFieldChange("courseName", e.target.value)}
+                onChange={(e) =>
+                  handleFieldChange("courseName", e.target.value)
+                }
                 placeholder={`[${currentLanguage}] 코스명을 입력하세요.`}
               />
 
@@ -149,7 +169,9 @@ export const AdminCourseDialog: React.FC<AdminCourseDialogProps> = ({
                 multiline
                 rows={3}
                 value={currentDescription}
-                onChange={(e) => handleFieldChange("description", e.target.value)}
+                onChange={(e) =>
+                  handleFieldChange("description", e.target.value)
+                }
                 placeholder={`[${currentLanguage}] 코스 설명을 입력하세요.`}
               />
             </Stack>
@@ -159,14 +181,21 @@ export const AdminCourseDialog: React.FC<AdminCourseDialogProps> = ({
 
           {/* 관광지 리스트 영역 */}
           <Box>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1.5 }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mb: 1.5,
+              }}
+            >
               <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
                 포함된 관광지 (최소 2개 이상)
               </Typography>
-              <Button 
-                size="small" 
-                variant="outlined" 
-                onClick={() => setOpenPlaceSearch(true)} 
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={() => setOpenPlaceSearch(true)}
                 sx={{ color: "#AC8E61", borderColor: "#AC8E61" }}
               >
                 + 관광지 검색 추가
@@ -174,30 +203,81 @@ export const AdminCourseDialog: React.FC<AdminCourseDialogProps> = ({
             </Box>
 
             {formPlaces.length === 0 ? (
-              <Box sx={{ p: 3, textAlign: "center", bgcolor: "#F9F9F9", borderRadius: "8px", border: "1px dashed #E0E0E0", color: "text.secondary" }}>
+              <Box
+                sx={{
+                  p: 3,
+                  textAlign: "center",
+                  bgcolor: "#F9F9F9",
+                  borderRadius: "8px",
+                  border: "1px dashed #E0E0E0",
+                  color: "text.secondary",
+                }}
+              >
                 추가된 관광지가 없습니다. 관광지 검색을 통해 추가해주세요.
               </Box>
             ) : (
               <Stack spacing={1.5}>
                 {formPlaces.map((place, index) => (
-                  <Box key={`${place.id}-${index}`} sx={{ display: "flex", alignItems: "center", gap: 1, bgcolor: "#F9F9F9", p: 1.5, borderRadius: "8px", border: "1px solid #E0E0E0" }}>
-                    <Typography variant="body2" sx={{ fontWeight: 600, minWidth: "24px", textAlign: "center" }}>
+                  <Box
+                    key={`${place.id}-${index}`}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      bgcolor: "#F9F9F9",
+                      p: 1.5,
+                      borderRadius: "8px",
+                      border: "1px solid #E0E0E0",
+                    }}
+                  >
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontWeight: 600,
+                        minWidth: "24px",
+                        textAlign: "center",
+                      }}
+                    >
                       {index + 1}
                     </Typography>
-                    
-                    <Typography variant="body2" sx={{ flexGrow: 1, fontWeight: 500 }}>
-                      {place.name} <span style={{ color: "gray", fontSize: "0.8rem" }}>(ID: {place.id})</span>
+
+                    <Typography
+                      variant="body2"
+                      sx={{ flexGrow: 1, fontWeight: 500 }}
+                    >
+                      {place.name}
+                      <Box
+                        component="span"
+                        sx={{
+                          color: "gray",
+                          fontSize: "0.8rem",
+                        }}
+                      >
+                        (ID: {place.id})
+                      </Box>
                     </Typography>
 
-                    <IconButton size="small" onClick={() => handleMovePlace(index, "up")} disabled={index === 0}>
+                    <IconButton
+                      size="small"
+                      onClick={() => handleMovePlace(index, "up")}
+                      disabled={index === 0}
+                    >
                       <ArrowUpwardIcon fontSize="small" />
                     </IconButton>
 
-                    <IconButton size="small" onClick={() => handleMovePlace(index, "down")} disabled={index === formPlaces.length - 1}>
+                    <IconButton
+                      size="small"
+                      onClick={() => handleMovePlace(index, "down")}
+                      disabled={index === formPlaces.length - 1}
+                    >
                       <ArrowDownwardIcon fontSize="small" />
                     </IconButton>
 
-                    <IconButton size="small" color="error" onClick={() => handleRemovePlace(index)}>
+                    <IconButton
+                      size="small"
+                      color="error"
+                      onClick={() => handleRemovePlace(index)}
+                    >
                       <DeleteOutlinedIcon fontSize="small" />
                     </IconButton>
                   </Box>
@@ -208,8 +288,14 @@ export const AdminCourseDialog: React.FC<AdminCourseDialogProps> = ({
         </Stack>
       </DialogContent>
       <DialogActions sx={{ p: 2 }}>
-        <Button onClick={handleCloseDialog} color="inherit">취소</Button>
-        <Button onClick={handleSaveCourse} variant="contained" sx={{ bgcolor: "#AC8E61", "&:hover": { bgcolor: "#8f734a" } }}>
+        <Button onClick={handleCloseDialog} color="inherit">
+          취소
+        </Button>
+        <Button
+          onClick={handleSaveCourse}
+          variant="contained"
+          sx={{ bgcolor: "#AC8E61", "&:hover": { bgcolor: "#8f734a" } }}
+        >
           {dialogMode === "CREATE" ? "등록" : "저장"}
         </Button>
       </DialogActions>

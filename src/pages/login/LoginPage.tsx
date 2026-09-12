@@ -1,4 +1,4 @@
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Button, Container, Link, Typography } from "@mui/material";
 import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -165,7 +165,11 @@ const LoginPage = () => {
               bgcolor: "white",
               justifyContent: "center",
               boxShadow: "none",
-              "&:hover": { bgcolor: "white", borderColor: "#e0e0e0", boxShadow: "none" },
+              "&:hover": {
+                bgcolor: "white",
+                borderColor: "#e0e0e0",
+                boxShadow: "none",
+              },
               "&:active": { bgcolor: "#f5f5f5" },
             }}
           >
@@ -256,27 +260,35 @@ const LoginPage = () => {
           }}
         >
           {t("termsPrefix")}
-          <Typography
-            component="span"
+
+          <Link
+            href="#"
+            underline="always"
             sx={{
-              textDecoration: "underline",
               fontSize: "0.75rem",
+              color: "inherit",
               cursor: "pointer",
             }}
+            onClick={(e) => e.preventDefault()}
           >
             {t("privacyPolicy")}
-          </Typography>
+          </Link>
+
           {t("termsAnd")}
-          <Typography
-            component="span"
+
+          <Link
+            href="#"
+            underline="always"
             sx={{
-              textDecoration: "underline",
               fontSize: "0.75rem",
+              color: "inherit",
               cursor: "pointer",
             }}
+            onClick={(e) => e.preventDefault()}
           >
             {t("termsOfService")}
-          </Typography>
+          </Link>
+
           {t("termsSuffix")}
         </Typography>
       </Box>
