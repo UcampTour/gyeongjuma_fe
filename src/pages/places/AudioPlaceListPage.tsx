@@ -10,21 +10,6 @@ import { usePlaceList } from "../../hooks/place/usePlaceList";
 
 type BookmarkFilter = "ALL" | "VISITED" | "UNVISITED";
 
-const bookmarkFilters = [
-  {
-    type: "ALL" as const,
-    label: "전체",
-  },
-  {
-    type: "VISITED" as const,
-    label: "방문 완료",
-  },
-  {
-    type: "UNVISITED" as const,
-    label: "방문 전",
-  },
-];
-
 const AudioPlaceListPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -59,6 +44,21 @@ const AudioPlaceListPage = () => {
     return audioPlaceList.filter((place) => !place.isVisited);
   }, [audioPlaceList, selectedFilter]);
 
+  const filters = [
+    {
+      type: "ALL" as const,
+      label: t("common:label.all"),
+    },
+    {
+      type: "VISITED" as const,
+      label: t("common:label.visited"),
+    },
+    {
+      type: "UNVISITED" as const,
+      label: t("common:label.unvisited"),
+    },
+  ];
+
   // 탭별 개수
   const getFilterCount = (type: BookmarkFilter) => {
     switch (type) {
@@ -76,8 +76,8 @@ const AudioPlaceListPage = () => {
       <CommonLoading
         loading={{
           isLoading: true,
-          loadingMsg: "즐겨찾기 관광지를 불러오는 중이에요",
-          description: "잠시만 기다려주세요!",
+          loadingMsg: t("places:bookmark.message.loadingPlaceList"),
+          description: t("places:bookmark.message.loadingPlaceListDesc"),
         }}
       />
     );
@@ -110,7 +110,7 @@ const AudioPlaceListPage = () => {
             },
           }}
         >
-          {bookmarkFilters.map((filter) => {
+          {filters.map((filter) => {
             const isSelected = selectedFilter === filter.type;
             const count = getFilterCount(filter.type);
 
@@ -202,7 +202,7 @@ const AudioPlaceListPage = () => {
               }}
             >
               {selectedFilter === "ALL"
-                ? t("places:audio.emptyState.listMessage")
+                ? t("places:audio.list.emptyState")
                 : selectedFilter === "VISITED"
                   ? t("places:audio.list.emptyVisitState")
                   : t("places:audio.list.allVisitState")}
