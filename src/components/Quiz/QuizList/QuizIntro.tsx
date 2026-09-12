@@ -10,6 +10,7 @@ import {
   type QuizItem,
   type QuizListItem,
 } from "../../../models/QuizModel";
+import { useAuthStore } from "../../../store/useAuthStore";
 
 interface QuizDetailContentProps {
   quiz: QuizItem | QuizListItem | undefined;
@@ -17,8 +18,9 @@ interface QuizDetailContentProps {
 }
 
 const QuizIntro = ({ quiz, showImage = true }: QuizDetailContentProps) => {
-  const { t } = useTranslation("quiz");
+  const { t } = useTranslation(["quiz", "common"]);
   const navigate = useNavigate();
+  const { member } = useAuthStore();
 
   const isLocked = quiz?.quizStatus === QuizStatus.LOCKED;
   const isCompleted = quiz?.quizStatus === QuizStatus.COMPLETED;
@@ -198,7 +200,7 @@ const QuizIntro = ({ quiz, showImage = true }: QuizDetailContentProps) => {
                 {
                   icon: <MilitaryTechIcon fontSize="small" />,
                   label: t("intro.stats.difficulty"),
-                  val: t("intro.stats.difficultyValue"),
+                  val: t(`mode.${member?.difficulty?.toLowerCase()}`, { ns: "common" }),
                 },
                 {
                   icon: <EmojiEventsIcon fontSize="small" />,

@@ -1,3 +1,5 @@
+import ApprovalIcon from "@mui/icons-material/Approval";
+import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import GroupsIcon from "@mui/icons-material/Groups";
 import LocalParkingIcon from "@mui/icons-material/LocalParking";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
@@ -5,11 +7,13 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import { Box, Stack, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
+
 import {
   getCongestionConfig,
   getOperationStatusConfig,
 } from "../../models/commonModel";
 import type { PlaceListBase } from "../../models/PlaceModel";
+import { formatDistance } from "../../utils/distance";
 import InfoBox from "../common/InfoBox";
 
 interface PlaceInfoTabProps {
@@ -25,23 +29,6 @@ const PlaceInfoTab = ({ place }: PlaceInfoTabProps) => {
 
   // 2. 주소 포맷팅 (null/undefined 대응)
   const formattedAddress = [place?.add1, place?.add2].filter(Boolean).join(" ");
-
-  // 3. 거리 포맷팅 (km/m 자동 단위 전환 예시)
-  const formattedDistance = (() => {
-    if (place?.distance === undefined || place?.distance === null)
-      return t("common:emptyState.none", "정보 없음");
-    const distanceMeters = Math.round(place.distance);
-
-    const formattedValue =
-      distanceMeters >= 1000
-        ? `${(distanceMeters / 1000).toFixed(1)}km`
-        : `${distanceMeters.toLocaleString()}m`;
-
-    // return t("places:detail.info.value.distance", {
-    //   distance: formattedValue,
-    // });
-    return formattedValue;
-  })();
 
   return (
     <Box sx={{ py: 2 }}>
@@ -66,7 +53,9 @@ const PlaceInfoTab = ({ place }: PlaceInfoTabProps) => {
                   fontSize: "0.795rem",
                 }}
               >
-                {formattedDistance}
+                {place?.distance === undefined || place?.distance === null
+                  ? t("common:emptyState.none", "정보 없음")
+                  : formatDistance(place?.distance)}
               </Typography>
             </Stack>
           }
@@ -140,6 +129,42 @@ const PlaceInfoTab = ({ place }: PlaceInfoTabProps) => {
           }
         />
 
+        <Stack sx={{ width: "100%" }} direction={"row"} spacing={1}>
+          <InfoBox
+            icon={<ApprovalIcon />}
+            label={t("places:detail.info.menu.visitCnt")}
+            value={
+              <Stack
+                direction={"row"}
+                sx={{
+                  width: "100%",
+                  justifyContent: "flex-end",
+                  pr: 2,
+                  alignItems: "center",
+                }}
+              >
+                {place?.visitCnt}
+              </Stack>
+            }
+          />
+          <InfoBox
+            icon={<FavoriteRoundedIcon />}
+            label={t("places:detail.info.menu.favoriteCount")}
+            value={
+              <Stack
+                direction={"row"}
+                sx={{
+                  width: "100%",
+                  justifyContent: "flex-end",
+                  pr: 2,
+                  alignItems: "center",
+                }}
+              >
+                {place?.totalFavorite}
+              </Stack>
+            }
+          />
+        </Stack>
         {/* 주차 여부 */}
         <InfoBox
           icon={<LocalParkingIcon />}

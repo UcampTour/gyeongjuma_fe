@@ -1,0 +1,36 @@
+{
+  "bottomNav": {
+    "explore": "地図",
+    "course": "コース",
+    "places": "観光地",
+    "quiz": "クイズ",
+    "profile": "プロフィール",
+    "home": "ホーム"
+  },
+  "label": {
+    "all": "すべて",
+    "congestionLevel": "予想混雑度",
+    "isOpen": "営業中",
+    "unvisited": "未訪問",
+    "summary": "概要を見る",
+    "mapView": "地図を見る",
+    "visited": "訪問済み"
+  },
+  "emptyState": {
+    "none": "情報なし"
+  },
+  "mode": {
+    "easy": "子ども向け",
+    "normal": "基本",
+    "hard": "専門家"
+  },
+  "button": {
+    "cancel": "キャンセル",
+    "confirm": "確認"
+  },
+  "message": {
+    "searchPlaceholder": "検索語を入力してください。",
+    "visitedMessage": "🏆 今までに{{count}}か所の観光地を訪れました！",
+    "visitedSubMessage": "慶州の思い出を少しずつ集めています ✨"
+  }
+}

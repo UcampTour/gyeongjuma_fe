@@ -15,13 +15,15 @@ const CommonLoading = ({ loading }: { loading?: LoadingProps }) => {
       sx={{
         zIndex: 9999,
         color: "#fff",
-        backgroundColor: "rgba(0,0,0,0.25)",
+        backgroundColor: "rgba(0,0,0,0.5)",
       }}
     >
       <Stack spacing={2} sx={{ alignItems: "center" }}>
         <CircularProgress color="inherit" />
 
-        <Typography sx={{ fontWeight: 600 }}>{loading?.loadingMsg}</Typography>
+        <Typography sx={{ fontWeight: 600 }} variant="h6">
+          {loading?.loadingMsg}
+        </Typography>
         <Typography
           sx={{ fontWeight: 300, whiteSpace: "pre-line", textAlign: "center" }}
         >

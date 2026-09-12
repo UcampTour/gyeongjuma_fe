@@ -67,8 +67,8 @@ export const getOperationStatusConfig = (
       return {
         label: "places:operation.status.open",
         color: "success",
-        bgColor: "#dfe6d18a",
-        iconColor: "#6b7d4a",
+        bgColor: "#e7ffbb", // "#dfe6d18a",
+        iconColor: "#050505",
         message: "",
       };
 

@@ -77,7 +77,7 @@ const PlaceSummaryPage = ({ placeId }: PlaceSummaryProps) => {
         display: "flex",
         flexDirection: "column",
         gap: 4,
-        minHeight: "100%",
+        height: "100%",
       }}
     >
       <Stack spacing={3}>
@@ -91,7 +91,7 @@ const PlaceSummaryPage = ({ placeId }: PlaceSummaryProps) => {
         >
           <Typography
             sx={{
-              fontSize: "1.5rem",
+              fontSize: "1.3rem",
               fontWeight: 700,
             }}
           >
@@ -115,7 +115,6 @@ const PlaceSummaryPage = ({ placeId }: PlaceSummaryProps) => {
             <Typography>
               {place?.add1} {place?.add2}
             </Typography>
-            <Typography>{formattedDistance}</Typography>
           </Stack>
         </Stack>
 

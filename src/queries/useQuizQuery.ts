@@ -1,11 +1,16 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { fetchQuizDetail, fetchQuizList, fetchQuizResult, submitQuizAnswer } from "../api/quizApi"
-import type { QuizSubmitRequest } from "../models/QuizModel";
+import { useAuthStore } from "../store/useAuthStore";
 
 // 1. 퀴즈 리스트 쿼리
 export const useQuizListQuery = () => {
+
+  const { member } = useAuthStore();
+  const locale = member?.locale ?? "ko";
+  const difficulty = member?.difficulty ?? "NORMAL";
+
   return useQuery({
-    queryKey: ["quizzes"],
+    queryKey: ["quizzes", locale, difficulty],
     queryFn: fetchQuizList,
   });
 };

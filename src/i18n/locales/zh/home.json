@@ -1,0 +1,16 @@
+{
+  "message": {
+    "greeting": "{{nickname}}，",
+    "greetingQuestion": "正在计划庆州旅行吗？",
+    "greetingDescription": "出发前，先找找想去的地方吧。"
+  },
+  "quickMenu": {
+    "favorite": "收藏夹",
+    "placeList": "探索景点",
+    "audio": "语音导览",
+    "course": "集章之旅"
+  },
+  "subTitle": {
+    "bestPlace": "热门景点"
+  }
+}
