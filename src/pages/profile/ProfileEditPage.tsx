@@ -7,7 +7,7 @@ import { checkNickname, updateMyInfo } from "../../api/authApi";
 import { useAuthStore } from "../../store/useAuthStore";
 
 const ProfileEditPage = () => {
-  const { t } = useTranslation(["profile", "common"]);
+  const { t } = useTranslation("profile");
   const navigate = useNavigate();
   const { member, setMemberInfo } = useAuthStore();
 
@@ -209,9 +209,9 @@ const ProfileEditPage = () => {
             sx={{ display: "flex", flexDirection: "column", gap: 1 }}
           >
             {[
-              { level: "EASY", label: t("mode.easy", { ns: "common" }), desc: t("diffEasyDesc") },
-              { level: "NORMAL", label: t("mode.normal", { ns: "common" }), desc: t("diffNormalDesc") },
-              { level: "HARD", label: t("mode.hard", { ns: "common" }), desc: t("diffHardDesc") },
+              { level: "EASY", label: t("diffEasyLabel"), desc: t("diffEasyDesc") },
+              { level: "NORMAL", label: t("diffNormalLabel"), desc: t("diffNormalDesc") },
+              { level: "HARD", label: t("diffHardLabel"), desc: t("diffHardDesc") },
             ].map(({ level, label, desc }) => (
               <FormControlLabel
                 key={level}

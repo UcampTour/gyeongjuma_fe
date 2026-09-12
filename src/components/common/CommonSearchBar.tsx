@@ -1,7 +1,6 @@
 import ClearIcon from "@mui/icons-material/Clear";
 import SearchIcon from "@mui/icons-material/Search";
 import { IconButton, InputAdornment, TextField } from "@mui/material";
-import { t } from "i18next";
 import { useRef } from "react";
 
 interface CommonSearchBarProps {
@@ -36,7 +35,7 @@ const CommonSearchBar = ({
     <TextField
       fullWidth
       inputRef={inputRef}
-      placeholder={placeholder ?? t("common:message.searchPlaceholder")}
+      placeholder={placeholder ?? "검색어를 입력하세요"}
       value={keyword}
       onChange={(e) => setKeyword?.(e.target.value)}
       onClick={isNavigate ? onClick : undefined}
@@ -70,7 +69,7 @@ const CommonSearchBar = ({
         },
       }}
       sx={{
-        mb: 2,
+        mb: 3,
         "& .MuiOutlinedInput-root": {
           bgcolor: "#FFFFFF",
           borderRadius: "24px",

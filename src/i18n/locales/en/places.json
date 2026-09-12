@@ -1,28 +1,20 @@
 {
-  "title": "Explore Gyeongju Attractions",
-
-  "placehorder": "Search for an attraction",
-
-  "visitcomplete": "Visited",
-
-  "status": {
+  "category": {
     "all": "All",
-    "open": "Open",
-    "breakTime": "Preparing",
-    "closed": "Closed",
-    "none": "No Information"
+    "tourist": "Tourist Attractions",
+    "historic": "Historic Sites",
+    "other": "Other"
   },
-
   "sortType": {
     "default": "Default",
-    "likes": "Most Favorited",
+    "likes": "Most Liked",
     "distance": "Distance"
   },
 
   "detail": {
     "tabs": {
       "info": "Info",
-      "commentary": "Commentary",
+      "commentary": "Guide",
       "audio": "Audio",
       "quiz": "Quiz"
     },
@@ -31,22 +23,20 @@
         "address": "Address",
         "operationInfo": "Business Hours",
         "operationStatus": "Operating Status",
-        "operationHour": "Operating Hours",
+        "operationHour": "Hours",
         "distance": "Distance",
         "congestion": "Expected Crowding",
         "favorite": "Favorites",
         "isVisited": "Visit Status",
         "parking": "Parking",
-        "tel": "Phone Number",
-        "visitCnt": "Visitors",
-        "favoriteCount": "Favorites"
+        "tel": "Tel"
       },
       "value": {
-        "distance": "From your current location"
+        "distance": "from your current location"
       }
     },
     "description": {
-      "emptyState": "No commentary is available yet."
+      "emptyState": "The guide is not available yet."
     }
   },
 
@@ -78,7 +68,7 @@
   },
 
   "parking": {
-    "unavailable": "Parking Unavailable",
+    "unavailable": "No Parking",
     "available": "Parking Available",
     "none": "No Parking Information"
   },
@@ -86,48 +76,27 @@
   "isVisited": {
     "title": "Stamp Status",
     "visited": "Visit Verified! 🎉",
-    "unvisited": "Not Visited 📍"
+    "unvisited": "Not Yet Visited 📍"
   },
 
   "audio": {
     "emptyState": {
-      "title": "No Audio Available.",
+      "title": "No Audio Available",
       "message": "There is no audio guide available yet.",
-      "message2": "More content will be added in future updates. Stay tuned! 😊"
+      "message2": "Stay tuned for future updates! 😊"
     },
     "label": {
       "story": "Story",
       "playAll": "Play All"
-    },
-    "list": {
-      "title": "Gyeongju Audio Tour 🎧",
-      "emptyState": "There are no attractions with audio guides.",
-      "emptyVisitState": "There are no visited attractions with audio guides.",
-      "listMessage": "Listen to the stories of Gyeongju with our audio guides.",
-      "allVisitState": "You've visited all attractions with audio guides."
-    }
-  },
-
-  "bookmark": {
-    "title": "Favorite Attractions",
-    "message": {
-      "bookmarkMessage": "Add attractions you like to your favorites.",
-      "loadingPlaceList": "Loading your favorite attractions.",
-      "loadingPlaceListDesc": "Please wait a moment!",
-      "emptyBookmark": "You don't have any favorite attractions yet.",
-      "emptyVisitState": "You haven't visited any of your favorite attractions yet.",
-      "allVisitedState": "You've visited all your favorite attractions."
     }
   },
 
   "message": {
-    "loadingPlaceInfo": "Loading attraction information",
-    "alreadyVisited": "You've already visited this attraction.",
-    "confirmVisitTitle": "Verify Your Visit",
+    "alreadyVisited": "You have already visited this attraction.",
+    "confirmVisitTitle": "Verify Visit",
     "confirmVisitMessage": "Would you like to verify your visit?",
-    "loadingVisitTitle": "Verifying Your Visit",
-    "loadingVisitMessgae": "Checking whether you've arrived at the attraction.\nPlease wait a moment!",
-    "successVisit": "Visit verified! 🎉\nYou've earned the {{placeName}} stamp!\nNow challenge yourself with the quiz and earn points.",
-    "errorVisit": "You're outside the visit verification area.\nPlease try again near the attraction."
+    "loadingVisitTitle": "Verifying Visit",
+    "loadingVisitMessgae": "We're checking if you've arrived at the attraction.\n Please wait a moment!",
+    "successVisit": "Visit verified! 🎉\n{{placeName}} stamp acquired!\nNow take the quiz and earn points."
   }
 }

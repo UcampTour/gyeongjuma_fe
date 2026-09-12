@@ -73,9 +73,8 @@ const AudioMiniPlayer = () => {
       sx={{
         position: "fixed",
         width: "100%",
-        maxWidth: "444px",
         // right: 16,
-        bottom: 8, // BottomNavigation 위
+        bottom: 72, // BottomNavigation 위
         borderRadius: 2,
         display: "flex",
         alignItems: "center",
@@ -97,7 +96,7 @@ const AudioMiniPlayer = () => {
           display: "flex",
           alignItems: "center",
           px: 1,
-          py: 3,
+          py: 2,
         }}
         onClick={handleNavigate}
       >

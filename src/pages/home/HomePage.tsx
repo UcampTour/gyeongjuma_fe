@@ -107,7 +107,7 @@ const HomePage = () => {
     <Box
       sx={{
         width: "100%",
-        minHeight: "100dvh",
+        height: "100%",
         px: 3,
         pt: 2,
         pb: 14,
@@ -121,7 +121,7 @@ const HomePage = () => {
       <Box
         sx={{
           position: "relative",
-          height: "5%",
+          height: 48,
           flexShrink: 0,
           display: "flex",
           alignItems: "center",
@@ -160,28 +160,30 @@ const HomePage = () => {
         </Box>
       </Box>
 
-      {/* 콘텐츠 */}
-      <Box
+      <Stack
+        direction="column"
         sx={{
+          flex: 1,
           minHeight: 0,
           minWidth: 0,
-          flex: 1,
           width: "100%",
           overflowX: "hidden",
-          overflowY: "auto",
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
+          justifyContent: "space-around",
         }}
       >
         {/* 유저 */}
-        <Box gap={0.5}>
+        <Box
+          sx={{
+            mb: 2,
+          }}
+        >
           <Typography
             sx={{
               fontSize: 20,
               fontWeight: 600,
               letterSpacing: "-1.5px",
               color: "#333",
+              mb: 0.5,
             }}
           >
             {t("home:message.greeting", { nickname })}
@@ -213,13 +215,12 @@ const HomePage = () => {
               key={`home-quick-menu-${idx}`}
               onClick={() => navigate(menu.path)}
               sx={{
-                minWidth: 0,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
                 bgcolor: "#FFFFFF",
                 borderRadius: "16px",
-                p: 2,
+                p: 2.2,
                 cursor: "pointer",
                 boxShadow: "0 4px 12px rgba(142,114,73,0.04)",
                 border: "1px solid #EFECE6",
@@ -230,14 +231,7 @@ const HomePage = () => {
                 },
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 2,
-                  minWidth: 0,
-                }}
-              >
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                 <Box
                   sx={{
                     width: 42,
@@ -255,12 +249,7 @@ const HomePage = () => {
                 </Box>
                 <Box>
                   <Typography
-                    sx={{
-                      fontWeight: 800,
-                      fontSize: "0.9rem",
-                      color: "#111111",
-                      whiteSpace: "nowrap",
-                    }}
+                    sx={{ fontWeight: 800, fontSize: "15px", color: "#111111" }}
                   >
                     {menu.label}
                   </Typography>
@@ -284,7 +273,7 @@ const HomePage = () => {
           >
             <Typography
               sx={{
-                fontSize: 15,
+                fontSize: 18,
                 fontWeight: 800,
                 color: "#2F2F2F",
                 letterSpacing: "-0.5px",
@@ -351,7 +340,7 @@ const HomePage = () => {
                     alt={place.placeName}
                     sx={{
                       width: "100%",
-                      height: 150,
+                      height: 175,
                       display: "block",
                       objectFit: "cover",
                     }}
@@ -372,7 +361,7 @@ const HomePage = () => {
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
-                        mb: 0.2,
+                        mb: 0.5,
                       }}
                     >
                       {place.placeName}
@@ -381,56 +370,26 @@ const HomePage = () => {
                     <Box
                       sx={{
                         display: "flex",
-                        justifyContent: "flex-end",
                         alignItems: "center",
-                        gap: 1.2,
-                        pr: 0.5,
+                        gap: 0.4,
                       }}
                     >
-                      <Stack
-                        direction="row"
-                        spacing={0.3}
-                        sx={{ alignItems: "center" }}
-                      >
-                        <ApprovalIcon
-                          sx={{
-                            fontSize: 13,
-                            color: "#C7A15A",
-                          }}
-                        />
+                      <ApprovalIcon
+                        sx={{
+                          fontSize: 13,
+                          color: "#C7A15A",
+                        }}
+                      />
 
-                        <Typography
-                          sx={{
-                            fontSize: 13,
-                            color: "#777",
-                            fontWeight: 600,
-                          }}
-                        >
-                          {place?.visitCnt}
-                        </Typography>
-                      </Stack>
-
-                      <Stack
-                        direction="row"
-                        spacing={0.3}
-                        sx={{ alignItems: "center" }}
+                      <Typography
+                        sx={{
+                          fontSize: 11,
+                          color: "#777",
+                          fontWeight: 600,
+                        }}
                       >
-                        <FavoriteIcon
-                          sx={{
-                            fontSize: 13,
-                            color: "#C05656",
-                          }}
-                        />
-                        <Typography
-                          sx={{
-                            fontSize: 13,
-                            color: "#777",
-                            fontWeight: 600,
-                          }}
-                        >
-                          {place?.totalFavorite}
-                        </Typography>
-                      </Stack>
+                        {place?.visitCnt}
+                      </Typography>
                     </Box>
                   </Box>
                 </Card>
@@ -557,7 +516,7 @@ const HomePage = () => {
             </SwiperSlide>
           ))}
         </Swiper>
-      </Box>
+      </Stack>
     </Box>
   );
 };

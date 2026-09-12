@@ -3,12 +3,8 @@
   "search": "Search for a course.",
   "tabLabel": {
     "ALL": "All",
-    "WALK": "Walking",
-    "TRANSIT": "Public Transit",
-    "DRIVE": "Driving"
-  },
-  "message": {
-    "loading": "Loading the course list.",
-    "loadingDesc": "Please wait a moment!"
+    "WALK": "WALK",
+    "TRANSIT": "TRANSIT",
+    "DRIVE": "DRIVE"
   }
 }

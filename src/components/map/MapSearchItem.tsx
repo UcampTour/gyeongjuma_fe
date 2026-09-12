@@ -1,7 +1,6 @@
 import LaunchIcon from "@mui/icons-material/Launch";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { Box, IconButton, Stack, Typography } from "@mui/material";
-import { formatDistance } from "../../utils/distance";
 
 export interface MapSearchItemProps {
   title: string;
@@ -18,6 +17,21 @@ const MapSearchItem = ({
   distance,
   onClick,
 }: MapSearchItemProps) => {
+  /**
+   * 거리를 사용자에게 보여줄 형식으로 변환
+   * - 1000m 미만: xxx m
+   * - 1000m 이상: x.x km
+   */
+  const formatDistance = (distance: number) => {
+    if (distance < 1000) {
+      return `${distance} m`;
+    }
+
+    const km = distance / 1000;
+
+    // 소수점 첫째 자리까지 표시 (1.0 -> 1)
+    return `${parseFloat(km.toFixed(1))} km`;
+  };
   return (
     <Box
       onClick={onClick}

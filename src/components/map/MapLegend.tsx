@@ -1,5 +1,4 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
-import { useTranslation } from "react-i18next";
 
 type LegendItem = {
   label: string;
@@ -9,7 +8,7 @@ type LegendItem = {
 };
 
 export interface MapLegendConfig {
-  title: string;
+  title: string | undefined;
   items: LegendItem[];
 }
 
@@ -18,7 +17,6 @@ export interface MapLegendProps {
   onClick?: () => void;
 }
 const MapLegend = ({ config, onClick }: MapLegendProps) => {
-  const { t } = useTranslation();
   return (
     <Paper
       elevation={3}
@@ -47,13 +45,13 @@ const MapLegend = ({ config, onClick }: MapLegendProps) => {
         variant="caption"
         sx={{ fontWeight: 700, mb: 0.8, display: "block" }}
       >
-        {t(config?.title) ?? ""}
+        {config.title ?? ""}
       </Typography>
 
       <Stack spacing={0.75}>
         {config.items.map((item) => (
           <Stack
-            key={t(item.label)}
+            key={item.label}
             direction="row"
             spacing={1}
             sx={{ alignItems: "center" }}
@@ -78,7 +76,7 @@ const MapLegend = ({ config, onClick }: MapLegendProps) => {
               }}
             >
               <Typography variant="caption" sx={{ lineHeight: 1.2 }}>
-                {t(item.label)}
+                {item.label}
               </Typography>
               <Typography variant="caption" sx={{ lineHeight: 1.2 }}>
                 {item.count}

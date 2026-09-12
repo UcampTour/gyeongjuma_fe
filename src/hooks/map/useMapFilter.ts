@@ -19,7 +19,7 @@ export const useMapFilter = (places: PlaceListBase[]) => {
     if (selectedFilter !== PlaceFilterType.NONE) {
       setFilterLoading({
         isLoading: true,
-        loadingMsg: t("places:message.loadingPlaceInfo"),
+        loadingMsg: "관광지 정보 가져오는 중",
       });
     }
 
@@ -53,17 +53,17 @@ export const useMapFilter = (places: PlaceListBase[]) => {
     switch (filter) {
       case PlaceFilterType.CONGESTION:
         return {
-          title: "map:legend.congestion.title",
+          title: "예상 혼잡도",
           items: [
             {
-              label: "map:legend.congestion.low",
+              label: "여유",
               value: CongestionLevel.LOW,
               color: "#4CAF50",
               count: places.filter((p) => p.congestion === CongestionLevel.LOW)
                 .length,
             },
             {
-              label: "map:legend.congestion.medium",
+              label: "보통",
               value: CongestionLevel.MEDIUM,
               color: "#FFC107",
               count: places.filter(
@@ -71,14 +71,14 @@ export const useMapFilter = (places: PlaceListBase[]) => {
               ).length,
             },
             {
-              label: "map:legend.congestion.high",
+              label: "혼잡",
               value: CongestionLevel.HIGH,
               color: "#F44336",
               count: places.filter((p) => p.congestion === CongestionLevel.HIGH)
                 .length,
             },
             {
-              label: "map:legend.congestion.none",
+              label: "정보없음",
               value: CongestionLevel.NONE,
               color: "#dfdfdf",
               count: places.filter((p) => p.congestion === CongestionLevel.NONE)
@@ -89,10 +89,10 @@ export const useMapFilter = (places: PlaceListBase[]) => {
 
       case PlaceFilterType.OPERATING:
         return {
-          title: "map:legend.operating.title",
+          title: "운영 상태",
           items: [
             {
-              label: "map:legend.operating.open",
+              label: "운영중",
               value: OperationStatus.OPEN,
               color: "#4CAF50",
               count: places.filter(
@@ -100,7 +100,7 @@ export const useMapFilter = (places: PlaceListBase[]) => {
               ).length,
             },
             {
-              label: "map:legend.operating.closed",
+              label: "운영종료",
               value: OperationStatus.CLOSED,
               color: "#f09898",
               count: places.filter(
@@ -108,7 +108,7 @@ export const useMapFilter = (places: PlaceListBase[]) => {
               ).length,
             },
             {
-              label: "map:legend.operating.breakTime",
+              label: "브레이크 타임",
               value: OperationStatus.BREAK_TIME,
               color: "#ffb46d",
               count: places.filter(
@@ -116,7 +116,7 @@ export const useMapFilter = (places: PlaceListBase[]) => {
               ).length,
             },
             {
-              label: "map:legend.operating.none",
+              label: "정보없음",
               value: OperationStatus.NONE,
               color: "#c5c4c4",
               count: places.filter(
@@ -128,17 +128,17 @@ export const useMapFilter = (places: PlaceListBase[]) => {
 
       case PlaceFilterType.UNVISITED:
         return {
-          title: "map:legend.visited.title",
+          title: "방문 여부",
           items: [
             {
-              label: "map:legend.visited.unvisited",
+              label: "미방문",
               value: "UNVISITED",
               color: "#A73831",
               count: places.filter((p) => !p.isVisited).length,
             },
             {
-              label: "map:legend.visited.completed",
-              value: "VISITED",
+              label: "방문 완료",
+              value: "VISITIED",
               color: "#29405F",
               count: places.filter((p) => p.isVisited).length,
             },
