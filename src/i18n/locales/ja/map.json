@@ -1,0 +1,44 @@
+{
+  "search": {
+    "placeholder": "場所・住所を検索",
+    "listPlaceholder": "観光地の名前を入力して検索してください。",
+    "noResult": "{{keyword}}の検索結果がありません。"
+  },
+  "buttons": {
+    "currentLocation": "現在地",
+    "nearbyAttractions": "周辺の観光地"
+  },
+  "label": {
+    "unVisited": "未訪問",
+    "isVisited": "訪問済み"
+  },
+  "title": {
+    "nearbyPlace": "近くの人気スポット"
+  },
+  "message": {
+    "moveToGyeongjuCenter": "慶州中心部へ移動",
+    "moveToCurrentLoc": "現在地へ移動",
+    "searchingCurrentLocation": "現在地を検索中..."
+  },
+  "legend": {
+    "congestion": {
+      "title": "予想混雑度",
+      "low": "空いている",
+      "medium": "普通",
+      "high": "混雑",
+      "none": "情報なし"
+    },
+    "operating": {
+      "title": "営業状況",
+      "open": "営業中",
+      "closed": "営業終了",
+      "breakTime": "休憩時間",
+      "none": "情報なし"
+    },
+    "visited": {
+      "title": "訪問状況",
+      "unvisited": "未訪問",
+      "completed": "訪問済み"
+    }
+  }
+}

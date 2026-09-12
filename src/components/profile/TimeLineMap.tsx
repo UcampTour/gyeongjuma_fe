@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useKakaoMap } from "../../hooks/map/useKakaoMap";
 
 export interface TimelinePlace {
@@ -7,6 +8,7 @@ export interface TimelinePlace {
   name: string;
   lat: number;
   lng: number;
+  image: string;
 }
 
 interface TimeLinePageProps {
@@ -18,6 +20,8 @@ const TimeLineMap = ({ places }: TimeLinePageProps) => {
 
   const { map } = useKakaoMap(mapRef);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (!map || places.length === 0) return;
 
@@ -27,26 +31,38 @@ const TimeLineMap = ({ places }: TimeLinePageProps) => {
       (place) => new kakao.maps.LatLng(place.lat, place.lng),
     );
 
-    // Polyline
+    // ===== Polyline =====
     const polyline = new kakao.maps.Polyline({
       path: positions,
-      strokeWeight: 5,
+      strokeWeight: 4,
       strokeColor: "#614101",
-      strokeOpacity: 0.9,
-      strokeStyle: "solid",
+      strokeOpacity: 0.8,
+      strokeStyle: "dash",
     });
 
     polyline.setMap(map);
 
-    // 마커
+    // ===== 마커 =====
     const overlays: any[] = [];
 
     places.forEach((place, index) => {
+      // ===== 마커 전체 컨테이너 =====
+      const markerWrapper = document.createElement("div");
+
+      Object.assign(markerWrapper.style, {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        cursor: "pointer",
+      } satisfies Partial<CSSStyleDeclaration>);
+
+      // ===== 사진/숫자 마커 =====
       const markerContent = document.createElement("div");
 
       Object.assign(markerContent.style, {
-        width: "40px",
-        height: "40px",
+        position: "relative",
+        width: "48px",
+        height: "48px",
         borderRadius: "50%",
         background: "#614101",
         border: "3px solid white",
@@ -54,19 +70,104 @@ const TimeLineMap = ({ places }: TimeLinePageProps) => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        overflow: "hidden",
+        cursor: "pointer",
+        transition: "transform 0.15s ease",
+        boxSizing: "border-box",
+      } satisfies Partial<CSSStyleDeclaration>);
+
+      // ===== 숫자 =====
+      const number = document.createElement("span");
+
+      number.textContent = String(index + 1);
+
+      Object.assign(number.style, {
         color: "white",
         fontSize: "16px",
         fontWeight: "700",
-        cursor: "pointer",
+        lineHeight: "1",
+        zIndex: "2",
+        transition: "opacity 0.15s ease",
       } satisfies Partial<CSSStyleDeclaration>);
 
-      markerContent.textContent = String(index + 1);
+      markerContent.appendChild(number);
 
+      // ===== 이미지 =====
+      const image = document.createElement("img");
+
+      Object.assign(image.style, {
+        position: "absolute",
+        inset: "0",
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        display: "block",
+        opacity: "0",
+        transition: "opacity 0.15s ease",
+      } satisfies Partial<CSSStyleDeclaration>);
+
+      image.src = place.image ?? "/images/default_place_image.png";
+      image.alt = place.name;
+
+      markerContent.appendChild(image);
+
+      // ===== 관광지명 라벨 =====
+      const label = document.createElement("div");
+
+      label.textContent = place.name;
+
+      Object.assign(label.style, {
+        marginTop: "6px",
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "5px 10px",
+        background: "rgba(255,255,255,0.95)",
+        border: "1px solid #E5E7EB",
+        borderRadius: "999px",
+        color: "#222",
+        fontSize: "12px",
+        fontWeight: "600",
+        lineHeight: "1",
+        whiteSpace: "nowrap",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+        pointerEvents: "none",
+        userSelect: "none",
+      } satisfies Partial<CSSStyleDeclaration>);
+
+      // 마커 + 관광지명
+      markerWrapper.appendChild(markerContent);
+      markerWrapper.appendChild(label);
+
+      // ===== Hover =====
+      const handleMouseEnter = () => {
+        image.style.opacity = "1";
+        number.style.opacity = "0";
+        markerContent.style.transform = "scale(1.1)";
+      };
+
+      const handleMouseLeave = () => {
+        image.style.opacity = "0";
+        number.style.opacity = "1";
+        markerContent.style.transform = "scale(1)";
+      };
+
+      markerContent.addEventListener("mouseenter", handleMouseEnter);
+      markerContent.addEventListener("mouseleave", handleMouseLeave);
+
+      // ===== 클릭 → 관광지 상세 =====
+      const handleClick = () => {
+        navigate(`/explore/${place.id}`);
+      };
+
+      // markerContent.addEventListener("click", handleClick);
+
+      // ===== CustomOverlay =====
       const overlay = new kakao.maps.CustomOverlay({
         position: positions[index],
-        content: markerContent,
-        yAnchor: 0.5,
+        content: markerWrapper,
         xAnchor: 0.5,
+        yAnchor: 0.5,
         zIndex: 10,
       });
 
@@ -74,7 +175,7 @@ const TimeLineMap = ({ places }: TimeLinePageProps) => {
       overlays.push(overlay);
     });
 
-    // 모든 장소가 보이도록
+    // ===== 모든 장소가 보이도록 =====
     const bounds = new kakao.maps.LatLngBounds();
 
     positions.forEach((position) => {
@@ -90,7 +191,7 @@ const TimeLineMap = ({ places }: TimeLinePageProps) => {
         overlay.setMap(null);
       });
     };
-  }, [map, places]);
+  }, [map, places, navigate]);
 
   return (
     <Box
@@ -100,7 +201,6 @@ const TimeLineMap = ({ places }: TimeLinePageProps) => {
         height: "100%",
       }}
     >
-      {/* 지도 */}
       <Box
         ref={mapRef}
         sx={{

@@ -1,6 +1,6 @@
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
-import { Box, Button, LinearProgress, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import type { QuizPlayState } from "../../../hooks/quiz/useQuizPlay";
 import type { QuizItem } from "../../../models/QuizModel";
@@ -64,36 +64,25 @@ const QuizPlayView = ({
         ))}
       </Box>
 
-      <LinearProgress
-        variant="determinate"
-        value={(quizState.solvedCount / quizData.totalQuestions) * 100}
-        sx={{
-          height: 8,
-          borderRadius: 5,
-          bgcolor: "#EBE6D9",
-          "& .MuiLinearProgress-bar": {
-            bgcolor: "#A08E73",
-            transition: "transform 0.4s ease",
-          },
-        }}
-      />
-
+      {/* 문제 텍스트 영역: 왼쪽 정렬 적용 */}
       <Box
         sx={{
           flexGrow: 1,
           display: "flex",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "flex-start",
           py: 4,
+          px: 1,
         }}
       >
         <Typography
           sx={{
             fontSize: "1.4rem",
             fontWeight: 700,
-            textAlign: "center",
+            textAlign: "left",
             lineHeight: 1.5,
             wordBreak: "keep-all",
+            width: "100%",
           }}
         >
           {currentQuestion?.question}

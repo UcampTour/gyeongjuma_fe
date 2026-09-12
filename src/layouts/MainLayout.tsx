@@ -2,8 +2,11 @@ import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import BottomNavigationBar from "../components/common/BottomNavigationBar";
 import AudioMiniPlayer from "../pages/places/AudioMiniPlayer";
+import { useBottomNavStore } from "../store/useBottomNavStore";
 
 const MainLayout = () => {
+  const { isVisible } = useBottomNavStore();
+
   return (
     <Box
       sx={{
@@ -30,6 +33,7 @@ const MainLayout = () => {
         <Box
           sx={{
             flex: 1,
+            minHeight: 0,
             overflowY: "auto",
           }}
         >
@@ -61,17 +65,19 @@ const MainLayout = () => {
         </Box>
 
         {/* Bottom Navigation */}
-        <Box
-          sx={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            width: "100%",
-            zIndex: 1200,
-          }}
-        >
-          <BottomNavigationBar />
-        </Box>
+        {isVisible && (
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              width: "100%",
+              zIndex: 1200,
+            }}
+          >
+            <BottomNavigationBar />
+          </Box>
+        )}
       </Box>
     </Box>
   );

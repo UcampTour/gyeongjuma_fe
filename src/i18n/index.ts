@@ -19,6 +19,14 @@ import placesEn from "./locales/en/places.json";
 import profileEn from "./locales/en/profile.json";
 import quizEn from "./locales/en/quiz.json";
 
+import loginJa from "./locales/ja/login.json";
+import profileJa from "./locales/ja/profile.json";
+import quizJa from "./locales/ja/quiz.json";
+
+import loginZh from "./locales/zh/login.json";
+import profileZh from "./locales/zh/profile.json";
+import quizZh from "./locales/zh/quiz.json";
+
 i18n
   // 브라우저 언어 자동 감지
   // ex) ko-KR -> ko, en-US -> en
@@ -49,7 +57,16 @@ i18n
         login: loginEn,
         profile: profileEn,
       },
-      // ... more 일단 한글,영어만 추가
+      ja: {
+        login: loginJa,
+        profile: profileJa,
+        quiz: quizJa,
+      },
+      zh: {
+        login: loginZh,
+        profile: profileZh,
+        quiz: quizZh,
+      },
     },
 
     // 감지된 언어가 없거나 지원하지 않는 언어일 경우 기본 언어

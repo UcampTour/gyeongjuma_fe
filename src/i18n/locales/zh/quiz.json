@@ -1,0 +1,59 @@
+{
+  "title": "庆州遗址问答",
+  "category": {
+    "all": "全部",
+    "available": "可挑战",
+    "progress": "进行中",
+    "completed": "已完成",
+    "locked": "已锁定"
+  },
+  "quizprogress": "问答进度",
+  "totalQuestions": "共 {{count}} 题",
+  "button": {
+    "retry": "重新答题",
+    "resume": "继续答题",
+    "challenge": "开始挑战"
+  },
+  "intro": {
+    "message": {
+      "available": "参与答题并赢取积分吧。 🎉",
+      "locked": "请点击印章完成访问认证！ 🔒",
+      "completed": "已经完成此问答。 👏",
+      "progress": "有正在进行的问答。 ✍️"
+    },
+    "button": {
+      "locked": "完成访问认证后可用",
+      "retry": "再次挑战",
+      "progress": "继续挑战",
+      "start": "开始挑战"
+    },
+    "stats": {
+      "questions": "题",
+      "difficulty": "难度",
+      "difficultyValue": "普通",
+      "points": "积分"
+    },
+    "empty": {
+      "title": "暂无准备好的问答",
+      "desc": "稍后将会更新，敬请期待！ 😊"
+    },
+    "completedNotice": "* 已完成的问答不再发放积分。"
+  },
+  "header": {
+    "resultTitle": "问答完成及结果"
+  },
+  "play": {
+    "remainingQuestions": "剩余题数",
+    "correctQuestions": "答对题数",
+    "currentPoints": "当前积分",
+    "unitQuestion": "题"
+  },
+  "result": {
+    "scoreSummary": "总共 {{total}} 题中答对了 {{correct}} 题。",
+    "pointEarned": "+{{points}} Point",
+    "reviewHeader": "确认我的答案",
+    "accuracyRate": "正确率 {{rate}}%",
+    "buttonRetry": "再次挑战",
+    "buttonBack": "返回"
+  }
+}

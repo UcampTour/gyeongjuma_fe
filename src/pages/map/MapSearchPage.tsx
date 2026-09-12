@@ -1,10 +1,11 @@
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import { Box, Button, Stack, Typography } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import CommonSearchBar from "../../components/common/CommonSearchBar";
 import MapSearchItem from "../../components/map/MapSearchItem";
+import { useCurrentLocation } from "../../hooks/useCurrentLocation";
 import { usePlaceListQuery } from "../../queries/usePlaceListQuery";
 
 const MapSearchPage = () => {
@@ -13,9 +14,17 @@ const MapSearchPage = () => {
 
   const [keyword, setKeyword] = useState("");
 
+  const { currentLocation, updateCurrentLocation } = useCurrentLocation();
+
+  useEffect(() => {
+    if (!currentLocation) {
+      updateCurrentLocation();
+    }
+  }, [currentLocation, updateCurrentLocation]);
+
   const { data: placeList = [] } = usePlaceListQuery({
-    latitude: 0,
-    longitude: 0,
+    latitude: currentLocation?.lat,
+    longitude: currentLocation?.lng,
   });
 
   // 캐싱 데이터 내에서 검색
@@ -63,14 +72,14 @@ const MapSearchPage = () => {
             },
           }}
         >
-          취소
+          {t("common:button.cancel")}
         </Button>
       </Stack>
 
       <Box>
         {keyword.trim().length >= 2 && searchResults.length === 0 && (
           <Typography variant="body2" color="text.secondary">
-            "{keyword}"에 대한 검색 결과가 없습니다.
+            {t("explore.search.noResult", { keyword })}
           </Typography>
         )}
 
@@ -102,7 +111,7 @@ const MapSearchPage = () => {
             <TravelExploreIcon sx={{ fontSize: 48, color: "text.secondary" }} />
 
             <Typography variant="body2" color="text.secondary">
-              관광지 이름을 입력해 검색해 보세요.
+              {t("map:search.listPlaceholder")}
             </Typography>
           </Stack>
         )}

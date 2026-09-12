@@ -40,11 +40,18 @@ export const useQuizPlay = (quizId: string | undefined) => {
         setLoading(true);
         const data = await fetchQuizDetail(quizId);
         setQuizData(data);
+        console.log(data);
 
         if (data.quizStatus === QuizStatus.PROGRESS) {
+          const solvedQuestions = data.questions.filter((q) => q.isSolved);
+          const calculatedSolvedCount = solvedQuestions.length;
+          const calculatedCorrectCnt = solvedQuestions.filter((q) => q.isCorrect).length;
+
           setQuizState((prev) => ({
             ...prev,
             currentIdx: data.lastQuestionIndex,
+            solvedCount: calculatedSolvedCount,
+            correctCnt: calculatedCorrectCnt,
           }));
         }
       } catch (error) {

@@ -19,7 +19,7 @@ export const usePlaceList = () => {
 
   const [selectedStatus, setSelectedStatus] = useState<FilterOperationStatus>("ALL");
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [sortBy, setSortBy] = useState<PlaceSortType>(PlaceSortType.DEFAULT);
+  const [sortBy, setSortBy] = useState<PlaceSortType>(PlaceSortType.DISTANCE);
 
   // 내 위치 정보 가져오기
   useEffect(() => {
@@ -69,9 +69,9 @@ export const usePlaceList = () => {
 
       case PlaceSortType.LIKES:
         return result.sort((a, b) => {
-          if (a.parkinglikes === null) return 1;
-          if (b.parkinglikes === null) return -1;
-          return b.parkinglikes - a.parkinglikes;
+          if (a.totalFavorite === null) return 1;
+          if (b.totalFavorite === null) return -1;
+          return b.totalFavorite - a.totalFavorite;
         });
 
       default:
