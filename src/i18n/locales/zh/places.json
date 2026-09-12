@@ -1,0 +1,133 @@
+{
+  "title": "探索庆州景点",
+
+  "placehorder": "搜索景点",
+
+  "visitcomplete": "已参观",
+
+  "status": {
+    "all": "全部",
+    "open": "营业中",
+    "breakTime": "准备中",
+    "closed": "结束",
+    "none": "暂无信息"
+  },
+
+  "sortType": {
+    "default": "默认排序",
+    "likes": "收藏最多",
+    "distance": "距离最近"
+  },
+
+  "detail": {
+    "tabs": {
+      "info": "信息",
+      "commentary": "讲解",
+      "audio": "语音",
+      "quiz": "答题"
+    },
+    "info": {
+      "menu": {
+        "address": "地址",
+        "operationInfo": "营业时间",
+        "operationStatus": "营业状态",
+        "operationHour": "开放时间",
+        "distance": "距离",
+        "congestion": "预计拥挤度",
+        "favorite": "收藏",
+        "isVisited": "参观状态",
+        "parking": "停车",
+        "tel": "电话号码",
+        "visitCnt": "参观人数",
+        "favoriteCount": "收藏数"
+      },
+      "value": {
+        "distance": "距离当前位置"
+      }
+    },
+    "description": {
+      "emptyState": "暂时还没有准备好的讲解内容。"
+    }
+  },
+
+  "congestion": {
+    "title": "预计拥挤度",
+    "status": {
+      "low": "空闲",
+      "medium": "一般",
+      "high": "拥挤",
+      "none": "暂无信息"
+    },
+    "description": {
+      "low": "比平时人少的时间段",
+      "medium": "与平时差不多的时间段",
+      "high": "比平时更加拥挤的时间段",
+      "none": "暂无预计拥挤度信息"
+    }
+  },
+
+  "operation": {
+    "title": "营业时间",
+    "status": {
+      "open": "营业中",
+      "alwaysOpen": "全天开放",
+      "breakTime": "休息时间",
+      "closed": "营业结束",
+      "none": "暂无信息"
+    }
+  },
+
+  "parking": {
+    "unavailable": "无法停车",
+    "available": "可以停车",
+    "none": "暂无停车信息"
+  },
+
+  "isVisited": {
+    "title": "集章情况",
+    "visited": "参观认证完成！🎉",
+    "unvisited": "未参观景点 📍"
+  },
+
+  "audio": {
+    "emptyState": {
+      "title": "暂无音频。",
+      "message": "暂时还没有提供语音导览。",
+      "message2": "后续会持续更新，敬请期待！😊"
+    },
+    "label": {
+      "story": "故事",
+      "playAll": "全部播放"
+    },
+    "list": {
+      "title": "庆州语音之旅 🎧",
+      "emptyState": "没有提供语音导览的景点。",
+      "emptyVisitState": "没有已参观的语音导览景点。",
+      "listMessage": "跟随语音导览，一起聆听庆州的故事。",
+      "allVisitState": "已经参观了所有语音导览景点！"
+    }
+  },
+
+  "bookmark": {
+    "title": "收藏景点",
+    "message": {
+      "bookmarkMessage": "把喜欢的景点添加到收藏夹吧。",
+      "loadingPlaceList": "正在加载收藏的景点。",
+      "loadingPlaceListDesc": "请稍等片刻！",
+      "emptyBookmark": "还没有收藏任何景点。",
+      "emptyVisitState": "还没有参观过收藏的景点。",
+      "allVisitedState": "已经参观完所有收藏的景点！"
+    }
+  },
+
+  "message": {
+    "loadingPlaceInfo": "正在加载景点信息",
+    "alreadyVisited": "该景点已经参观过了。",
+    "confirmVisitTitle": "参观认证",
+    "confirmVisitMessage": "要进行参观认证吗？",
+    "loadingVisitTitle": "正在进行参观认证",
+    "loadingVisitMessgae": "正在确认你是否已到达景点。\n请稍等片刻！",
+    "successVisit": "参观认证完成！🎉\n已获得{{placeName}}的印章！\n现在挑战答题，赢取积分吧。",
+    "errorVisit": "你不在参观认证范围内。\n请到景点附近再次尝试。"
+  }
+}

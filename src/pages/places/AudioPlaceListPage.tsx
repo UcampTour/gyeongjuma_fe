@@ -10,45 +10,60 @@ import { usePlaceList } from "../../hooks/place/usePlaceList";
 
 type BookmarkFilter = "ALL" | "VISITED" | "UNVISITED";
 
-const BookmarkPage = () => {
-  const navigate = useNavigate();
+const bookmarkFilters = [
+  {
+    type: "ALL" as const,
+    label: "전체",
+  },
+  {
+    type: "VISITED" as const,
+    label: "방문 완료",
+  },
+  {
+    type: "UNVISITED" as const,
+    label: "방문 전",
+  },
+];
+
+const AudioPlaceListPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { placeList, isLoading } = usePlaceList();
 
   const [selectedFilter, setSelectedFilter] = useState<BookmarkFilter>("ALL");
 
-  // 즐겨찾기한 관광지만 먼저 추림
-  const favoriteList = useMemo(
-    () => placeList?.filter((item) => item.isFavorite) ?? [],
+  // 오디오가 있는 관광지만 추림
+  const audioPlaceList = useMemo(
+    () => placeList?.filter((item) => item.audioCount > 0) ?? [],
     [placeList],
   );
 
   // 탭별 개수
   const visitedCount = useMemo(
-    () => favoriteList.filter((place) => place.isVisited).length,
-    [favoriteList],
+    () => audioPlaceList.filter((place) => place.isVisited).length,
+    [audioPlaceList],
   );
 
-  const unvisitedCount = favoriteList.length - visitedCount;
+  const unvisitedCount = audioPlaceList.length - visitedCount;
 
   // 탭별 표시 데이터
   const displayList = useMemo(() => {
     if (selectedFilter === "ALL") {
-      return favoriteList;
+      return audioPlaceList;
     }
 
     if (selectedFilter === "VISITED") {
-      return favoriteList.filter((place) => place.isVisited);
+      return audioPlaceList.filter((place) => place.isVisited);
     }
 
-    return favoriteList.filter((place) => !place.isVisited);
-  }, [favoriteList, selectedFilter]);
+    return audioPlaceList.filter((place) => !place.isVisited);
+  }, [audioPlaceList, selectedFilter]);
 
   // 탭별 개수
   const getFilterCount = (type: BookmarkFilter) => {
     switch (type) {
       case "ALL":
-        return favoriteList.length;
+        return audioPlaceList.length;
       case "VISITED":
         return visitedCount;
       case "UNVISITED":
@@ -61,27 +76,12 @@ const BookmarkPage = () => {
       <CommonLoading
         loading={{
           isLoading: true,
-          loadingMsg: t("places:bookmark.message.loadingPlaceList"),
-          description: t("places:bookmark.message.loadingPlaceListDesc"),
+          loadingMsg: "즐겨찾기 관광지를 불러오는 중이에요",
+          description: "잠시만 기다려주세요!",
         }}
       />
     );
   }
-
-  const bookmarkFilters = [
-    {
-      type: "ALL" as const,
-      label: t("common:label.all"),
-    },
-    {
-      type: "VISITED" as const,
-      label: t("common:label.visited"),
-    },
-    {
-      type: "UNVISITED" as const,
-      label: t("common:label.unvisited"),
-    },
-  ];
 
   return (
     <Box
@@ -95,7 +95,7 @@ const BookmarkPage = () => {
     >
       {/* 고정 헤더 */}
       <Box sx={{ flexShrink: 0 }}>
-        <PageHeader title={t("places:bookmark.title")} />
+        <PageHeader title={t("places:audio.list.title")} />
 
         {/* 방문 상태 필터 */}
         <Stack
@@ -202,10 +202,10 @@ const BookmarkPage = () => {
               }}
             >
               {selectedFilter === "ALL"
-                ? t("places:message.emptyBookmark")
+                ? t("places:audio.emptyState.listMessage")
                 : selectedFilter === "VISITED"
-                  ? t("places:message.emptyVisitState")
-                  : t("places:message.allVisitedState")}
+                  ? t("places:audio.list.emptyVisitState")
+                  : t("places:audio.list.allVisitState")}
             </Typography>
 
             <Typography
@@ -214,7 +214,7 @@ const BookmarkPage = () => {
                 color: "#8A8178",
               }}
             >
-              {t("places:bookmark.allVisitedState")}
+              {t("places:audio.list.listMessage")}
             </Typography>
           </Box>
         )}
@@ -223,4 +223,4 @@ const BookmarkPage = () => {
   );
 };
 
-export default BookmarkPage;
+export default AudioPlaceListPage;

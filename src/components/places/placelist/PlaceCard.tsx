@@ -1,3 +1,4 @@
+import ApprovalIcon from "@mui/icons-material/Approval";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { Box, Card, CardMedia, Typography } from "@mui/material";
@@ -6,9 +7,9 @@ import { useTranslation } from "react-i18next";
 import defaultPlaceImg from "../../../assets/default_place_img.png";
 import { CongestionLevel, OperationStatus } from "../../../models/commonModel";
 import { type PlaceListBase } from "../../../models/PlaceModel";
+import { useAuthStore } from "../../../store/useAuthStore";
 import CommonStamp from "../../common/CommonStamp";
 import StatusBadge from "../../common/StatusBadge";
-import { useAuthStore } from "../../../store/useAuthStore";
 
 interface PlaceCardProps {
   place: PlaceListBase;
@@ -18,22 +19,46 @@ interface PlaceCardProps {
 const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
   const { t } = useTranslation("places");
 
-  const difficulty = useAuthStore((state) => state.member?.difficulty) || "normal";
-  const lowerDifficulty = difficulty.toLowerCase() as keyof typeof place.description;
-  const currentDescription = place.description?.[lowerDifficulty] || place.description?.normal || "";
+  const difficulty =
+    useAuthStore((state) => state.member?.difficulty) || "normal";
+  const lowerDifficulty =
+    difficulty.toLowerCase() as keyof typeof place.description;
+  const currentDescription =
+    place.description?.[lowerDifficulty] || place.description?.normal || "";
 
   // 현재 json 구조(congestion.status 및 status)에 맞게 번역 경로 수정
   const badgeConfig: Record<
     CongestionLevel | OperationStatus,
     { translationKey: string; bgColor: string }
   > = {
-    [CongestionLevel.HIGH]: { translationKey: "congestion.status.high", bgColor: "#C05656" },
-    [CongestionLevel.MEDIUM]: { translationKey: "congestion.status.medium", bgColor: "#E0A928" },
-    [CongestionLevel.LOW]: { translationKey: "congestion.status.low", bgColor: "#3F8E72" },
-    [CongestionLevel.NONE]: { translationKey: "congestion.status.none", bgColor: "#d8d8d8" },
-    [OperationStatus.CLOSED]: { translationKey: "status.closed", bgColor: "#757575" },
-    [OperationStatus.BREAK_TIME]: { translationKey: "status.breakTime", bgColor: "#E2723B" },
-    [OperationStatus.OPEN]: { translationKey: "status.open", bgColor: "#3F8E72" },
+    [CongestionLevel.HIGH]: {
+      translationKey: "congestion.status.high",
+      bgColor: "#C05656",
+    },
+    [CongestionLevel.MEDIUM]: {
+      translationKey: "congestion.status.medium",
+      bgColor: "#E0A928",
+    },
+    [CongestionLevel.LOW]: {
+      translationKey: "congestion.status.low",
+      bgColor: "#3F8E72",
+    },
+    [CongestionLevel.NONE]: {
+      translationKey: "congestion.status.none",
+      bgColor: "#d8d8d8",
+    },
+    [OperationStatus.CLOSED]: {
+      translationKey: "status.closed",
+      bgColor: "#757575",
+    },
+    [OperationStatus.BREAK_TIME]: {
+      translationKey: "status.breakTime",
+      bgColor: "#E2723B",
+    },
+    [OperationStatus.OPEN]: {
+      translationKey: "status.open",
+      bgColor: "#3F8E72",
+    },
   };
 
   const currentConfig =
@@ -213,6 +238,34 @@ const PlaceCard = ({ place, onClick }: PlaceCardProps) => {
               }}
             >
               {place.totalFavorite}
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              flexShrink: 0,
+              whiteSpace: "nowrap",
+            }}
+          >
+            <ApprovalIcon
+              sx={{
+                fontSize: "13px",
+                color: "#54745e",
+                mr: 0.3,
+                flexShrink: 0,
+              }}
+            />
+            <Typography
+              variant="body2"
+              sx={{
+                color: "#7A7265",
+                fontSize: "12px",
+                fontWeight: 500,
+                lineHeight: 1.2,
+              }}
+            >
+              {place?.visitCnt ?? 0}
             </Typography>
           </Box>
         </Box>

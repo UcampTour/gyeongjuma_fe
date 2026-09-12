@@ -1,11 +1,15 @@
 import { Box, CardMedia, Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { fetchTimeline } from "../../api/profileApi";
 import defaultPlaceImg from "../../assets/default_place_img.png";
 import PageHeader from "../../components/common/PageHeader";
 import TimeLinePage from "../../components/profile/TimeLineMap";
-import { fetchTimeline } from "../../api/profileApi";
 
 const TimelinePage = () => {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
   // 'summary' (요약 타임라인) 또는 'map' (지도 보기) 탭 상태 관리
   const [activeTab, setActiveTab] = useState<"summary" | "map">("summary");
   const [timelineData, setTimelineData] = useState<any[]>([]);
@@ -78,6 +82,10 @@ const TimelinePage = () => {
     return path;
   };
 
+  const handleClick = (placeId: string) => {
+    navigate(`/explore/${placeId}`);
+  };
+
   return (
     <Box
       sx={{
@@ -88,7 +96,31 @@ const TimelinePage = () => {
         pb: activeTab === "map" ? 0 : 16,
       }}
     >
-      <PageHeader title="내 발자취 모음" />
+      <PageHeader title={t("profile:timelineMenuTitle")} />
+      <Box
+        sx={{
+          px: 3,
+          pt: 2,
+          pb: 0.5,
+          textAlign: "center",
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: "15px",
+            fontWeight: 700,
+            color: "#2C251E",
+            lineHeight: 1.5,
+          }}
+        >
+          {t("common:message.visitedMessage", { count: badgeCount })}{" "}
+        </Typography>
+        <Typography
+          sx={{ mt: 0.3, fontSize: "12px", color: "#8C8273", fontWeight: 500 }}
+        >
+          {t("common:message.visitedSubMessage")}{" "}
+        </Typography>
+      </Box>
 
       {/* 상단 알약 탭 (칩 스위처) */}
       <Box
@@ -134,7 +166,7 @@ const TimelinePage = () => {
                 color: activeTab === "summary" ? "#2C251E" : "#8C8273",
               }}
             >
-              요약 보기
+              {t("common:label.summary")}
             </Typography>
           </Box>
 
@@ -161,7 +193,7 @@ const TimelinePage = () => {
                 color: activeTab === "map" ? "#2C251E" : "#8C8273",
               }}
             >
-              지도 보기
+              {t("common:label.mapView")}
             </Typography>
           </Box>
         </Box>
@@ -303,6 +335,7 @@ const TimelinePage = () => {
 
                   <Box
                     sx={{
+                      cursor: "pointer",
                       width: 64,
                       height: 64,
                       borderRadius: "50%",
@@ -317,6 +350,7 @@ const TimelinePage = () => {
                       left: "50%",
                       transform: "translateX(-50%)",
                     }}
+                    onClick={() => handleClick(item.id)}
                   >
                     <CardMedia
                       component="img"
@@ -348,6 +382,7 @@ const TimelinePage = () => {
               name: item.name,
               lat: item.lat,
               lng: item.lng,
+              image: item.image,
             }))}
           />
         </Box>

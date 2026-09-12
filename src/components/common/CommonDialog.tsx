@@ -6,6 +6,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 export type DialogType = "alert" | "confirm";
 
@@ -25,11 +26,12 @@ const CommonDialog = ({
   type,
   title,
   message,
-  confirmText = "확인",
-  cancelText = "취소",
+  confirmText,
+  cancelText,
   onConfirm,
   onCancel,
 }: CommonDialogProps) => {
+  const { t } = useTranslation();
   return (
     <Dialog
       open={open}
@@ -39,6 +41,7 @@ const CommonDialog = ({
           sx: {
             borderRadius: "15px",
             width: "70%",
+            maxWidth: "400px",
             minHeight: "20%",
             px: 1.5,
             pb: 2,
@@ -47,7 +50,7 @@ const CommonDialog = ({
         },
       }}
     >
-      {title && <DialogTitle>{title}</DialogTitle>}
+      {title && <DialogTitle sx={{ fontWeight: 700 }}>{title}</DialogTitle>}
 
       {message && (
         <DialogContent>
@@ -63,7 +66,7 @@ const CommonDialog = ({
               color: "#BC9A5D",
             }}
           >
-            {cancelText}
+            {cancelText ? cancelText : t("common:button.cancel")}
           </Button>
         )}
         <Button
@@ -74,7 +77,7 @@ const CommonDialog = ({
             borderRadius: "15px",
           }}
         >
-          {confirmText}
+          {confirmText ? confirmText : t("common:button.confirm")}
         </Button>
       </DialogActions>
     </Dialog>
