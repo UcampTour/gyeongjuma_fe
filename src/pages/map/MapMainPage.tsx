@@ -136,7 +136,7 @@ const MapMainPage = () => {
 
   const legendConfig = useMemo(
     () => getLegendConfig(selectedFilter, placeData),
-    [selectedFilter, placeData, getLegendConfig],
+    [selectedFilter, placeData],
   );
 
   const handleGoToFilterList = () => {
@@ -153,7 +153,7 @@ const MapMainPage = () => {
     const location = await updateCurrentLocation();
     if (!location) return;
 
-    moveToCurrentLocation(location, t("map:message.moveToCurrentLoc"));
+    moveToCurrentLocation(location, "현재 위치로 이동 중");
   };
 
   const commonLoading = useCommonLoading(locationLoading, filterLoading);
@@ -248,13 +248,13 @@ const MapMainPage = () => {
         >
           <IconCircleButton
             icon={<LocationOnIcon />}
-            ariaLabel={t("map:message.moveToGyeongjuCenter")}
+            ariaLabel="경주 중심지로 이동"
             onClick={moveToGyeongjuCenter}
           />
 
           <IconCircleButton
             icon={<GpsFixedIcon />}
-            ariaLabel={t("map:message.moveToCurrentLoc")}
+            ariaLabel="현재 위치로 이동"
             onClick={handleGoToCurrentLocation}
           />
         </Stack>
@@ -292,7 +292,7 @@ const MapMainPage = () => {
             ref={infoSheetRef}
             open={isRecommendOpen}
             onClose={() => setIsRecommendOpen(false)}
-            placeList={nearbyPlaceData.slice(0, 10)}
+            placeList={nearbyPlaceData}
             currentAddress={currentAddress}
           />
         )}

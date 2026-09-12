@@ -319,8 +319,6 @@ const CourseDetailPage = () => {
       >
         <Sheet.Container
           style={{
-            left: "max(0px, calc(50% - 222px))",
-            width: "min(100vw, 444px)",
             borderTopLeftRadius: isFull ? 0 : 24,
             borderTopRightRadius: isFull ? 0 : 24,
             transition: "border-radius .2s",

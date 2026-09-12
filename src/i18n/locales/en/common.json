@@ -2,35 +2,22 @@
   "bottomNav": {
     "explore": "Map",
     "course": "Courses",
-    "places": "Attractions",
+    "places": "Places",
     "quiz": "Quiz",
     "profile": "Profile",
     "home": "Home"
   },
   "label": {
-    "all": "All",
-    "congestionLevel": "Expected Crowding",
-    "isOpen": "Open",
-    "unvisited": "Not Visited",
-    "summary": "View Summary",
-    "mapView": "View Map",
-    "visited": "Visited"
+    "congestionLevel": "Peak Hours",
+    "isOpen": "Open Now",
+    "unvisited": "Unvisited"
   },
   "emptyState": {
     "none": "No Information"
   },
   "mode": {
     "easy": "Kids",
-    "normal": "Basic",
+    "normal": "Standard",
     "hard": "Expert"
-  },
-  "button": {
-    "cancel": "Cancel",
-    "confirm": "Confirm"
-  },
-  "message": {
-    "searchPlaceholder": "Please enter a search term.",
-    "visitedMessage": "🏆 You've visited {{count}} attractions so far!",
-    "visitedSubMessage": "You're collecting memories of Gyeongju one by one ✨"
   }
 }

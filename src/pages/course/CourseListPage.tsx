@@ -1,7 +1,6 @@
 import { Box, Chip, Stack } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import CommonLoading from "../../components/common/CommonLoading";
 import CommonSearchBar from "../../components/common/CommonSearchBar";
 import PageHeader from "../../components/common/PageHeader";
 import CourseItem from "../../components/course/CourseItem";
@@ -32,15 +31,7 @@ const CoursePage = () => {
   });
 
   if (isLoading) {
-    return (
-      <CommonLoading
-        loading={{
-          isLoading: true,
-          loadingMsg: t("course:message.loading"),
-          description: t("course:message.loadingDesc"),
-        }}
-      />
-    );
+    return <div>로딩 중...</div>;
   }
 
   if (isError) {

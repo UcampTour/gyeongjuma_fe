@@ -11,21 +11,18 @@ import {
   getOperationStatusConfig,
 } from "../../models/commonModel";
 import type { PlaceListBase } from "../../models/PlaceModel";
-import { formatDistance } from "../../utils/distance";
-
 interface SheetProps {
   open: boolean;
   onClose: () => void;
-  placeList?: PlaceListBase[];
+  placeList?: PlaceListBase[]; // 관광지 목록 데이터
   currentAddress: string | null;
 }
 
 export interface HandleInfoSheetRef {
   minimize: () => void;
-  expand: () => void;
-  close: () => void;
+  expand: () => void; // BottomSheet를 기본 높이로 열기 위한 메서드
+  close: () => void; // BottomSheet를 닫기 위한 메서드
 }
-
 export enum SheetState {
   CLOSED = 0,
   MINI = 1,
@@ -41,7 +38,8 @@ const NearbyPlaceSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
   ({ open, onClose, placeList, currentAddress }, ref) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-
+    // const mountPoint = document.getElementById("sheet-root"); //  BottomSheet를 지도의 하단에 렌더링하기 위해 mountPoint를 지정
+    // const [mountPoint, setMountPoint] = useState<HTMLElement | null>(null);
     const mountPoint = document.getElementById("sheet-root");
 
     // BottomSheet를 원하는 스냅 위치로 이동시키기 위한 ref
@@ -66,6 +64,7 @@ const NearbyPlaceSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
 
     /**
      * 관광지 상세 화면으로 이동
+     * @param placeId
      */
     const handleGoToPlace = (placeId: number) => {
       navigate(`/explore/${placeId}`);
@@ -98,6 +97,7 @@ const NearbyPlaceSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
         <Sheet.Container
           style={{
             width: "min(100vw, 444px)",
+
             left: "max(0px, calc(50% - 222px))",
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
@@ -127,7 +127,7 @@ const NearbyPlaceSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
 
           <Sheet.Content>
             <Box sx={{ p: 2 }} onClick={handleGoToPlaceList}>
-              {/* 상단 : 현재 위치 */}
+              {/*  상단 : 현재위치, 날씨 */}
               <Stack
                 direction="row"
                 sx={{
@@ -170,33 +170,22 @@ const NearbyPlaceSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
                   </Typography>
                 </Stack>
               </Stack>
-
-              {/* 근처 관광지 제목 */}
               <Stack
                 direction="row"
                 spacing={1}
-                sx={{
-                  alignItems: "center",
-                  mb: 3,
-                }}
+                sx={{ alignItems: "center", mb: 3 }}
               >
                 <Typography variant="subtitle1">
                   {t("map:title.nearbyPlace")}
                 </Typography>
-
                 <Typography
                   variant="subtitle1"
-                  sx={{
-                    fontWeight: 700,
-                    color: "#BC9A5D",
-                  }}
+                  sx={{ fontWeight: 700, color: "#BC9A5D" }}
                 >
                   TOP {placeList?.length}
                 </Typography>
               </Stack>
-
-              {/* 관광지 목록 */}
-              {placeList && placeList.length > 0 && (
+              {placeList && placeList?.length > 0 && (
                 <Swiper
                   spaceBetween={12}
                   slidesPerView={1.6}
@@ -206,36 +195,31 @@ const NearbyPlaceSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
                     height: 270,
                   }}
                 >
-                  {placeList.map((place) => {
+                  {placeList?.map((place) => {
                     const operationConfig = getOperationStatusConfig(
-                      place.operationStatus,
+                      place?.operationStatus,
                     );
 
                     const congestionConfig = getCongestionConfig(
-                      place.congestion,
+                      place?.congestion,
                     );
 
                     return (
                       <SwiperSlide key={place.placeId}>
                         <Box
-                          onClick={(e: any) => {
-                            e.stopPropagation();
-                            handleGoToPlace(place.placeId);
-                          }}
+                          onClick={() => handleGoToPlace(place.placeId)}
                           sx={{
                             position: "relative",
                             width: "100%",
                             height: 270,
                             borderRadius: 3,
                             overflow: "hidden",
-                            cursor: "pointer",
                           }}
                         >
                           {/* 이미지 */}
                           <Box
                             component="img"
                             src={place.imageUrl || defaultPlaceImage}
-                            alt={place.placeName}
                             sx={{
                               width: "100%",
                               height: "100%",
@@ -243,41 +227,7 @@ const NearbyPlaceSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
                             }}
                           />
 
-                          {/* 운영 상태 - 이미지 우측 상단 */}
-                          <Box
-                            sx={{
-                              position: "absolute",
-                              top: 12,
-                              right: 12,
-                              zIndex: 2,
-
-                              display: "inline-flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-
-                              px: 1.2,
-                              py: 0.8,
-
-                              borderRadius: "999px",
-                              color: "white",
-                              backgroundColor: "rgba(92, 92, 92, 0.67)",
-
-                              // backgroundColor: operationConfig.bgColor,
-                              // color: operationConfig.iconColor,
-
-                              fontSize: "0.875rem",
-                              fontWeight: 600,
-
-                              boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-                            }}
-                          >
-                            {place?.distance
-                              ? formatDistance(place?.distance)
-                              : t("map:label.noDistance")}
-                            {/* {t(operationConfig.label)} */}
-                          </Box>
-
-                          {/* 하단 텍스트 */}
+                          {/* 텍스트 */}
                           <Box
                             sx={{
                               position: "absolute",
@@ -285,47 +235,52 @@ const NearbyPlaceSheet = forwardRef<HandleInfoSheetRef, SheetProps>(
                               left: 0,
                               width: "100%",
                               p: 2,
-
                               background:
-                                "linear-gradient(to top, rgba(0,0,0,0.7) 3%, rgba(0,0,0,0) 100%)",
-
+                                "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%)",
                               color: "#fff",
                             }}
                           >
-                            {/* 장소명 */}
-                            <Typography
+                            <Box
                               sx={{
                                 fontSize: "1.1rem",
                                 fontWeight: "bold",
-                                mb: 0.5,
                               }}
                             >
                               {place.placeName ?? "장소 이름"}
-                            </Typography>
+                            </Box>
 
-                            {/* 주소 */}
+                            {/* 운영 상태 */}
                             <Box
                               sx={{
                                 display: "inline-flex",
-                                alignItems: "center",
-
+                                mt: 0.5,
+                                px: 1,
                                 py: 0.3,
-
                                 borderRadius: "999px",
-
-                                backgroundColor: congestionConfig.bgColor,
-                                color: congestionConfig.iconColor,
-
-                                fontSize: "0.65rem",
-                                fontWeight: 500,
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
+                                backgroundColor: operationConfig.bgColor,
+                                color: operationConfig.iconColor,
+                                fontSize: "0.7rem",
+                                fontWeight: 600,
                               }}
                             >
-                              {place.add1
-                                ? place.add1
-                                : t("map:label.noAddress")}
+                              {operationConfig.label}
+                            </Box>
+
+                            {/* 혼잡도 */}
+                            <Box
+                              sx={{
+                                display: "inline-flex",
+                                ml: 0.5,
+                                px: 1,
+                                py: 0.3,
+                                borderRadius: "999px",
+                                backgroundColor: congestionConfig.bgColor,
+                                color: congestionConfig.iconColor,
+                                fontSize: "0.65rem",
+                                fontWeight: 500,
+                              }}
+                            >
+                              {t(congestionConfig.label)}
                             </Box>
                           </Box>
                         </Box>

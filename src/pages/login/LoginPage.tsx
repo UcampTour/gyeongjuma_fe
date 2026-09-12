@@ -22,6 +22,7 @@ const LoginPage = () => {
     const REDIRECT_URI = `${window.location.origin}/auth/naver/callback`;
     const STATE = Math.random().toString(36).substring(3);
 
+    // response_type을 code가 아닌 token으로 변경
     const naverURL = `https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&state=${STATE}`;
 
     window.location.href = naverURL;
@@ -37,7 +38,7 @@ const LoginPage = () => {
     window.location.href = kakaoURL;
   };
 
-  // 구글 로그인 성공 핸들러 (기존 idToken 방식 유지)
+  // 구글 로그인 성공 핸들러
   const onSuccess = async (credentialResponse: any) => {
     if (isLoading) return;
     setIsLoading(true);
@@ -134,7 +135,7 @@ const LoginPage = () => {
           <Box sx={{ flex: 1, height: "1px", bgcolor: "rgba(0,0,0,0.1)" }} />
         </Box>
 
-        {/* 구글 로그인 (기존 GoogleLogin 컴포넌트 방식 + 크기 안정화) */}
+        {/* 구글 로그인 */}
         <Box sx={{ position: "relative", width: "100%", height: "52px" }}>
           <GoogleLogin
             onSuccess={onSuccess}
@@ -148,7 +149,7 @@ const LoginPage = () => {
                 height: "100%",
                 opacity: 0,
                 cursor: "pointer",
-                zIndex: 2, // zIndex를 높여서 클릭을 온전히 맨 위에서 받도록 수정
+                zIndex: 1,
               },
             }}
           />
@@ -164,9 +165,7 @@ const LoginPage = () => {
               color: "#1f1f1f",
               bgcolor: "white",
               justifyContent: "center",
-              boxShadow: "none",
-              "&:hover": { bgcolor: "white", borderColor: "#e0e0e0", boxShadow: "none" },
-              "&:active": { bgcolor: "#f5f5f5" },
+              "&:hover": { bgcolor: "#f5f5f5" },
             }}
           >
             <Box
@@ -207,9 +206,7 @@ const LoginPage = () => {
             fontWeight: 600,
             bgcolor: "#FEE500",
             color: "#000",
-            boxShadow: "none",
-            "&:hover": { bgcolor: "#FEE500", boxShadow: "none" },
-            "&:active": { bgcolor: "#E5CE00" },
+            "&:hover": { bgcolor: "#FEE500" },
           }}
         >
           <Box
@@ -232,9 +229,7 @@ const LoginPage = () => {
             fontWeight: 600,
             bgcolor: "#03C75A",
             color: "#fff",
-            boxShadow: "none",
-            "&:hover": { bgcolor: "#03C75A", boxShadow: "none" },
-            "&:active": { bgcolor: "#029E48" },
+            "&:hover": { bgcolor: "#03C75A" },
           }}
         >
           <Box

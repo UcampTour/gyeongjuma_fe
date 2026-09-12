@@ -1,4 +1,8 @@
-import { createBrowserRouter, type RouteObject } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  type RouteObject,
+} from "react-router-dom";
 import App from "../App";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 import PublicRoute from "../components/auth/PublicRoute";
@@ -6,7 +10,6 @@ import RegistrationRoute from "../components/auth/RegistrationRoute";
 import AdminLayout from "../layouts/AdminLayout";
 import MainLayout from "../layouts/MainLayout";
 import AdminCoursePage from "../pages/admin/AdminCoursePage";
-import AdminLoginPage from "../pages/admin/AdminLoginPage";
 import AdminPlacePage from "../pages/admin/AdminPlacePage";
 import AdminUserPage from "../pages/admin/AdminUserPage";
 import AdminQuizFormPage from "../pages/admin/quiz/AdminQuizFormPage";
@@ -15,14 +18,11 @@ import CommonErrorPage from "../pages/common/CommonErrorPage";
 import CourseDetailPage from "../pages/course/CourseDetailPage";
 import CoursePage from "../pages/course/CourseListPage";
 import HomePage from "../pages/home/HomePage";
-import KakaoCallbackPage from "../pages/login/KakaoCallbackPage";
 import LoginPage from "../pages/login/LoginPage";
-import NaverCallbackPage from "../pages/login/NaverCallbackPage";
 import RegisterPage from "../pages/login/RegisterPage";
 import MapMainPage from "../pages/map/MapMainPage";
 import MapSearchPage from "../pages/map/MapSearchPage";
 import AudioDetailPage from "../pages/places/AudioDetailPage";
-import AudioPlaceListPage from "../pages/places/AudioPlaceListPage";
 import PlaceDetailPage from "../pages/places/PlaceDetailPage";
 import PlaceListPage from "../pages/places/PlaceListPage";
 import BookmarkPage from "../pages/profile/BookmarkPage";
@@ -32,6 +32,9 @@ import ProfilePage from "../pages/profile/ProfilePage";
 import TimelinePage from "../pages/profile/TimeLinePage";
 import QuizListPage from "../pages/quiz/QuizListPage";
 import QuizPlayPage from "../pages/quiz/QuizPlayPage";
+import AdminLoginPage from "../pages/admin/AdminLoginPage";
+import KakaoCallbackPage from "../pages/login/KakaoCallbackPage";
+import NaverCallbackPage from "../pages/login/NaverCallbackPage";
 
 const routes: RouteObject[] = [
   {
@@ -78,10 +81,6 @@ const routes: RouteObject[] = [
               {
                 path: "places",
                 element: <PlaceListPage />,
-              },
-              {
-                path: "audio",
-                element: <AudioPlaceListPage />,
               },
               {
                 path: "course",

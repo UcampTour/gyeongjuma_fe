@@ -11,8 +11,9 @@ const PlaceListSorter = ({ sortBy, setSortBy }: PlaceListSorterProps) => {
   const { t } = useTranslation();
 
   const sortTypes = [
-    { value: PlaceSortType.DISTANCE, label: t("places:sortType.distance") },
+    { value: PlaceSortType.DEFAULT, label: t("places:sortType.default") },
     { value: PlaceSortType.LIKES, label: t("places:sortType.likes") },
+    { value: PlaceSortType.DISTANCE, label: t("places:sortType.distance") },
   ];
 
   return (

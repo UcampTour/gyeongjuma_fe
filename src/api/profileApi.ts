@@ -6,10 +6,3 @@ export const fetchMyInfo = async (): Promise<MyInfoResponse> => {
 
   return response.data.data;
 }
-
-export const fetchTimeline = async (): Promise<any> => {
-
-  const response = await apiClient.get("mypage/visits");
-
-  return response.data.data;
-}

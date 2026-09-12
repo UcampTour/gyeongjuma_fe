@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import type { LoadingProps } from "../../components/common/CommonLoading";
 import type { MapLocation } from "../../models/MapModel";
 
@@ -21,8 +20,6 @@ export const useMapNavigation = ({ map }: MapNavProps) => {
   const [locationLoading, setLocationLoading] = useState<
     LoadingProps | undefined
   >(undefined);
-
-  const { t } = useTranslation();
 
   /**
    * 지도 이동 공통 함수
@@ -52,7 +49,7 @@ export const useMapNavigation = ({ map }: MapNavProps) => {
    * 경주 중심지로 이동
    */
   const moveToGyeongjuCenter = () => {
-    return moveMap(GYEONGJU_CENTER, t("map:message.moveToGyeongjuCenter"));
+    return moveMap(GYEONGJU_CENTER, "경주 중심지로 이동");
   };
 
   /**

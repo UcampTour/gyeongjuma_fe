@@ -17,10 +17,10 @@ import logo from "../../assets/gyeongjuma_logo.png";
 import { useAuthStore } from "../../store/useAuthStore";
 
 const RegisterPage = () => {
-  const { t } = useTranslation(["login", "common"]); // 💡 t 함수 선언
+  const { t } = useTranslation("login"); // 💡 t 함수 선언
   const [nickname, setNickname] = useState("");
   const [difficulty, setDifficulty] = useState("NORMAL");
-  const [locale, setLocale] = useState("ko");
+  const [locale, setLocale] = useState("KO");
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
 
   const navigate = useNavigate();
@@ -178,9 +178,9 @@ const RegisterPage = () => {
               onChange={(e) => setDifficulty(e.target.value)}
               sx={{ borderRadius: 3, height: "40px" }}
             >
-              <MenuItem value="EASY">{t("mode.easy", { ns: "common" })}</MenuItem>
-              <MenuItem value="NORMAL">{t("mode.normal", { ns: "common" })}</MenuItem>
-              <MenuItem value="HARD">{t("mode.hard", { ns: "common" })}</MenuItem>
+              <MenuItem value="EASY">{t("register.difficultyEasy")}</MenuItem>
+              <MenuItem value="NORMAL">{t("register.difficultyNormal")}</MenuItem>
+              <MenuItem value="HARD">{t("register.difficultyHard")}</MenuItem>
             </Select>
           </FormControl>
         </Box>
