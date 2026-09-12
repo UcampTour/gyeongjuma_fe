@@ -1,14 +1,25 @@
-import { Box, Card, TextField, Typography, Button, RadioGroup, FormControlLabel, Radio } from "@mui/material";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  Button,
+  Card,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import PageHeader from "../../components/common/PageHeader";
+import { useNavigate } from "react-router-dom";
 import { checkNickname, updateMyInfo } from "../../api/authApi";
+import PageHeader from "../../components/common/PageHeader";
+import { useCommonDialog } from "../../hooks/common/useCommonDialog";
 import { useAuthStore } from "../../store/useAuthStore";
 
 const ProfileEditPage = () => {
   const { t } = useTranslation(["profile", "common"]);
   const navigate = useNavigate();
+  const { alert } = useCommonDialog();
   const { member, setMemberInfo } = useAuthStore();
 
   const [nickname, setNickname] = useState("");
@@ -24,7 +35,7 @@ const ProfileEditPage = () => {
     if (member) {
       setNickname(member.nickname || "");
       if (member.difficulty) setDifficulty(member.difficulty);
-      if (member.locale) setLocale(member.locale); 
+      if (member.locale) setLocale(member.locale);
     }
   }, [member]);
 
@@ -96,14 +107,15 @@ const ProfileEditPage = () => {
     { code: "en", label: "English" },
     { code: "ja", label: "日本語" },
     { code: "zh", label: "中文" },
-];
+  ];
 
   return (
     <Box sx={{ bgcolor: "#F7F5EE", minHeight: "100vh", pb: 16 }}>
       <PageHeader title={t("pageTitle")} />
 
-      <Box sx={{ px: 2, pt: 1, display: "flex", flexDirection: "column", gap: 2 }}>
-        
+      <Box
+        sx={{ px: 2, pt: 1, display: "flex", flexDirection: "column", gap: 2 }}
+      >
         {/* 1. 닉네임 변경 카드 */}
         <Card
           elevation={0}
@@ -115,10 +127,17 @@ const ProfileEditPage = () => {
             border: "1px solid #EFECE6",
           }}
         >
-          <Typography sx={{ fontWeight: 800, fontSize: "15px", color: "#111111", mb: 1.5 }}>
+          <Typography
+            sx={{
+              fontWeight: 800,
+              fontSize: "15px",
+              color: "#111111",
+              mb: 1.5,
+            }}
+          >
             {t("nicknameSectionTitle")}
           </Typography>
-          
+
           <Box sx={{ display: "flex", gap: 1, mb: 1 }}>
             <TextField
               fullWidth
@@ -149,7 +168,7 @@ const ProfileEditPage = () => {
                   fontSize: "14px",
                   fontWeight: 600,
                   color: "#111111",
-                }
+                },
               }}
             />
             <Button
@@ -166,24 +185,33 @@ const ProfileEditPage = () => {
                 "&:hover": {
                   borderColor: "#9A7D52",
                   bgcolor: "#FAF8F5",
-                }
+                },
               }}
             >
               {t("btnCheckDuplicate")}
             </Button>
           </Box>
 
-          <Box sx={{ display: "flex", justifyContent: "space-between", px: 0.5 }}>
-            <Typography 
-              sx={{ 
-                fontSize: "11px", 
-                fontWeight: 600, 
-                color: isAvailable === null ? "#958D80" : isAvailable ? "#2E7D32" : "#D32F2F" 
+          <Box
+            sx={{ display: "flex", justifyContent: "space-between", px: 0.5 }}
+          >
+            <Typography
+              sx={{
+                fontSize: "11px",
+                fontWeight: 600,
+                color:
+                  isAvailable === null
+                    ? "#958D80"
+                    : isAvailable
+                      ? "#2E7D32"
+                      : "#D32F2F",
               }}
             >
               {errorMessage}
             </Typography>
-            <Typography sx={{ fontSize: "11px", color: "#958D80", fontWeight: 600 }}>
+            <Typography
+              sx={{ fontSize: "11px", color: "#958D80", fontWeight: 600 }}
+            >
               {nickname.length}/10{t("charUnit")}
             </Typography>
           </Box>
@@ -200,7 +228,14 @@ const ProfileEditPage = () => {
             border: "1px solid #EFECE6",
           }}
         >
-          <Typography sx={{ fontWeight: 800, fontSize: "15px", color: "#111111", mb: 1.5 }}>
+          <Typography
+            sx={{
+              fontWeight: 800,
+              fontSize: "15px",
+              color: "#111111",
+              mb: 1.5,
+            }}
+          >
             {t("difficultySectionTitle")}
           </Typography>
           <RadioGroup
@@ -209,15 +244,27 @@ const ProfileEditPage = () => {
             sx={{ display: "flex", flexDirection: "column", gap: 1 }}
           >
             {[
-              { level: "EASY", label: t("mode.easy", { ns: "common" }), desc: t("diffEasyDesc") },
-              { level: "NORMAL", label: t("mode.normal", { ns: "common" }), desc: t("diffNormalDesc") },
-              { level: "HARD", label: t("mode.hard", { ns: "common" }), desc: t("diffHardDesc") },
+              {
+                level: "EASY",
+                label: t("mode.easy", { ns: "common" }),
+                desc: t("diffEasyDesc"),
+              },
+              {
+                level: "NORMAL",
+                label: t("mode.normal", { ns: "common" }),
+                desc: t("diffNormalDesc"),
+              },
+              {
+                level: "HARD",
+                label: t("mode.hard", { ns: "common" }),
+                desc: t("diffHardDesc"),
+              },
             ].map(({ level, label, desc }) => (
               <FormControlLabel
                 key={level}
                 value={level}
                 control={
-                  <Radio 
+                  <Radio
                     sx={{
                       color: "#E3DCCE",
                       "&.Mui-checked": { color: "#AC8E61" },
@@ -226,10 +273,22 @@ const ProfileEditPage = () => {
                 }
                 label={
                   <Box>
-                    <Typography sx={{ fontSize: "14px", fontWeight: 700, color: "#111111" }}>
+                    <Typography
+                      sx={{
+                        fontSize: "14px",
+                        fontWeight: 700,
+                        color: "#111111",
+                      }}
+                    >
                       {label}
                     </Typography>
-                    <Typography sx={{ fontSize: "11px", color: "#958D80", fontWeight: 500 }}>
+                    <Typography
+                      sx={{
+                        fontSize: "11px",
+                        color: "#958D80",
+                        fontWeight: 500,
+                      }}
+                    >
                       {desc}
                     </Typography>
                   </Box>
@@ -243,7 +302,7 @@ const ProfileEditPage = () => {
                   py: 1,
                   alignItems: "center",
                   transition: "border-color 0.15s ease",
-                  "&:hover": { borderColor: "#AC8E61" }
+                  "&:hover": { borderColor: "#AC8E61" },
                 }}
               />
             ))}
@@ -261,7 +320,14 @@ const ProfileEditPage = () => {
             border: "1px solid #EFECE6",
           }}
         >
-          <Typography sx={{ fontWeight: 800, fontSize: "15px", color: "#111111", mb: 1.5 }}>
+          <Typography
+            sx={{
+              fontWeight: 800,
+              fontSize: "15px",
+              color: "#111111",
+              mb: 1.5,
+            }}
+          >
             {t("localeSectionTitle")}
           </Typography>
           <RadioGroup
@@ -269,7 +335,10 @@ const ProfileEditPage = () => {
             onChange={(e) => setLocale(e.target.value)}
             sx={{
               display: "grid",
-              gridTemplateColumns: { xs: "repeat(2, 1fr)", sm: "repeat(3, 1fr)" },
+              gridTemplateColumns: {
+                xs: "repeat(2, 1fr)",
+                sm: "repeat(3, 1fr)",
+              },
               gap: 1,
             }}
           >
@@ -278,7 +347,7 @@ const ProfileEditPage = () => {
                 key={code}
                 value={code}
                 control={
-                  <Radio 
+                  <Radio
                     sx={{
                       color: "#E3DCCE",
                       "&.Mui-checked": { color: "#AC8E61" },
@@ -286,8 +355,8 @@ const ProfileEditPage = () => {
                   />
                 }
                 label={
-                  <Typography 
-                    noWrap 
+                  <Typography
+                    noWrap
                     sx={{ fontSize: "13px", fontWeight: 700, color: "#111111" }}
                   >
                     {label}
@@ -301,7 +370,7 @@ const ProfileEditPage = () => {
                   px: 1.5,
                   py: 0.5,
                   transition: "border-color 0.15s ease",
-                  "&:hover": { borderColor: "#AC8E61" }
+                  "&:hover": { borderColor: "#AC8E61" },
                 }}
               />
             ))}
@@ -327,14 +396,13 @@ const ProfileEditPage = () => {
               },
               "&:disabled": {
                 bgcolor: "#D3C5B4",
-                color: "#FFFFFF"
-              }
+                color: "#FFFFFF",
+              },
             }}
           >
             {isSubmitting ? t("btnSubmitting") : t("btnSubmit")}
           </Button>
         </Box>
-
       </Box>
     </Box>
   );
