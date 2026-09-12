@@ -191,7 +191,7 @@ function BottomNavigationBar() {
               <BottomNavigationAction
                 key={menu.path}
                 label={menu.label}
-                icon={<span className="icon-bg">{menu.icon}</span>}
+                icon={<Box className="icon-bg">{menu.icon}</Box>}
               />
             );
           })}
