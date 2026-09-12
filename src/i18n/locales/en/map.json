@@ -1,7 +1,7 @@
 {
   "search": {
-    "placeholder": "Search for a place or address",
-    "listPlaceholder": "Enter an attraction name to search.",
+    "placeholder": "Search places or addresses",
+    "listPlaceholder": "Enter the name of an attraction to search.",
     "noResult": "No search results found for {{keyword}}."
   },
   "buttons": {
@@ -13,9 +13,11 @@
     "isVisited": "Visited"
   },
   "title": {
-    "nearbyPlace": "Popular Places Near You"
+    "nearbyPlace": "Popular Places Near Me"
   },
   "message": {
+    "moveToGyeongjuCenter": "Go to Gyeongju Center",
+    "moveToCurrentLoc": "Go to Current Location",
     "searchingCurrentLocation": "Finding your current location..."
   },
   "legend": {

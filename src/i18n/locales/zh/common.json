@@ -1,0 +1,36 @@
+{
+  "bottomNav": {
+    "explore": "地图",
+    "course": "路线",
+    "places": "景点",
+    "quiz": "答题",
+    "profile": "个人中心",
+    "home": "首页"
+  },
+  "label": {
+    "all": "全部",
+    "congestionLevel": "预计拥挤度",
+    "isOpen": "营业中",
+    "unvisited": "未参观",
+    "summary": "查看简介",
+    "mapView": "查看地图",
+    "visited": "已参观"
+  },
+  "emptyState": {
+    "none": "暂无信息"
+  },
+  "mode": {
+    "easy": "儿童",
+    "normal": "基础",
+    "hard": "专家"
+  },
+  "button": {
+    "cancel": "取消",
+    "confirm": "确认"
+  },
+  "message": {
+    "searchPlaceholder": "请输入搜索关键词。",
+    "visitedMessage": "🏆 到目前为止，你已经参观了{{count}}处景点！",
+    "visitedSubMessage": "正在一点一点收集庆州的美好回忆 ✨"
+  }
+}

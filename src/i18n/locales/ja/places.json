@@ -1,0 +1,133 @@
+{
+  "title": "慶州の観光地を巡る",
+
+  "placehorder": "観光地を検索してください",
+
+  "visitcomplete": "訪問済み",
+
+  "status": {
+    "all": "すべて",
+    "open": "営業中",
+    "breakTime": "準備中",
+    "closed": "終了",
+    "none": "情報なし"
+  },
+
+  "sortType": {
+    "default": "おすすめ順",
+    "likes": "お気に入り順",
+    "distance": "距離順"
+  },
+
+  "detail": {
+    "tabs": {
+      "info": "情報",
+      "commentary": "解説",
+      "audio": "音声",
+      "quiz": "クイズ"
+    },
+    "info": {
+      "menu": {
+        "address": "住所",
+        "operationInfo": "営業時間",
+        "operationStatus": "営業状況",
+        "operationHour": "営業時間",
+        "distance": "距離",
+        "congestion": "予想混雑度",
+        "favorite": "お気に入り",
+        "isVisited": "訪問状況",
+        "parking": "駐車場",
+        "tel": "電話番号",
+        "visitCnt": "訪問者数",
+        "favoriteCount": "お気に入り"
+      },
+      "value": {
+        "distance": "現在地から"
+      }
+    },
+    "description": {
+      "emptyState": "まだ解説はありません。"
+    }
+  },
+
+  "congestion": {
+    "title": "予想混雑度",
+    "status": {
+      "low": "空いている",
+      "medium": "普通",
+      "high": "混雑",
+      "none": "情報なし"
+    },
+    "description": {
+      "low": "普段より空いている時間帯",
+      "medium": "普段と同じくらいの混雑度",
+      "high": "普段より混雑している時間帯",
+      "none": "予想混雑度の情報はありません"
+    }
+  },
+
+  "operation": {
+    "title": "営業時間",
+    "status": {
+      "open": "営業中",
+      "alwaysOpen": "常時開放",
+      "breakTime": "休憩時間",
+      "closed": "営業終了",
+      "none": "情報なし"
+    }
+  },
+
+  "parking": {
+    "unavailable": "駐車不可",
+    "available": "駐車可能",
+    "none": "駐車場情報なし"
+  },
+
+  "isVisited": {
+    "title": "スタンプ状況",
+    "visited": "訪問認証完了！🎉",
+    "unvisited": "未訪問の観光地 📍"
+  },
+
+  "audio": {
+    "emptyState": {
+      "title": "登録された音声がありません。",
+      "message": "まだ音声ガイドは提供されていません。",
+      "message2": "今後アップデートされる予定です。お楽しみに！😊"
+    },
+    "label": {
+      "story": "ストーリー",
+      "playAll": "すべて再生"
+    },
+    "list": {
+      "title": "慶州オーディオツアー 🎧",
+      "emptyState": "音声ガイドのある観光地がありません。",
+      "emptyVisitState": "訪問済みの音声ガイド付き観光地がありません。",
+      "listMessage": "音声ガイドと一緒に慶州の物語を楽しみましょう。",
+      "allVisitState": "音声ガイドのある観光地をすべて訪問しました！"
+    }
+  },
+
+  "bookmark": {
+    "title": "お気に入りの観光地",
+    "message": {
+      "bookmarkMessage": "気になる観光地をお気に入りに追加してみましょう。",
+      "loadingPlaceList": "お気に入りの観光地を読み込んでいます。",
+      "loadingPlaceListDesc": "しばらくお待ちください！",
+      "emptyBookmark": "まだお気に入りの観光地がありません。",
+      "emptyVisitState": "訪問済みのお気に入り観光地がありません。",
+      "allVisitedState": "お気に入りの観光地をすべて訪問しました！"
+    }
+  },
+
+  "message": {
+    "loadingPlaceInfo": "観光地情報を読み込んでいます",
+    "alreadyVisited": "この観光地はすでに訪問済みです。",
+    "confirmVisitTitle": "訪問認証",
+    "confirmVisitMessage": "訪問認証を行いますか？",
+    "loadingVisitTitle": "訪問認証中",
+    "loadingVisitMessgae": "観光地に到着したか確認しています。\nしばらくお待ちください！",
+    "successVisit": "訪問認証完了！🎉\n{{placeName}}のスタンプを獲得しました！\nクイズに挑戦してポイントを獲得しましょう。",
+    "errorVisit": "訪問認証可能な範囲外です。\n観光地の近くでもう一度お試しください。"
+  }
+}

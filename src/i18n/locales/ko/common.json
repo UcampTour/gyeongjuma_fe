@@ -8,9 +8,13 @@
     "home": "홈"
   },
   "label": {
+    "all": "전체",
     "congestionLevel": "예상혼잡도",
     "isOpen": "운영중",
-    "unvisited": "미방문지"
+    "unvisited": "미방문지",
+    "summary": "요약 보기",
+    "mapView": "지도 보기",
+    "visited": "방문완료"
   },
   "emptyState": {
     "none": "정보없음"
@@ -21,6 +25,12 @@
     "hard": "전문가"
   },
   "button": {
-    "cancel": "취소"
+    "cancel": "취소",
+    "confirm": "확인"
+  },
+  "message": {
+    "searchPlaceholder": "검색어를 입력해주세요.",
+    "visitedMessage": "🏆 지금까지 {{count}}곳의 관광지를 방문했어요!",
+    "visitedSubMessage": "경주의 추억을 차곡차곡 모으고 있어요 ✨"
   }
 }

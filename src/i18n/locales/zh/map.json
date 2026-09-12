@@ -1,0 +1,44 @@
+{
+  "search": {
+    "placeholder": "搜索地点或地址",
+    "listPlaceholder": "请输入景点名称进行搜索。",
+    "noResult": "没有找到与{{keyword}}相关的搜索结果。"
+  },
+  "buttons": {
+    "currentLocation": "当前位置",
+    "nearbyAttractions": "附近景点"
+  },
+  "label": {
+    "unVisited": "未参观",
+    "isVisited": "已参观"
+  },
+  "title": {
+    "nearbyPlace": "我附近的热门景点"
+  },
+  "message": {
+    "moveToGyeongjuCenter": "前往庆州中心",
+    "moveToCurrentLoc": "前往当前位置",
+    "searchingCurrentLocation": "正在查找当前位置..."
+  },
+  "legend": {
+    "congestion": {
+      "title": "预计拥挤度",
+      "low": "空闲",
+      "medium": "一般",
+      "high": "拥挤",
+      "none": "暂无信息"
+    },
+    "operating": {
+      "title": "营业状态",
+      "open": "营业中",
+      "closed": "营业结束",
+      "breakTime": "休息时间",
+      "none": "暂无信息"
+    },
+    "visited": {
+      "title": "参观状态",
+      "unvisited": "未参观",
+      "completed": "已参观"
+    }
+  }
+}

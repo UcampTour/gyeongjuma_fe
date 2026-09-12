@@ -1,5 +1,6 @@
 import { Box, CardMedia, Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { fetchTimeline } from "../../api/profileApi";
 import defaultPlaceImg from "../../assets/default_place_img.png";
@@ -8,6 +9,7 @@ import TimeLinePage from "../../components/profile/TimeLineMap";
 
 const TimelinePage = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   // 'summary' (요약 타임라인) 또는 'map' (지도 보기) 탭 상태 관리
   const [activeTab, setActiveTab] = useState<"summary" | "map">("summary");
   const [timelineData, setTimelineData] = useState<any[]>([]);
@@ -94,7 +96,7 @@ const TimelinePage = () => {
         pb: activeTab === "map" ? 0 : 16,
       }}
     >
-      <PageHeader title="내 발자취 모음" />
+      <PageHeader title={t("profile:timelineMenuTitle")} />
       <Box
         sx={{
           px: 3,
@@ -111,28 +113,12 @@ const TimelinePage = () => {
             lineHeight: 1.5,
           }}
         >
-          🏆 지금까지{" "}
-          <Box
-            component="span"
-            sx={{
-              color: "#BC9A5D",
-              fontWeight: 800,
-            }}
-          >
-            {badgeCount}곳
-          </Box>{" "}
-          의 관광지를 방문했어요!
+          {t("common:message.visitedMessage", { count: badgeCount })}{" "}
         </Typography>
-
         <Typography
-          sx={{
-            mt: 0.3,
-            fontSize: "12px",
-            color: "#8C8273",
-            fontWeight: 500,
-          }}
+          sx={{ mt: 0.3, fontSize: "12px", color: "#8C8273", fontWeight: 500 }}
         >
-          경주의 추억을 차곡차곡 모으고 있어요 ✨
+          {t("common:message.visitedSubMessage")}{" "}
         </Typography>
       </Box>
 
@@ -180,7 +166,7 @@ const TimelinePage = () => {
                 color: activeTab === "summary" ? "#2C251E" : "#8C8273",
               }}
             >
-              요약 보기
+              {t("common:label.summary")}
             </Typography>
           </Box>
 
@@ -207,7 +193,7 @@ const TimelinePage = () => {
                 color: activeTab === "map" ? "#2C251E" : "#8C8273",
               }}
             >
-              지도 보기
+              {t("common:label.mapView")}
             </Typography>
           </Box>
         </Box>

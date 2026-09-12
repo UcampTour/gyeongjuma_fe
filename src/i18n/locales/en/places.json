@@ -1,5 +1,5 @@
 {
-  "title": "Explore Gyeongju's Attractions",
+  "title": "Explore Gyeongju Attractions",
 
   "placehorder": "Search for an attraction",
 
@@ -15,7 +15,7 @@
 
   "sortType": {
     "default": "Default",
-    "likes": "Favorites",
+    "likes": "Most Favorited",
     "distance": "Distance"
   },
 
@@ -26,28 +26,25 @@
       "audio": "Audio",
       "quiz": "Quiz"
     },
-
     "info": {
       "menu": {
         "address": "Address",
-        "operationInfo": "Hours",
-        "operationStatus": "Status",
+        "operationInfo": "Business Hours",
+        "operationStatus": "Operating Status",
         "operationHour": "Operating Hours",
         "distance": "Distance",
         "congestion": "Expected Crowding",
         "favorite": "Favorites",
-        "isVisited": "Visited",
+        "isVisited": "Visit Status",
         "parking": "Parking",
-        "tel": "Phone",
+        "tel": "Phone Number",
         "visitCnt": "Visitors",
         "favoriteCount": "Favorites"
       },
-
       "value": {
         "distance": "From your current location"
       }
     },
-
     "description": {
       "emptyState": "No commentary is available yet."
     }
@@ -55,25 +52,22 @@
 
   "congestion": {
     "title": "Expected Crowding",
-
     "status": {
       "low": "Low",
       "medium": "Moderate",
       "high": "Crowded",
       "none": "No Information"
     },
-
     "description": {
-      "low": "Usually less crowded than usual",
-      "medium": "Usually about as crowded as usual",
-      "high": "Usually more crowded than usual",
-      "none": "No crowding information available"
+      "low": "Less crowded than usual",
+      "medium": "About as crowded as usual",
+      "high": "More crowded than usual",
+      "none": "No expected crowding information"
     }
   },
 
   "operation": {
     "title": "Operating Hours",
-
     "status": {
       "open": "Open",
       "alwaysOpen": "Always Open",
@@ -84,7 +78,7 @@
   },
 
   "parking": {
-    "unavailable": "No Parking",
+    "unavailable": "Parking Unavailable",
     "available": "Parking Available",
     "none": "No Parking Information"
   },
@@ -92,36 +86,48 @@
   "isVisited": {
     "title": "Stamp Status",
     "visited": "Visit Verified! 🎉",
-    "unvisited": "Not Yet Visited 📍"
+    "unvisited": "Not Visited 📍"
   },
 
   "audio": {
     "emptyState": {
       "title": "No Audio Available.",
       "message": "There is no audio guide available yet.",
-      "message2": "Stay tuned for future updates! 😊"
+      "message2": "More content will be added in future updates. Stay tuned! 😊"
     },
-
     "label": {
       "story": "Story",
       "playAll": "Play All"
     },
-
     "list": {
       "title": "Gyeongju Audio Tour 🎧",
-      "emptyState": "No attractions with audio guides.",
-      "emptyVisitState": "No visited attractions with audio guides.",
-      "listMessage": "Explore the stories of Gyeongju with an audio guide.",
-      "allVisitState": "You've visited all audio attractions!"
+      "emptyState": "There are no attractions with audio guides.",
+      "emptyVisitState": "There are no visited attractions with audio guides.",
+      "listMessage": "Listen to the stories of Gyeongju with our audio guides.",
+      "allVisitState": "You've visited all attractions with audio guides."
+    }
+  },
+
+  "bookmark": {
+    "title": "Favorite Attractions",
+    "message": {
+      "bookmarkMessage": "Add attractions you like to your favorites.",
+      "loadingPlaceList": "Loading your favorite attractions.",
+      "loadingPlaceListDesc": "Please wait a moment!",
+      "emptyBookmark": "You don't have any favorite attractions yet.",
+      "emptyVisitState": "You haven't visited any of your favorite attractions yet.",
+      "allVisitedState": "You've visited all your favorite attractions."
     }
   },
 
   "message": {
-    "alreadyVisited": "This attraction has already been marked as visited.",
+    "loadingPlaceInfo": "Loading attraction information",
+    "alreadyVisited": "You've already visited this attraction.",
     "confirmVisitTitle": "Verify Your Visit",
     "confirmVisitMessage": "Would you like to verify your visit?",
     "loadingVisitTitle": "Verifying Your Visit",
-    "loadingVisitMessgae": "We're checking if you've arrived at the attraction.\nPlease wait a moment!",
-    "successVisit": "Visit verified! 🎉\nYou've earned a stamp for {{placeName}}!\nNow take the quiz to earn points."
+    "loadingVisitMessgae": "Checking whether you've arrived at the attraction.\nPlease wait a moment!",
+    "successVisit": "Visit verified! 🎉\nYou've earned the {{placeName}} stamp!\nNow challenge yourself with the quiz and earn points.",
+    "errorVisit": "You're outside the visit verification area.\nPlease try again near the attraction."
   }
 }

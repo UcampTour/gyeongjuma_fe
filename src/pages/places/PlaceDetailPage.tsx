@@ -195,7 +195,11 @@ const PlaceDetailPage = () => {
         isLoading: false,
       });
       const error = err as AxiosError<any>;
-      alert(error.response?.data.message ?? "SYSTEM ERROR");
+      const errorMessage =
+        error.response?.data.message === "방문 인증 가능 반경 밖입니다."
+          ? t("places:message.errorVisit")
+          : "SYSTEM ERROR";
+      alert(errorMessage);
     }
   };
 

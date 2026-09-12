@@ -16,6 +16,8 @@
     "nearbyPlace": "내 주변 인기 장소"
   },
   "message": {
+    "moveToGyeongjuCenter": "경주 중심지로 이동",
+    "moveToCurrentLoc": "현재 위치로 이동",
     "searchingCurrentLocation": "현재 위치 찾는 중..."
   },
   "legend": {

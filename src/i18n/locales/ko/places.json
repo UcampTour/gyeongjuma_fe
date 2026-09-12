@@ -101,12 +101,25 @@
       "allVisitState": "오디오 관광지를 모두 방문했어요"
     }
   },
+  "bookmark": {
+    "title": "즐겨찾기 관광지",
+    "message": {
+      "bookmarkMessage": "마음에 드는 관광지를 즐겨찾기에 추가해보세요.",
+      "loadingPlaceList": "즐겨찾기 관광지를 불러오는 중이에요",
+      "loadingPlaceListDesc": "잠시만 기다려주세요!",
+      "emptyBookmark": "아직 즐겨찾기한 관광지가 없어요.",
+      "emptyVisitState": "방문 완료한 즐겨찾기 관광지가 없어요.",
+      "allVisitedState": "즐겨찾기한 관광지를 모두 방문 완료했어요."
+    }
+  },
   "message": {
+    "loadingPlaceInfo": "관광지 정보 가져오는 중",
     "alreadyVisited": "이미 방문 완료된 관광지입니다.",
     "confirmVisitTitle": "방문 인증 처리",
     "confirmVisitMessage": "방문 인증 처리하시겠습니까?",
     "loadingVisitTitle": "방문 인증 처리 중",
     "loadingVisitMessgae": "관광지에 도착했는지 확인하고 있어요.\n 잠시만 기다려 주세요!",
-    "successVisit": "방문 인증 완료 🎉\n {{placeName}} 스탬프 획득 완료!\n 이제 퀴즈에 도전해 포인트를 획득해 보세요."
+    "successVisit": "방문 인증 완료 🎉\n {{placeName}} 스탬프 획득 완료!\n 이제 퀴즈에 도전해 포인트를 획득해 보세요.",
+    "errorVisit": "방문 인증 가능 거리를 벗어났어요.\n 관광지 근처에서 다시 시도해 주세요."
   }
 }

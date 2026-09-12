@@ -19,7 +19,7 @@ export const useMapFilter = (places: PlaceListBase[]) => {
     if (selectedFilter !== PlaceFilterType.NONE) {
       setFilterLoading({
         isLoading: true,
-        loadingMsg: "관광지 정보 가져오는 중",
+        loadingMsg: t("places:message.loadingPlaceInfo"),
       });
     }
 

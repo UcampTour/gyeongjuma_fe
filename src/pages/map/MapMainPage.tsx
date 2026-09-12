@@ -153,7 +153,7 @@ const MapMainPage = () => {
     const location = await updateCurrentLocation();
     if (!location) return;
 
-    moveToCurrentLocation(location, "현재 위치로 이동 중");
+    moveToCurrentLocation(location, t("map:message.moveToCurrentLoc"));
   };
 
   const commonLoading = useCommonLoading(locationLoading, filterLoading);
@@ -248,13 +248,13 @@ const MapMainPage = () => {
         >
           <IconCircleButton
             icon={<LocationOnIcon />}
-            ariaLabel="경주 중심지로 이동"
+            ariaLabel={t("map:message.moveToGyeongjuCenter")}
             onClick={moveToGyeongjuCenter}
           />
 
           <IconCircleButton
             icon={<GpsFixedIcon />}
-            ariaLabel="현재 위치로 이동"
+            ariaLabel={t("map:message.moveToCurrentLoc")}
             onClick={handleGoToCurrentLocation}
           />
         </Stack>
