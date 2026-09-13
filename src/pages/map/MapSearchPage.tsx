@@ -79,7 +79,7 @@ const MapSearchPage = () => {
       <Box>
         {keyword.trim().length >= 2 && searchResults.length === 0 && (
           <Typography variant="body2" color="text.secondary">
-            {t("explore.search.noResult", { keyword })}
+            {t("map:search.noResult", { keyword })}
           </Typography>
         )}
 

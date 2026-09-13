@@ -163,19 +163,22 @@ const HomePage = () => {
       {/* 콘텐츠 */}
       <Box
         sx={{
-          minHeight: 0,
-          minWidth: 0,
-          flex: 1,
           width: "100%",
+          minWidth: 0,
           overflowX: "hidden",
-          overflowY: "auto",
           display: "flex",
           flexDirection: "column",
           gap: 2,
         }}
       >
         {/* 유저 */}
-        <Box gap={0.5}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 0.5,
+          }}
+        >
           <Typography
             sx={{
               fontSize: 20,
@@ -219,7 +222,8 @@ const HomePage = () => {
                 justifyContent: "space-between",
                 bgcolor: "#FFFFFF",
                 borderRadius: "16px",
-                p: 2,
+                px: 1.5,
+                py: 2,
                 cursor: "pointer",
                 boxShadow: "0 4px 12px rgba(142,114,73,0.04)",
                 border: "1px solid #EFECE6",
@@ -242,8 +246,10 @@ const HomePage = () => {
                   sx={{
                     width: 42,
                     height: 42,
+                    minWidth: 42,
+                    minHeight: 42,
+                    flexShrink: 0,
                     borderRadius: "12px",
-                    // bgcolor: "#F5F2EB",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
