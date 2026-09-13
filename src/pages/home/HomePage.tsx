@@ -172,7 +172,13 @@ const HomePage = () => {
         }}
       >
         {/* 유저 */}
-        <Box gap={0.5}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 0.5,
+          }}
+        >
           <Typography
             sx={{
               fontSize: 20,
