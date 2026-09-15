@@ -1,8 +1,8 @@
 {
   "message": {
     "greeting": "{{nickname}},",
-    "greetingQuestion": "Are you planning a trip to Gyeongju?",
-    "greetingDescription": "Before you go, find the places you'd like to visit in advance."
+    "greetingQuestion": "Welcome to Gyeongju, the city of a thousand years!",
+    "greetingDescription": "Discover hidden gems around you and start your own special journey through Gyeongju."
   },
   "quickMenu": {
     "favorite": "Favorites",
@@ -12,5 +12,19 @@
   },
   "subTitle": {
     "bestPlace": "Popular Attractions"
+  },
+  "banner": {
+    "travel": {
+      "title": "Discover a Special Journey in Gyeongju",
+      "description": "Explore new places to visit in Gyeongju."
+    },
+    "hidden": {
+      "title": "Hidden Gems of Gyeongju",
+      "description": "Discover the stories of Gyeongju waiting to be found."
+    },
+    "course": {
+      "title": "Your Special Gyeongju Journey",
+      "description": "Where will you go today?"
+    }
   }
 }

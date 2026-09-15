@@ -5,10 +5,12 @@
     "ALL": "All",
     "WALK": "Walking",
     "TRANSIT": "Public Transit",
-    "DRIVE": "Driving"
+    "DRIVE": "Driving",
+    "BIKE": "Bike"
   },
   "message": {
     "loading": "Loading the course list.",
-    "loadingDesc": "Please wait a moment!"
+    "loadingDesc": "Please wait a moment!",
+    "emptyState": "There are no courses yet. Shall we find another one? 🗺️"
   }
 }
