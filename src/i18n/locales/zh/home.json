@@ -1,8 +1,8 @@
 {
   "message": {
     "greeting": "{{nickname}}，",
-    "greetingQuestion": "正在计划庆州旅行吗？",
-    "greetingDescription": "出发前，先找找想去的地方吧。"
+    "greetingQuestion": "千年古都庆州，欢迎您的到来！",
+    "greetingDescription": "探索身边隐藏的景点，开启一段特别的庆州之旅吧。"
   },
   "quickMenu": {
     "favorite": "收藏夹",
@@ -12,5 +12,19 @@
   },
   "subTitle": {
     "bestPlace": "热门景点"
+  },
+  "banner": {
+    "travel": {
+      "title": "在庆州遇见一场特别的旅行",
+      "description": "探索庆州全新的旅游景点。"
+    },
+    "hidden": {
+      "title": "庆州的隐藏景点",
+      "description": "寻找那些尚未发现的庆州故事。"
+    },
+    "course": {
+      "title": "特别的庆州旅行路线",
+      "description": "今天想去哪里呢？"
+    }
   }
 }

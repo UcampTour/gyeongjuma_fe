@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import dummyImage from "../../assets/default_place_img.png";
+// import homeLogo from "../../assets/homeLogo.png";
+import homeLogo from "../../assets/simpleLogo.png";
 import { usePlaceListQuery } from "../../queries/usePlaceListQuery";
 import { useAuthStore } from "../../store/useAuthStore";
 
@@ -18,23 +20,23 @@ const HomePage = () => {
   const bannerList = [
     {
       id: 1,
+      title: t("home:banner.travel.title"),
+      description: t("home:banner.travel.description"),
       image: dummyImage,
-      title: "경주에서 만나는 특별한 여행",
-      description: "새로운 경주 여행지를 만나보세요.",
       path: "/places",
     },
     {
       id: 2,
+      title: t("home:banner.hidden.title"),
+      description: t("home:banner.hidden.description"),
       image: dummyImage,
-      title: "경주의 숨겨진 명소",
-      description: "아직 발견하지 못한 경주의 이야기를 찾아보세요.",
       path: "/explore",
     },
     {
       id: 3,
+      title: t("home:banner.course.title"),
+      description: t("home:banner.course.description"),
       image: dummyImage,
-      title: "특별한 경주 여행 코스",
-      description: "오늘은 어디로 떠나볼까요?",
       path: "/bookmark",
     },
   ];
@@ -135,16 +137,31 @@ const HomePage = () => {
           sx={{
             cursor: "pointer",
             textAlign: "left",
-            lineHeight: 1,
+            lineHeight: 2,
             userSelect: "none",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "flex-start",
           }}
         >
+          <Box
+            component="img"
+            src={homeLogo}
+            alt="Gyeongju Ma"
+            sx={{
+              width: "2.5rem",
+              height: "auto",
+              display: "block",
+              objectFit: "contain",
+            }}
+          />
           <Typography
             sx={{
-              fontSize: 25,
               fontWeight: 900,
               letterSpacing: "-1.5px",
               color: "#333",
+              mt: 1,
+              fontSize: "1rem",
             }}
           >
             Gyeongju
@@ -238,7 +255,7 @@ const HomePage = () => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  gap: 2,
+                  gap: 1,
                   minWidth: 0,
                 }}
               >

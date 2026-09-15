@@ -138,7 +138,9 @@ const PlaceSummaryPage = ({ placeId }: PlaceSummaryProps) => {
             {t(operationConfig?.label)}
           </Typography>
           <Typography>
-            {place?.operationHour || t("common:emptyState.none")}
+            {place?.operationHour === "상시개방"
+              ? t("places:operation.status.alwaysOpen")
+              : place?.operationHour || t("common:emptyState.none")}
           </Typography>
         </Stack>
 

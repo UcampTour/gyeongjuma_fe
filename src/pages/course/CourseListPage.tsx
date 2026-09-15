@@ -1,4 +1,4 @@
-import { Box, Chip, Stack } from "@mui/material";
+import { Box, Chip, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import CommonLoading from "../../components/common/CommonLoading";
@@ -53,59 +53,72 @@ const CoursePage = () => {
         display: "flex",
         flexDirection: "column",
         height: "100vh",
+        width: "100%",
         bgcolor: "#F7F5EE",
-        overflow: "hidden",
+        overflowY: "auto",
+        // overflow: "hidden",
       }}
     >
       <Box sx={{ flexShrink: 0 }}>
         <PageHeader title={t("course:title")} />
 
         {/* 코스 필터 */}
-        <Stack
-          direction="row"
-          spacing={1}
+        <Box
           sx={{
-            px: 3,
-            mb: 2,
+            width: "100%",
             overflowX: "auto",
+            overflowY: "hidden",
+            scrollbarWidth: "none",
             "&::-webkit-scrollbar": {
               display: "none",
             },
           }}
         >
-          {courseFilters.map((filter) => {
-            const isSelected = selectedType === filter.type;
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{
+              width: "max-content",
+              px: 3,
+              mb: 2,
+              flexWrap: "nowrap",
+            }}
+          >
+            {courseFilters.map((filter) => {
+              const isSelected = selectedType === filter.type;
 
-            return (
-              <Chip
-                key={filter.type}
-                label={filter.emoji + t(`course:tabLabel.${filter.type}`)}
-                onClick={() => setSelectedType(filter.type)}
-                sx={{
-                  flexShrink: 0,
-                  height: 36,
-                  borderRadius: 5,
-                  fontSize: 13,
-                  fontWeight: 600,
+              return (
+                <Chip
+                  key={filter.type}
+                  label={filter.emoji + t(`course:tabLabel.${filter.type}`)}
+                  onClick={() => setSelectedType(filter.type)}
+                  sx={{
+                    flexShrink: 0,
+                    height: 36,
+                    borderRadius: 5,
+                    fontSize: 13,
+                    fontWeight: 600,
 
-                  bgcolor: isSelected ? "#BC9A5D" : "#FFFFFF",
-                  color: isSelected ? "#FFFFFF" : "#555",
-                  border: isSelected
-                    ? "1px solid #BC9A5D"
-                    : "1px solid #E5E1D8",
+                    bgcolor: isSelected ? "#BC9A5D" : "#FFFFFF",
+                    color: isSelected ? "#FFFFFF" : "#555",
 
-                  "&:hover": {
-                    bgcolor: isSelected ? "#BC9A5D" : "#F5F2EA",
-                  },
+                    border: isSelected
+                      ? "1px solid #BC9A5D"
+                      : "1px solid #E5E1D8",
 
-                  "& .MuiChip-label": {
-                    px: 1.5,
-                  },
-                }}
-              />
-            );
-          })}
-        </Stack>
+                    "&:hover": {
+                      bgcolor: isSelected ? "#BC9A5D" : "#F5F2EA",
+                    },
+
+                    "& .MuiChip-label": {
+                      px: 1.5,
+                    },
+                  }}
+                />
+              );
+            })}
+          </Stack>
+        </Box>
 
         {/* 검색창 */}
         <Stack sx={{ width: "100%", px: 3, pb: 1 }}>
@@ -134,9 +147,15 @@ const CoursePage = () => {
         }}
       >
         <Stack spacing={1.5}>
-          {filteredCourses.map((course) => (
-            <CourseItem key={course.courseId} item={course} />
-          ))}
+          {filteredCourses.length === 0 ? (
+            <Typography sx={{ fontSize: 13 }}>
+              {t("course:message.emptyState")}
+            </Typography>
+          ) : (
+            filteredCourses.map((course) => (
+              <CourseItem key={course.courseId} item={course} />
+            ))
+          )}
         </Stack>
       </Box>
     </Box>
