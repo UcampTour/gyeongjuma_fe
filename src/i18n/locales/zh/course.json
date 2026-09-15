@@ -5,10 +5,12 @@
     "ALL": "全部",
     "WALK": "步行",
     "TRANSIT": "公共交通",
-    "DRIVE": "自驾"
+    "DRIVE": "自驾",
+    "BIKE": "自行车"
   },
   "message": {
     "loading": "正在加载路线列表。",
-    "loadingDesc": "请稍等片刻！"
+    "loadingDesc": "请稍等片刻！",
+    "emptyState": "暂时还没有路线。要不要找找其他路线？🗺️"
   }
 }

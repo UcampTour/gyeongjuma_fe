@@ -1,8 +1,8 @@
 {
   "message": {
     "greeting": "{{nickname}} 님,",
-    "greetingQuestion": "경주 여행을 준비하고 계신가요?",
-    "greetingDescription": "떠나기 전에 가보고 싶은 곳을 미리 찾아보세요."
+    "greetingQuestion": "천년의 도시, 경주에 오신 걸 환영해요!",
+    "greetingDescription": "주변의 숨겨진 명소를 찾아보고 특별한 경주 여행을 시작해 보세요."
   },
 
   "quickMenu": {
@@ -13,5 +13,19 @@
   },
   "subTitle": {
     "bestPlace": "인기 관광지"
+  },
+  "banner": {
+    "travel": {
+      "title": "경주에서 만나는 특별한 여행",
+      "description": "새로운 경주 여행지를 만나보세요."
+    },
+    "hidden": {
+      "title": "경주의 숨겨진 명소",
+      "description": "아직 발견하지 못한 경주의 이야기를 찾아보세요."
+    },
+    "course": {
+      "title": "특별한 경주 여행 코스",
+      "description": "오늘은 어디로 떠나볼까요?"
+    }
   }
 }

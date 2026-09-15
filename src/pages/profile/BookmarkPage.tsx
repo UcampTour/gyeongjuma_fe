@@ -199,13 +199,14 @@ const BookmarkPage = () => {
                 fontWeight: 700,
                 color: "#4A4038",
                 mb: 0.5,
+                textAlign: "center",
               }}
             >
               {selectedFilter === "ALL"
-                ? t("places:message.emptyBookmark")
+                ? t("places:bookmark.message.emptyBookmark")
                 : selectedFilter === "VISITED"
-                  ? t("places:message.emptyVisitState")
-                  : t("places:message.allVisitedState")}
+                  ? t("places:bookmark.message.emptyVisitState")
+                  : t("places:bookmark.message.allVisitedState")}
             </Typography>
 
             <Typography
@@ -214,7 +215,7 @@ const BookmarkPage = () => {
                 color: "#8A8178",
               }}
             >
-              {t("places:bookmark.allVisitedState")}
+              {t("places:bookmark.message.allVisitedState")}
             </Typography>
           </Box>
         )}

@@ -26,6 +26,7 @@ import AudioPlaceListPage from "../pages/places/AudioPlaceListPage";
 import PlaceDetailPage from "../pages/places/PlaceDetailPage";
 import PlaceListPage from "../pages/places/PlaceListPage";
 import BookmarkPage from "../pages/profile/BookmarkPage";
+import PointHistoryPage from "../pages/profile/PointHistoryPage";
 import ProfileEdit from "../pages/profile/ProfileEditPage";
 import ProfileMorePage from "../pages/profile/ProfileMorePage";
 import ProfilePage from "../pages/profile/ProfilePage";
@@ -106,6 +107,10 @@ const routes: RouteObject[] = [
                   {
                     path: "timeline",
                     element: <TimelinePage />,
+                  },
+                  {
+                    path: "point",
+                    element: <PointHistoryPage />,
                   },
                   {
                     path: "bookmark",
