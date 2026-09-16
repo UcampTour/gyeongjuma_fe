@@ -5,6 +5,7 @@ export enum CourseType {
   WALK = "WALK",
   TRANSIT = "TRANSIT",
   DRIVE = "DRIVE",
+  BIKE = "BIKE",
 }
 
 export interface CourseFilter {
@@ -16,7 +17,7 @@ export interface CourseFilter {
 export const courseFilters: CourseFilter[] = [
   {
     type: CourseType.ALL,
-    label: i18n.t("course:tabLabel.ALL  "),
+    label: i18n.t("course:tabLabel.ALL"),
     emoji: "🌟",
   },
   {
@@ -33,6 +34,11 @@ export const courseFilters: CourseFilter[] = [
     type: CourseType.DRIVE,
     label: i18n.t("course:tabLabel.DRIVE"),
     emoji: "🚗",
+  },
+  {
+    type: CourseType.BIKE,
+    label: i18n.t("course:tabLabel.BIKE"),
+    emoji: "🚲",
   },
 ];
 

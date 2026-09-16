@@ -1,8 +1,8 @@
 {
   "message": {
     "greeting": "{{nickname}}さん、",
-    "greetingQuestion": "慶州旅行を計画していますか？",
-    "greetingDescription": "出発前に、行ってみたい場所を探してみましょう。"
+    "greetingQuestion": "千年の都、慶州へようこそ！",
+    "greetingDescription": "周辺の隠れた名所を見つけて、特別な慶州の旅を始めましょう。"
   },
   "quickMenu": {
     "favorite": "お気に入り",
@@ -12,5 +12,19 @@
   },
   "subTitle": {
     "bestPlace": "人気の観光地"
+  },
+  "banner": {
+    "travel": {
+      "title": "慶州で出会う特別な旅",
+      "description": "新しい慶州の観光地を見つけてみましょう。"
+    },
+    "hidden": {
+      "title": "慶州の隠れた名所",
+      "description": "まだ知らない慶州の物語を見つけてみましょう。"
+    },
+    "course": {
+      "title": "特別な慶州旅行コース",
+      "description": "今日はどこへ出かけましょうか？"
+    }
   }
 }

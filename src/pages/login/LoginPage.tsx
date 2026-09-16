@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { login as googleLogin, myInfo } from "../../api/authApi";
-import logo from "../../assets/gyeongjuma_logo.png";
 import kakaoIcon from "../../assets/login/kakaoLoginIcon.png";
+import logoMain from "../../assets/login/loginLogo.png";
 import naverIcon from "../../assets/login/naverLoginIcon.png";
 import { useAuthStore } from "../../store/useAuthStore";
 
@@ -111,9 +111,10 @@ const LoginPage = () => {
       >
         <Box
           component="img"
-          src={logo}
+          // src={logo}
+          src={logoMain}
           alt="로고"
-          sx={{ maxWidth: "280px", width: "80%", height: "auto" }}
+          sx={{ ml: "10px", width: "80%", height: "auto" }}
         />
       </Box>
 

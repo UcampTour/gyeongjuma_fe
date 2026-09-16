@@ -1,7 +1,6 @@
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "pretendard/dist/web/static/pretendard.css";
 import { StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
@@ -29,7 +28,7 @@ createRoot(document.getElementById("root")!).render(
           </DialogProvider>
         </ThemeProvider>
         {/* 리액트 쿼리 개발 캐싱 확인 도구 */}
-        {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
+        {/* {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />} */}
       </QueryClientProvider>
     </GoogleOAuthProvider>
   </StrictMode>,

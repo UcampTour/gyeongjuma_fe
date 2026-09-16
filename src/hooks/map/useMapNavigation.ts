@@ -3,12 +3,11 @@ import { useTranslation } from "react-i18next";
 import type { LoadingProps } from "../../components/common/CommonLoading";
 import type { MapLocation } from "../../models/MapModel";
 
-/* 경주역 */
+/* 경주 중심지 - 첨성대 */
 const GYEONGJU_CENTER = {
-  lat: 35.798365,
-  lng: 129.138955,
+  lat: 35.83433034,
+  lng: 129.21853454,
 };
-
 export interface MapNavProps {
   map: any | null;
   selectedPlace?: any;
