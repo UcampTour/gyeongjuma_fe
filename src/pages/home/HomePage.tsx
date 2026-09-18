@@ -10,6 +10,8 @@ import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import dummyImage from "../../assets/default_place_img.png";
 // import homeLogo from "../../assets/homeLogo.png";
+import bannerNight from "../../assets/banner/bannerNight.jpg";
+import bannerTravel from "../../assets/banner/bannerTravel.jpg";
 import homeLogo from "../../assets/simpleLogo.png";
 import { usePlaceListQuery } from "../../queries/usePlaceListQuery";
 import { useAuthStore } from "../../store/useAuthStore";
@@ -22,22 +24,22 @@ const HomePage = () => {
       id: 1,
       title: t("home:banner.travel.title"),
       description: t("home:banner.travel.description"),
-      image: dummyImage,
+      image: bannerTravel,
       path: "/places",
     },
     {
       id: 2,
-      title: t("home:banner.hidden.title"),
-      description: t("home:banner.hidden.description"),
-      image: dummyImage,
-      path: "/explore",
-    },
-    {
-      id: 3,
       title: t("home:banner.course.title"),
       description: t("home:banner.course.description"),
       image: dummyImage,
-      path: "/bookmark",
+      path: "/course",
+    },
+    {
+      id: 3,
+      title: t("home:banner.audio.title"),
+      description: t("home:banner.audio.description"),
+      image: bannerNight,
+      path: "/audio",
     },
   ];
 
