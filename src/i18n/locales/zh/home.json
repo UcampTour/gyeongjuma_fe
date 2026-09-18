@@ -16,15 +16,15 @@
   "banner": {
     "travel": {
       "title": "在庆州遇见一场特别的旅行",
-      "description": "探索庆州全新的旅游景点。"
-    },
-    "hidden": {
-      "title": "庆州的隐藏景点",
-      "description": "寻找那些尚未发现的庆州故事。"
+      "description": "探索庆州全新的旅游景点与精彩故事。"
     },
     "course": {
-      "title": "特别的庆州旅行路线",
-      "description": "今天想去哪里呢？"
+      "title": "沿着庆州名胜开启旅程",
+      "description": "体验串联历史与文化的特色旅游路线。"
+    },
+    "audio": {
+      "title": "寻找庆州隐藏的故事",
+      "description": "聆听每一处名胜背后等待着你的故事。"
     }
   }
 }

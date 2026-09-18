@@ -2,7 +2,7 @@
   "message": {
     "greeting": "{{nickname}},",
     "greetingQuestion": "Welcome to Gyeongju, the city of a thousand years!",
-    "greetingDescription": "Discover hidden gems around you and start your own special journey through Gyeongju."
+    "greetingDescription": "start your own special journey through Gyeongju."
   },
   "quickMenu": {
     "favorite": "Favorites",
@@ -15,16 +15,16 @@
   },
   "banner": {
     "travel": {
-      "title": "Discover a Special Journey in Gyeongju",
-      "description": "Explore new places to visit in Gyeongju."
-    },
-    "hidden": {
-      "title": "Hidden Gems of Gyeongju",
-      "description": "Discover the stories of Gyeongju waiting to be found."
+      "title": "A Special Journey Through Gyeongju",
+      "description": "Discover new destinations and stories in Gyeongju."
     },
     "course": {
-      "title": "Your Special Gyeongju Journey",
-      "description": "Where will you go today?"
+      "title": "A Journey Along Gyeongju's Landmarks",
+      "description": "Explore special travel courses where history and culture come together."
+    },
+    "audio": {
+      "title": "Discover the Hidden Stories of Gyeongju",
+      "description": "Listen to the stories waiting at every landmark."
     }
   }
 }
