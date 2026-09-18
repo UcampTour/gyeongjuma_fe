@@ -16,7 +16,8 @@
   "sortType": {
     "default": "默认排序",
     "likes": "收藏最多",
-    "distance": "距离最近"
+    "distance": "距离最近",
+    "visits": "按访问量排序"
   },
 
   "detail": {

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query"; // 1. 임포트 추가
 import { QuizStatus, type QuizItem, type QuizResultResponse } from "../../models/QuizModel";
 import { useAnimatedNumber } from "../common/useAnimatedNumber";
 import { fetchQuizDetail, fetchQuizResult, submitQuizAnswer } from "../../api/quizApi";
-
 
 export interface QuizPlayState {
   stage: string;
@@ -14,6 +14,7 @@ export interface QuizPlayState {
 }
 
 export const useQuizPlay = (quizId: string | undefined) => {
+  const queryClient = useQueryClient(); 
   const [quizData, setQuizData] = useState<QuizItem | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -40,7 +41,6 @@ export const useQuizPlay = (quizId: string | undefined) => {
         setLoading(true);
         const data = await fetchQuizDetail(quizId);
         setQuizData(data);
-        console.log(data);
 
         if (data.quizStatus === QuizStatus.PROGRESS) {
           const solvedQuestions = data.questions.filter((q) => q.isSolved);
@@ -85,7 +85,6 @@ export const useQuizPlay = (quizId: string | undefined) => {
   const handleAnswer = async (selectedOptionId: number) => {
     if (quizState.selectedAnswerId !== null || !quizId || !quizData) return;
 
-    // 선택된 답안과 해결한 문제 수 우선 반영
     setQuizState((prev) => ({
       ...prev,
       selectedAnswerId: selectedOptionId,
@@ -105,6 +104,10 @@ export const useQuizPlay = (quizId: string | undefined) => {
           ? prev.correctCnt + 1
           : prev.correctCnt,
       }));
+
+      if (responseData.isLastQuestion) {
+        queryClient.invalidateQueries({ queryKey: ["myinfo"] });
+      }
 
       setTimeout(() => {
         setQuizState((prev) => ({
