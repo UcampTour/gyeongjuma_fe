@@ -94,6 +94,7 @@ export enum PlaceSortType {
   DEFAULT = "DEFAULT",
   LIKES = "LIKES",
   DISTANCE = "DISTANCE",
+  VISITS = "VISITS",
 }
 
 // types/place.ts (타입 정의는 프로젝트 구조에 맞게 위치시켜 주세요)

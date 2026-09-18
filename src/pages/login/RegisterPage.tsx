@@ -10,14 +10,14 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { useTranslation } from "react-i18next"; // 💡 i18n 훅 추가
+import { useTranslation } from "react-i18next"; // i18n 훅 추가
 import { useNavigate } from "react-router-dom";
 import { checkNickname, registerExtraInfo } from "../../api/authApi";
-import logo from "../../assets/gyeongjuma_logo.png";
+import logoMain from "../../assets/login/loginLogo.png";
 import { useAuthStore } from "../../store/useAuthStore";
 
 const RegisterPage = () => {
-  const { t } = useTranslation(["login", "common"]); // 💡 t 함수 선언
+  const { t } = useTranslation(["login", "common"]); // t 함수 선언
   const [nickname, setNickname] = useState("");
   const [difficulty, setDifficulty] = useState("NORMAL");
   const [locale, setLocale] = useState("ko");
@@ -80,9 +80,9 @@ const RegisterPage = () => {
       >
         <Box
           component="img"
-          src={logo}
+          src={logoMain}
           alt="로고"
-          sx={{ maxWidth: "280px", width: "80%", height: "auto" }}
+          sx={{ maxWidth: "280px", width: "100%", height: "auto" }}
         />
       </Box>
 
@@ -123,7 +123,12 @@ const RegisterPage = () => {
               size="small"
               value={nickname}
               onChange={(e) => {
-                setNickname(e.target.value);
+                // 💡 띄어쓰기 및 특수문자 차단 (한글, 영문, 숫자만 허용)
+                const filteredValue = e.target.value.replace(
+                  /[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9]/g,
+                  ""
+                );
+                setNickname(filteredValue);
                 setIsAvailable(null);
               }}
               placeholder={t("register.nicknamePlaceholder")}

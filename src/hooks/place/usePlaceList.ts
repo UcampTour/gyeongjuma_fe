@@ -74,6 +74,13 @@ export const usePlaceList = () => {
           return b.totalFavorite - a.totalFavorite;
         });
 
+      case PlaceSortType.VISITS:
+        return result.sort((a, b) => {
+          if (a.visitCnt === null) return 1;
+          if (b.visitCnt === null) return -1;
+          return b.visitCnt - a.visitCnt;
+        });
+
       default:
         return result;
     }
