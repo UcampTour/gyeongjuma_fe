@@ -19,6 +19,7 @@ const AudioMiniPlayer = () => {
     setPlaying,
     showMiniPlayer,
     resetAudio,
+    setAudio,
   } = useAudioStore();
   const navigate = useNavigate();
 
@@ -47,12 +48,50 @@ const AudioMiniPlayer = () => {
     navigate(`/audio/${placeId}/${audioId}`);
   };
 
-  const handlePrevious = () => {
-    // 이전 오디오 재생
+  const handlePrevious = (event: React.MouseEvent) => {
+    event.stopPropagation();
+
+    audioPlayer.playPrevious();
+
+    const previousAudio = audioPlayer.getCurrentAudio();
+
+    if (!previousAudio) return;
+
+    setAudio({
+      title: previousAudio.title,
+      imageUrl: previousAudio.imageUrl,
+      audioId: previousAudio.audioId,
+      placeId: previousAudio.placeId,
+    });
+
+    setPlaying(true);
+
+    navigate(`/audio/${previousAudio.placeId}/${previousAudio.audioId}`, {
+      replace: true,
+    });
   };
 
-  const handleNext = () => {
-    // 다음 오디오 재생
+  const handleNext = (event: React.MouseEvent) => {
+    event.stopPropagation();
+
+    audioPlayer.playNext();
+
+    const nextAudio = audioPlayer.getCurrentAudio();
+
+    if (!nextAudio) return;
+
+    setAudio({
+      title: nextAudio.title,
+      imageUrl: nextAudio.imageUrl,
+      audioId: nextAudio.audioId,
+      placeId: nextAudio.placeId,
+    });
+
+    setPlaying(true);
+
+    navigate(`/audio/${nextAudio.placeId}/${nextAudio.audioId}`, {
+      replace: true,
+    });
   };
 
   /**
@@ -76,11 +115,10 @@ const AudioMiniPlayer = () => {
         maxWidth: "444px",
         // right: 16,
         bottom: 8, // BottomNavigation 위
-        borderRadius: 2,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        height: 56,
+        height: 80,
         zIndex: 2000,
         px: 1,
       }}
@@ -90,13 +128,13 @@ const AudioMiniPlayer = () => {
           bgcolor: "#434343b5",
           width: "100%",
           height: "100%",
-          borderRadius: 2,
+          borderRadius: 5,
           background: "rgba(60, 60, 60, 0.45)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
           display: "flex",
           alignItems: "center",
-          px: 1,
+          px: 2,
           py: 3,
         }}
         onClick={handleNavigate}
@@ -107,9 +145,9 @@ const AudioMiniPlayer = () => {
           src={imageUrl || defaultImage}
           alt={title}
           sx={{
-            width: 40,
-            height: 40,
-            borderRadius: 1.5,
+            width: 45,
+            height: 45,
+            borderRadius: 3,
             objectFit: "cover",
             flexShrink: 0,
             mr: 2,
@@ -140,8 +178,8 @@ const AudioMiniPlayer = () => {
             alignItems: "center",
           }}
         >
-          <IconButton sx={{ color: "white" }}>
-            <SkipPreviousIcon sx={{ fontSize: 35 }} onClick={handlePrevious} />
+          <IconButton sx={{ color: "white" }} onClick={handlePrevious}>
+            <SkipPreviousIcon sx={{ fontSize: 35 }} />
           </IconButton>
           {/* 재생버튼 */}
           <IconButton
@@ -161,8 +199,8 @@ const AudioMiniPlayer = () => {
               <PlayArrowIcon sx={{ fontSize: 35 }} />
             )}
           </IconButton>
-          <IconButton sx={{ color: "white" }}>
-            <SkipNextIcon sx={{ fontSize: 35 }} onClick={handleNext} />
+          <IconButton sx={{ color: "white" }} onClick={handleNext}>
+            <SkipNextIcon sx={{ fontSize: 35 }} />
           </IconButton>
           {/* 닫기 */}
           <IconButton
