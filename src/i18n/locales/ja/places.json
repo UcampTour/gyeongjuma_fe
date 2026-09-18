@@ -16,7 +16,8 @@
   "sortType": {
     "default": "おすすめ順",
     "likes": "お気に入り順",
-    "distance": "距離順"
+    "distance": "距離順",
+    "visits": "訪問者順"
   },
 
   "detail": {

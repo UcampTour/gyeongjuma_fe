@@ -16,28 +16,19 @@ const LoginPage = () => {
 
   const { t } = useTranslation("login");
 
-  // 네이버 로그인 핸들러
   const handleNaverLogin = () => {
     const CLIENT_ID = import.meta.env.VITE_NAVER_CLIENT_ID;
     const REDIRECT_URI = `${window.location.origin}/auth/naver/callback`;
     const STATE = Math.random().toString(36).substring(3);
-
-    const naverURL = `https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&state=${STATE}`;
-
-    window.location.href = naverURL;
+    window.location.href = `https://nid.naver.com/oauth2.0/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&state=${STATE}`;
   };
 
-  // 카카오 로그인 핸들러
   const handleKakaoLogin = () => {
     const REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
     const REDIRECT_URI = `${window.location.origin}/auth/kakao/callback`;
-
-    const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-
-    window.location.href = kakaoURL;
+    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
   };
 
-  // 구글 로그인 성공 핸들러 (기존 idToken 방식 유지)
   const onSuccess = async (credentialResponse: any) => {
     if (isLoading) return;
     setIsLoading(true);
@@ -56,7 +47,6 @@ const LoginPage = () => {
       });
 
       const accessToken = response.accessToken;
-
       setAccessToken(accessToken);
 
       if (response.isNewMember) {
@@ -68,7 +58,6 @@ const LoginPage = () => {
         navigate("/register");
       } else {
         const userInfo = await myInfo();
-
         login(
           {
             memberId: userInfo.memberId,
@@ -79,7 +68,6 @@ const LoginPage = () => {
           false,
           accessToken,
         );
-
         navigate("/");
       }
     } catch (error) {
@@ -99,7 +87,6 @@ const LoginPage = () => {
         pb: 4,
       }}
     >
-      {/* 로고 영역 */}
       <Box
         sx={{
           flexGrow: 1,
@@ -111,14 +98,12 @@ const LoginPage = () => {
       >
         <Box
           component="img"
-          // src={logo}
           src={logoMain}
           alt="로고"
-          sx={{ ml: "10px", width: "80%", height: "auto" }}
+          sx={{ ml: "10px", width: "100%", height: "auto" }}
         />
       </Box>
 
-      {/* 로그인 버튼 영역 */}
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5, pb: 4 }}>
         <Box sx={{ display: "flex", alignItems: "center", mb: 1, px: 2 }}>
           <Box sx={{ flex: 1, height: "1px", bgcolor: "rgba(0,0,0,0.1)" }} />
@@ -135,27 +120,23 @@ const LoginPage = () => {
           <Box sx={{ flex: 1, height: "1px", bgcolor: "rgba(0,0,0,0.1)" }} />
         </Box>
 
-        {/* 구글 로그인 (기존 GoogleLogin 컴포넌트 방식 + 크기 안정화) */}
-        <Box sx={{ position: "relative", width: "100%", height: "52px" }}>
-          <GoogleLogin
-            onSuccess={onSuccess}
-            onError={() => console.log("구글 로그인 실패")}
-            containerProps={{
-              style: {
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                opacity: 0,
-                cursor: "pointer",
-                zIndex: 2, // zIndex를 높여서 클릭을 온전히 맨 위에서 받도록 수정
-              },
-            }}
-          />
+        {/* 구글 로그인: iframe 투명 레이어가 버튼 전체를 정확히 덮도록 수정 */}
+        <Box
+          sx={{
+            position: "relative",
+            width: "100%",
+            height: "52px",
+            overflow: "hidden",
+            borderRadius: 2,
+          }}
+        >
+          {/* 가상 버튼 UI (보이는 용도) */}
           <Button
             fullWidth
             sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
               height: "52px",
               borderRadius: 2,
               textTransform: "none",
@@ -166,12 +147,8 @@ const LoginPage = () => {
               bgcolor: "white",
               justifyContent: "center",
               boxShadow: "none",
-              "&:hover": {
-                bgcolor: "white",
-                borderColor: "#e0e0e0",
-                boxShadow: "none",
-              },
-              "&:active": { bgcolor: "#f5f5f5" },
+              zIndex: 1,
+              pointerEvents: "none", // 클릭이 아래(구글 iframe)로 바로 가도록 유도
             }}
           >
             <Box
@@ -198,6 +175,24 @@ const LoginPage = () => {
             </Box>
             {t("googleLogin")}
           </Button>
+
+          {/* 실제 구글 인증 iframe (투명하게 위에서 클릭을 가로챔) */}
+          <GoogleLogin
+            onSuccess={onSuccess}
+            onError={() => console.log("구글 로그인 실패")}
+            containerProps={{
+              style: {
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                opacity: 0,
+                zIndex: 2,
+                cursor: "pointer",
+              },
+            }}
+          />
         </Box>
 
         {/* 카카오 로그인 */}
@@ -261,35 +256,23 @@ const LoginPage = () => {
           }}
         >
           {t("termsPrefix")}
-
           <Link
             href="#"
             underline="always"
-            sx={{
-              fontSize: "0.75rem",
-              color: "inherit",
-              cursor: "pointer",
-            }}
+            sx={{ fontSize: "0.75rem", color: "inherit", cursor: "pointer" }}
             onClick={(e) => e.preventDefault()}
           >
             {t("privacyPolicy")}
           </Link>
-
           {t("termsAnd")}
-
           <Link
             href="#"
             underline="always"
-            sx={{
-              fontSize: "0.75rem",
-              color: "inherit",
-              cursor: "pointer",
-            }}
+            sx={{ fontSize: "0.75rem", color: "inherit", cursor: "pointer" }}
             onClick={(e) => e.preventDefault()}
           >
             {t("termsOfService")}
           </Link>
-
           {t("termsSuffix")}
         </Typography>
       </Box>

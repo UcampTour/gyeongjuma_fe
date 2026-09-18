@@ -65,7 +65,7 @@ const TravelProgress = ({
     >
       {/* 카드 타이틀 */}
       <Typography sx={{ fontWeight: 800, fontSize: "15px", color: "#111111", mb: 2 }}>
-        ✈️ {t("travelProgressTitle")}
+      🗺️ {t("travelProgressTitle")}
       </Typography>
 
       {/* 레벨 및 프로그레스바 영역 */}

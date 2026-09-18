@@ -19,8 +19,39 @@ const ProfileCard = ({
   point,
   totalPoint,
 }: ProfileCardProps) => {
-  const { t } = useTranslation("profile"); // 💡 네임스페이스 지정
+  const { t } = useTranslation(["profile", "common"]); // 💡 네임스페이스 지정
   const navigate = useNavigate();
+
+  // 1. 난이도 키 매핑 (EASY/NORMAL/HARD -> common:mode.easy 등)
+  const getDifficultyLabel = (diff: string) => {
+    switch (diff?.toUpperCase()) {
+      case "EASY":
+        return t("mode.easy", { ns: "common" });
+      case "NORMAL":
+        return t("mode.normal", { ns: "common" });
+      case "HARD":
+        return t("mode.hard", { ns: "common" });
+      default:
+        return diff;
+    }
+  };
+
+  // 2. 언어 코드 키 매핑 (ko/en/ja/zh -> common:language 또는 자체 키)
+  // ProfileEditPage의 languages 배열과 동일한 방식으로 매칭합니다.
+  const getLocaleLabel = (loc: string) => {
+    switch (loc?.toLowerCase()) {
+      case "ko":
+        return "한국어";
+      case "en":
+        return "English";
+      case "ja":
+        return "日本語";
+      case "zh":
+        return "中文";
+      default:
+        return loc;
+    }
+  };
 
   return (
     <Card
@@ -72,7 +103,7 @@ const ProfileCard = ({
             }}
           >
             <Chip
-              label={`${t("difficultyLabel")}: ${difficulty}`}
+              label={`${t("difficultyLabel")}: ${getDifficultyLabel(difficulty)}`}
               size="small"
               sx={{
                 height: 18,
@@ -84,7 +115,7 @@ const ProfileCard = ({
               }}
             />
             <Chip
-              label={`${t("localeLabel")}: ${locale}`}
+              label={`${t("localeLabel")}: ${getLocaleLabel(locale)}`}
               size="small"
               sx={{
                 height: 18,
@@ -121,6 +152,7 @@ const ProfileCard = ({
           borderRadius: "14px",
           py: 1.5,
           border: "1px solid #F0ECE1",
+          cursor: "pointer",
         }}
         onClick={() => navigate("/profile/point")}
       >

@@ -13,6 +13,7 @@ const PlaceListSorter = ({ sortBy, setSortBy }: PlaceListSorterProps) => {
   const sortTypes = [
     { value: PlaceSortType.DISTANCE, label: t("places:sortType.distance") },
     { value: PlaceSortType.LIKES, label: t("places:sortType.likes") },
+    { value: PlaceSortType.VISITS, label: t("places:sortType.visits") },
   ];
 
   return (

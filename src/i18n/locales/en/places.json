@@ -16,7 +16,8 @@
   "sortType": {
     "default": "Default",
     "likes": "Most Favorited",
-    "distance": "Distance"
+    "distance": "Distance",
+    "visits": "Most Visited"
   },
 
   "detail": {

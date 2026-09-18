@@ -16,7 +16,8 @@
   "sortType": {
     "default": "기본순",
     "likes": "즐겨찾기순",
-    "distance": "거리순"
+    "distance": "거리순",
+    "visits": "방문자순"
   },
   "detail": {
     "tabs": {
