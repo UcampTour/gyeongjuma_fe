@@ -1,5 +1,9 @@
 import { Box, IconButton, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import bikeImage from "../../assets/course/bikeImage.png";
+import busImage from "../../assets/course/busImage.png";
+import driveImage from "../../assets/course/driveImage.png";
+import walkImage from "../../assets/course/walkImage.png";
 import type { CourseListItem } from "../../models/CourseModel";
 import { getCourseTypeLabel } from "../../pages/course/courseConstants";
 
@@ -10,7 +14,20 @@ interface CourseItemProps {
 const CourseItem = ({ item }: CourseItemProps) => {
   const navigate = useNavigate();
 
-  console.log("item: ", item);
+  const getCourseThumbnail = (type: string) => {
+    switch (type) {
+      case "DRIVE":
+        return driveImage;
+      case "BIKE":
+        return bikeImage;
+      case "TRANSIT":
+        return busImage;
+      case "WALK":
+        return walkImage;
+      default:
+        return "";
+    }
+  };
 
   return (
     <Box
@@ -27,7 +44,7 @@ const CourseItem = ({ item }: CourseItemProps) => {
       {/* 배경 이미지 */}
       <Box
         component="img"
-        src={item.thumbnailUrl}
+        src={item.thumbnailUrl ?? getCourseThumbnail(item.type)}
         alt={item.title}
         sx={{
           position: "absolute",
