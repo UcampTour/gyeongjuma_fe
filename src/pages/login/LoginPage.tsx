@@ -120,6 +120,56 @@ const LoginPage = () => {
           <Box sx={{ flex: 1, height: "1px", bgcolor: "rgba(0,0,0,0.1)" }} />
         </Box>
 
+        {/* 카카오 로그인 */}
+        <Button
+          fullWidth
+          onClick={handleKakaoLogin}
+          sx={{
+            height: "52px",
+            borderRadius: 2,
+            textTransform: "none",
+            fontSize: "16px",
+            fontWeight: 600,
+            bgcolor: "#FEE500",
+            color: "#000",
+            boxShadow: "none",
+            "&:hover": { bgcolor: "#FEE500", boxShadow: "none" },
+            "&:active": { bgcolor: "#E5CE00" },
+          }}
+        >
+          <Box
+            component="img"
+            src={kakaoIcon}
+            sx={{ width: 24, height: 24, mr: 1 }}
+          />
+          {t("kakaoLogin")}
+        </Button>
+
+        {/* 네이버 로그인 */}
+        <Button
+          fullWidth
+          onClick={handleNaverLogin}
+          sx={{
+            height: "52px",
+            borderRadius: 2,
+            textTransform: "none",
+            fontSize: "16px",
+            fontWeight: 600,
+            bgcolor: "#03C75A",
+            color: "#fff",
+            boxShadow: "none",
+            "&:hover": { bgcolor: "#03C75A", boxShadow: "none" },
+            "&:active": { bgcolor: "#029E48" },
+          }}
+        >
+          <Box
+            component="img"
+            src={naverIcon}
+            sx={{ width: 24, height: 24, mr: 1 }}
+          />
+          {t("naverLogin")}
+        </Button>
+
         {/* 구글 로그인: iframe 투명 레이어가 버튼 전체를 정확히 덮도록 수정 */}
         <Box
           sx={{
@@ -194,56 +244,6 @@ const LoginPage = () => {
             }}
           />
         </Box>
-
-        {/* 카카오 로그인 */}
-        <Button
-          fullWidth
-          onClick={handleKakaoLogin}
-          sx={{
-            height: "52px",
-            borderRadius: 2,
-            textTransform: "none",
-            fontSize: "16px",
-            fontWeight: 600,
-            bgcolor: "#FEE500",
-            color: "#000",
-            boxShadow: "none",
-            "&:hover": { bgcolor: "#FEE500", boxShadow: "none" },
-            "&:active": { bgcolor: "#E5CE00" },
-          }}
-        >
-          <Box
-            component="img"
-            src={kakaoIcon}
-            sx={{ width: 24, height: 24, mr: 1 }}
-          />
-          {t("kakaoLogin")}
-        </Button>
-
-        {/* 네이버 로그인 */}
-        <Button
-          fullWidth
-          onClick={handleNaverLogin}
-          sx={{
-            height: "52px",
-            borderRadius: 2,
-            textTransform: "none",
-            fontSize: "16px",
-            fontWeight: 600,
-            bgcolor: "#03C75A",
-            color: "#fff",
-            boxShadow: "none",
-            "&:hover": { bgcolor: "#03C75A", boxShadow: "none" },
-            "&:active": { bgcolor: "#029E48" },
-          }}
-        >
-          <Box
-            component="img"
-            src={naverIcon}
-            sx={{ width: 24, height: 24, mr: 1 }}
-          />
-          {t("naverLogin")}
-        </Button>
 
         {/* 이용약관 */}
         <Typography
